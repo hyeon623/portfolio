@@ -14,8 +14,12 @@ const projects = [
     number: "01",
     title: "ORBIT Dome Theater",
     type: "Exhibition & Immersive Design",
-    year: "2024",
-    role: "Spatial Designer",
+    year: "2024 - Present",
+
+    role: "Lead Spatial Designer",
+
+    scope: "Exterior Design, Landscape Design, Architectural Visualization",
+
     location: "South Korea",
     description:
       "Immersive dome theater project developed for cultural and educational experiences. Responsible for architectural exterior design, landscape planning, spatial design and visualization.",
@@ -26,24 +30,38 @@ const projects = [
     type: "Exhibition Design",
     year: null,
     role: null,
+    scope: null,
     location: null,
     description: null,
   },
   {
     number: "03",
-    title: "Shinhan Human Resources Center",
-    type: "Workplace Spatial Design",
+    title: "Oil Depot Cultural Renewal",
+    type: "Architectural & Exhibition Renewal",
+    year: "2024",
+    role: "Lead Spatial Designer",
+    scope: "Exterior Design, Landscape Design, Architectural Visualization",
+    location: "Seoul, South Korea",
+    description:
+      "Cultural renewal project transforming a former oil depot into a contemporary public destination. Responsible for exterior design development, landscape planning, spatial composition, and architectural visualization.",
+  },
+  {
+    number: "04",
+    title: "Concept Visualization Works",
+    type: "Architectural Visualization & Environment Design",
     year: null,
     role: null,
+    scope: null,
     location: null,
     description: null,
   },
   {
-    number: "04",
-    title: "Oil Depot Cultural Renewal",
-    type: "Cultural Space Renewal",
+    number: "05",
+    title: "Shinhan Human Resources Center",
+    type: "Workplace Spatial Design",
     year: null,
     role: null,
+    scope: null,
     location: null,
     description: null,
   },
@@ -69,103 +87,345 @@ const experience = [
 
 type Project = (typeof projects)[number];
 
+const ORBIT_IMAGE_DIR = "/images/orbit";
+
+const orbitMosaicColSpans = [
+  "w-full sm:col-span-2 lg:col-span-8",
+  "w-full lg:col-span-4",
+  "w-full lg:col-span-5",
+  "w-full lg:col-span-7",
+  "w-full lg:col-span-4",
+  "w-full lg:col-span-8",
+] as const;
+
+const orbitProjectImages = [
+  "2_night.png",
+  "orbit-1f01.png",
+  "orbit-1f02.png",
+  "orbit-1f03.png",
+  "orbit-1f04.png",
+  "orbit-1f05.png",
+  "orbit-1f06.png",
+  "26-0508 night.png",
+  "플라네타리움_초실사_렌더.png",
+  "26-0519 Orbyt Section 확장.png",
+  "26-0430 3F 라운지.png",
+  "26-0430 리테일 & 프리미엄 F&B.png",
+] as const;
+
+const OIL_DEPOT_IMAGE_DIR = "/images/oil depot cultural renewal";
+
+const oilDepotProjectImages = [
+  "1.jpg",
+  "2.jpg",
+  "3.png",
+  "4.png",
+  "5.png",
+  "6.png",
+  "7.png",
+  "8.png",
+  "9.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png",
+  "14.png",
+  "15.png",
+  "16.png",
+] as const;
+
+const CONCEPT_IMAGE_DIR = "/images/concept visualization works";
+
+const conceptVisualizationSections = [
+  {
+    id: "aquarium-science-center",
+    title: "Aquarium Science Center",
+    description:
+      "Concept design and visualization studies for an immersive aquarium and science center environment.",
+    images: ["a1.png", "a2.png", "a3.png"],
+  },
+  {
+    id: "hanok-renewal",
+    title: "Hanok Renewal",
+    description:
+      "Concept design and visualization study exploring the renewal and adaptive reuse of traditional Korean architectural heritage. Focused on spatial atmosphere, cultural identity, architectural preservation, and contemporary interpretation.",
+    images: ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
+  },
+] as const;
+
+function getOrbitImageSrc(filename: string) {
+  return `${ORBIT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+}
+
+function getConceptImageSrc(filename: string) {
+  return `${CONCEPT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+}
+
+function getOilDepotImageSrc(filename: string) {
+  return `${OIL_DEPOT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+}
+
+function GalleryImage({
+  src,
+  alt = "",
+  className,
+  onOpen,
+}: {
+  src: string;
+  alt?: string;
+  className?: string;
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(src)}
+      className={`block w-full text-left ${className ?? ""}`}
+    >
+      <img src={src} alt={alt} className="w-full cursor-zoom-in" />
+    </button>
+  );
+}
+
+function ImageLightbox({
+  activeImage,
+  onClose,
+}: {
+  activeImage: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-6 sm:p-10"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute right-4 top-4 text-xs font-medium uppercase tracking-[0.2em] text-white/70 transition-colors hover:text-white sm:right-8 sm:top-8"
+      >
+        Close
+      </button>
+      <img
+        src={activeImage}
+        alt=""
+        className="max-h-full max-w-full object-contain"
+        onClick={(event) => event.stopPropagation()}
+      />
+    </div>
+  );
+}
+
+function SubsectionGallery({
+  images,
+  getImageSrc,
+  onOpen,
+}: {
+  images: readonly string[];
+  getImageSrc: (filename: string) => string;
+  onOpen: (src: string) => void;
+}) {
+  if (images.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+      <GalleryImage src={getImageSrc(images[0])} onOpen={onOpen} />
+
+      {images.length > 1 && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-12 lg:gap-10">
+          {images.slice(1).map((filename, index) => (
+            <GalleryImage
+              key={filename}
+              src={getImageSrc(filename)}
+              className={
+                orbitMosaicColSpans[index % orbitMosaicColSpans.length]
+              }
+              onOpen={onOpen}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MetadataItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="border-t border-black/10 py-5 sm:py-6">
       <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
         {label}
       </p>
-      <p className="mt-2 text-sm font-light tracking-tight text-black sm:text-base">
+      <p className="mt-2 whitespace-pre-line text-sm font-light tracking-tight text-black sm:text-base">
         {value}
       </p>
     </div>
   );
 }
 
+function ProjectInfoLayout({ project }: { project: Project }) {
+  return (
+    <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20 xl:gap-28">
+      <div className="lg:col-span-7">
+        <p className="max-w-2xl text-base leading-relaxed text-black/75 sm:text-lg sm:leading-8 lg:text-xl">
+          {project.description}
+        </p>
+      </div>
+      <div className="lg:col-span-5">
+        {project.year && <MetadataItem label="Year" value={project.year} />}
+        {project.role && <MetadataItem label="Role" value={project.role} />}
+        {project.scope && (
+          <MetadataItem
+            label="Scope"
+            value={project.scope
+              .split(",")
+              .map((item) => item.trim())
+              .join("\n")}
+          />
+        )}
+        <MetadataItem label="Project Type" value={project.type} />
+        {project.location && (
+          <MetadataItem label="Location" value={project.location} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OrbitProjectDetails({
+  project,
+  onOpen,
+}: {
+  project: Project;
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <>
+      <ProjectInfoLayout project={project} />
+
+      <div className="mt-20 space-y-6 sm:mt-28 sm:space-y-8 lg:mt-36 lg:space-y-10">
+        <GalleryImage
+          src={getOrbitImageSrc(orbitProjectImages[0])}
+          alt="ORBIT Dome Theater"
+          onOpen={onOpen}
+        />
+
+        <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10">
+          <GalleryImage
+            src={getOrbitImageSrc("orbit-hero01.png")}
+            className="lg:col-span-7"
+            onOpen={onOpen}
+          />
+          <div className="flex flex-col gap-6 sm:gap-8 lg:col-span-5">
+            <GalleryImage
+              src={getOrbitImageSrc("orbit-hero03.png")}
+              onOpen={onOpen}
+            />
+            <GalleryImage
+              src={getOrbitImageSrc("orbit-hero04.png")}
+              onOpen={onOpen}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-12 lg:gap-10">
+          {orbitProjectImages.slice(1).map((filename, index) => (
+            <GalleryImage
+              key={filename}
+              src={getOrbitImageSrc(filename)}
+              className={orbitMosaicColSpans[index % orbitMosaicColSpans.length]}
+              onOpen={onOpen}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function OilDepotProjectDetails({
+  project,
+  onOpen,
+}: {
+  project: Project;
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <>
+      <ProjectInfoLayout project={project} />
+
+      <div className="mt-20 sm:mt-28 lg:mt-36">
+        <SubsectionGallery
+          images={oilDepotProjectImages}
+          getImageSrc={getOilDepotImageSrc}
+          onOpen={onOpen}
+        />
+      </div>
+    </>
+  );
+}
+
+function ConceptVisualizationDetails({
+  onOpen,
+}: {
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <div className="mt-20 space-y-20 sm:mt-28 sm:space-y-28 lg:mt-36 lg:space-y-36">
+      {conceptVisualizationSections.map((section, index) => (
+        <section
+          key={section.id}
+          className={
+            index > 0 ? "border-t border-black/10 pt-20 sm:pt-28 lg:pt-36" : ""
+          }
+        >
+          <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+            {section.title}
+          </h4>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+            {section.description}
+          </p>
+          <div className="mt-12 sm:mt-16 lg:mt-20">
+            <SubsectionGallery
+              images={section.images}
+              getImageSrc={getConceptImageSrc}
+              onOpen={onOpen}
+            />
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 function ProjectDetails({ project }: { project: Project }) {
-  if (project.number !== "01") {
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  if (project.number !== "01" && project.number !== "03" && project.number !== "04") {
     return null;
   }
 
   return (
     <div className="pb-16 pt-4 sm:pb-24 sm:pt-8 lg:pb-32">
-      <div className="mb-16 flex flex-col gap-6 sm:mb-20 sm:flex-row sm:items-end sm:gap-10 lg:mb-28 lg:gap-16">
-        <span className="text-7xl font-light leading-none tracking-tighter text-black/20 sm:text-8xl lg:text-9xl">
-          {project.number}
-        </span>
-        <h2 className="text-3xl font-light tracking-tight text-black sm:text-4xl lg:text-5xl">
-          {project.title}
-        </h2>
-      </div>
+      {project.number === "01" && (
+        <OrbitProjectDetails project={project} onOpen={setActiveImage} />
+      )}
+      {project.number === "03" && (
+        <OilDepotProjectDetails project={project} onOpen={setActiveImage} />
+      )}
+      {project.number === "04" && (
+        <ConceptVisualizationDetails onOpen={setActiveImage} />
+      )}
 
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20 xl:gap-28">
-        <div className="lg:col-span-7">
-          <p className="max-w-2xl text-base leading-relaxed text-black/75 sm:text-lg sm:leading-8 lg:text-xl">
-            {project.description}
-          </p>
-        </div>
-        <div className="lg:col-span-5">
-          {project.year && <MetadataItem label="Year" value={project.year} />}
-          {project.role && <MetadataItem label="Role" value={project.role} />}
-          <MetadataItem label="Project Type" value={project.type} />
-          {project.location && (
-            <MetadataItem label="Location" value={project.location} />
-          )}
-        </div>
-      </div>
-
-      <div className="mt-20 space-y-6 sm:mt-28 sm:space-y-8 lg:mt-36 lg:space-y-10">
-        <img
-          src="/images/orbit/orbit-hero02.png"
-          alt="ORBIT Dome Theater"
-          className="w-full"
+      {activeImage && (
+        <ImageLightbox
+          activeImage={activeImage}
+          onClose={() => setActiveImage(null)}
         />
-
-        <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10">
-          <img
-            src="/images/orbit/orbit-hero01.png"
-            alt=""
-            className="w-full lg:col-span-7"
-          />
-          <div className="flex flex-col gap-6 sm:gap-8 lg:col-span-5">
-            <img src="/images/orbit/orbit-hero03.png" alt="" className="w-full" />
-            <img src="/images/orbit/orbit-hero04.png" alt="" className="w-full" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-12 lg:gap-10">
-          <img
-            src="/images/orbit/orbit-1f01.png"
-            alt=""
-            className="w-full sm:col-span-2 lg:col-span-8"
-          />
-          <img
-            src="/images/orbit/orbit-1f02.png"
-            alt=""
-            className="w-full lg:col-span-4"
-          />
-          <img
-            src="/images/orbit/orbit-1f03.png"
-            alt=""
-            className="w-full lg:col-span-5"
-          />
-          <img
-            src="/images/orbit/orbit-1f04.png"
-            alt=""
-            className="w-full lg:col-span-7"
-          />
-          <img
-            src="/images/orbit/orbit-1f05.png"
-            alt=""
-            className="w-full lg:col-span-4"
-          />
-          <img
-            src="/images/orbit/orbit-1f06.png"
-            alt=""
-            className="w-full lg:col-span-8"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
