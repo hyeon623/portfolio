@@ -9,7 +9,18 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-const projects = [
+type ProjectData = {
+  number: string;
+  title: string;
+  type: string;
+  year: string | null;
+  role: string | null;
+  scope: string | null;
+  location: string | null;
+  description: string | null;
+};
+
+const projects: ProjectData[] = [
   {
     number: "01",
     title: "ORBIT Dome Theater",
@@ -26,8 +37,8 @@ const projects = [
   },
   {
     number: "02",
-    title: "Singapore NSC Science Center",
-    type: "Exhibition Design",
+    title: "Concept Visualization Works",
+    type: "Architectural Visualization & Environment Design",
     year: null,
     role: null,
     scope: null,
@@ -36,6 +47,16 @@ const projects = [
   },
   {
     number: "03",
+    title: "Film & Stage Set Design",
+    type: "Production Design & Set Visualization",
+    year: null,
+    role: null,
+    scope: null,
+    location: null,
+    description: null,
+  },
+  {
+    number: "04",
     title: "Oil Depot Cultural Renewal",
     type: "Architectural & Exhibition Renewal",
     year: "2024",
@@ -46,19 +67,9 @@ const projects = [
       "Cultural renewal project transforming a former oil depot into a contemporary public destination. Responsible for exterior design development, landscape planning, spatial composition, and architectural visualization.",
   },
   {
-    number: "04",
-    title: "Concept Visualization Works",
-    type: "Architectural Visualization & Environment Design",
-    year: null,
-    role: null,
-    scope: null,
-    location: null,
-    description: null,
-  },
-  {
     number: "05",
-    title: "Shinhan Human Resources Center",
-    type: "Workplace Spatial Design",
+    title: "Singapore NSC Science Center",
+    type: "Exhibition Design",
     year: null,
     role: null,
     scope: null,
@@ -85,7 +96,7 @@ const experience = [
   },
 ];
 
-type Project = (typeof projects)[number];
+type Project = ProjectData;
 
 const ORBIT_IMAGE_DIR = "/images/orbit";
 
@@ -109,6 +120,7 @@ const orbitProjectImages = [
   "26-0508 night.png",
   "플라네타리움_초실사_렌더.png",
   "26-0519 Orbyt Section 확장.png",
+  "26-0508 Orbyt Section.png",
   "26-0430 3F 라운지.png",
   "26-0430 리테일 & 프리미엄 F&B.png",
 ] as const;
@@ -134,6 +146,90 @@ const oilDepotProjectImages = [
   "16.png",
 ] as const;
 
+const NSC_IMAGE_DIR = "/images/nsc science center";
+
+const nscProjectImages = [
+  "강연_001.png",
+  "강연_002.png",
+  "파티_003.png",
+  "파티_005.png",
+] as const;
+
+const FILM_STAGE_IMAGE_DIR = "/images/film stage set design";
+
+type FilmStageProject = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  folder: string;
+  category: string;
+  thumbnail: string;
+  paragraphs?: readonly string[];
+  closingQuestion?: string;
+  closingAnswer?: string;
+  images: readonly string[];
+};
+
+const filmStageProjects: FilmStageProject[] = [
+  {
+    slug: "human",
+    folder: "01_human",
+    title: "HUMAN",
+    subtitle: "Production Design Concept",
+    category: "Film & Stage Set Design",
+    thumbnail: "01_letters.png",
+    paragraphs: [
+      "People live through people. People live through love.",
+      "This project explores the emotional traces that remain in spaces long after people have left.",
+      "Rather than focusing on characters, the story is told through environments. Each space represents a different aspect of human existence—love, memory, loss, hope, waiting, and connection. The architecture, objects, materials, and atmosphere become silent witnesses to human life.",
+      "The series follows a journey through ten spaces, each preserving a fragment of human experience. An archive of undelivered letters speaks of longing. A frozen honeymoon home captures a love interrupted by time. Forgotten belongings, empty theaters, wedding photographs, and illuminated windows reveal how deeply human emotions become embedded within physical environments.",
+      "Designed from a human-scale perspective, every scene emphasizes spatial storytelling through composition, materiality, light, and memory. The spaces are not simply backgrounds; they function as emotional landscapes that communicate the presence of people even in their absence.",
+    ],
+    closingQuestion: "What remains when people are gone?",
+    closingAnswer:
+      "The answer is found within the spaces they leave behind.",
+    images: [
+      "01_letters.png",
+      "02_frozen.png",
+      "03_forgotten.png",
+      "04_goodbye.png",
+      "05_applause.png",
+      "06_missing.png",
+      "07_promise.png",
+      "08_hope.png",
+      "09_waiting.png",
+      "10_windows.png",
+    ],
+  },
+  {
+    slug: "revive",
+    folder: "02_revive",
+    title: "REVIVE",
+    subtitle: "Production Design Concept",
+    category: "Film & Stage Set Design",
+    thumbnail: "01_cover.png",
+    images: [],
+  },
+  {
+    slug: "memory",
+    folder: "03_memory",
+    title: "MEMORY",
+    subtitle: "Production Design Concept",
+    category: "Film & Stage Set Design",
+    thumbnail: "01_cover.png",
+    images: [],
+  },
+  {
+    slug: "lost",
+    folder: "04_lost",
+    title: "LOST",
+    subtitle: "Production Design Concept",
+    category: "Film & Stage Set Design",
+    thumbnail: "01_cover.png",
+    images: [],
+  },
+];
+
 const CONCEPT_IMAGE_DIR = "/images/concept visualization works";
 
 const conceptVisualizationSections = [
@@ -153,16 +249,112 @@ const conceptVisualizationSections = [
   },
 ] as const;
 
+function publicImageSrc(baseDir: string, filename: string) {
+  return `${baseDir}/${encodeURIComponent(filename)}`;
+}
+
 function getOrbitImageSrc(filename: string) {
-  return `${ORBIT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+  return publicImageSrc(ORBIT_IMAGE_DIR, filename);
 }
 
 function getConceptImageSrc(filename: string) {
-  return `${CONCEPT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+  return publicImageSrc(CONCEPT_IMAGE_DIR, filename);
 }
 
 function getOilDepotImageSrc(filename: string) {
-  return `${OIL_DEPOT_IMAGE_DIR}/${encodeURIComponent(filename)}`;
+  return publicImageSrc(OIL_DEPOT_IMAGE_DIR, filename);
+}
+
+function getNscImageSrc(filename: string) {
+  return publicImageSrc(NSC_IMAGE_DIR, filename);
+}
+
+function getFilmStageImageSrc(folder: string, filename: string) {
+  return publicImageSrc(`${FILM_STAGE_IMAGE_DIR}/${folder}`, filename);
+}
+
+function getFilmStageThumbnailSrc(project: FilmStageProject) {
+  return getFilmStageImageSrc(project.folder, project.thumbnail);
+}
+
+function getFilmStageCoverSrc() {
+  return getFilmStageThumbnailSrc(filmStageProjects[0]);
+}
+
+function getProjectThumbnailSrc(projectNumber: string): string | null {
+  switch (projectNumber) {
+    case "01":
+      return getOrbitImageSrc(orbitProjectImages[0]);
+    case "02":
+      return getConceptImageSrc(conceptVisualizationSections[0].images[0]);
+    case "03":
+      return getFilmStageCoverSrc();
+    case "04":
+      return getOilDepotImageSrc(oilDepotProjectImages[0]);
+    case "05":
+      return getNscImageSrc(nscProjectImages[0]);
+    default:
+      return null;
+  }
+}
+
+function ProjectListItem({
+  project,
+  isOpen,
+  onToggle,
+}: {
+  project: Project;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const thumbnailSrc = getProjectThumbnailSrc(project.number);
+
+  return (
+    <div className="border-b border-black/10 last:border-b-0">
+      <article
+        onClick={onToggle}
+        className="group cursor-pointer py-3 transition-colors duration-300 sm:py-4 lg:py-5"
+      >
+        <div className="grid grid-cols-[auto_1fr_4.25rem] items-center gap-x-3 gap-y-0.5 sm:grid-cols-12 sm:grid-rows-[auto_auto] sm:gap-x-6 sm:gap-y-0.5 lg:gap-x-8">
+          <span
+            className={`row-span-2 self-center text-5xl font-light leading-none tracking-tighter transition-colors duration-300 sm:col-span-2 sm:row-span-2 sm:text-6xl lg:text-7xl ${
+              isOpen
+                ? "text-black/30"
+                : "text-black/15 group-hover:text-black/25"
+            }`}
+          >
+            {project.number}
+          </span>
+
+          <h3
+            className={`min-w-0 self-end sm:col-span-5 sm:row-start-1 lg:col-span-6 ${
+              isOpen ? "text-black" : "group-hover:translate-x-1"
+            } text-2xl font-light tracking-tight transition-all duration-300 sm:text-3xl lg:text-4xl xl:text-5xl`}
+          >
+            {project.title}
+          </h3>
+
+          {thumbnailSrc && (
+            <div className="row-span-2 flex items-center justify-end sm:col-span-5 sm:col-start-8 sm:row-span-2 sm:row-start-1 lg:col-span-4 lg:col-start-9">
+              <div className="h-[3.25rem] w-[4.25rem] overflow-hidden bg-black/[0.03] sm:h-14 sm:w-24 lg:h-16 lg:w-28">
+                <img
+                  src={thumbnailSrc}
+                  alt=""
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
+            </div>
+          )}
+
+          <p className="self-start text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 transition-colors duration-300 group-hover:text-black/60 sm:col-span-5 sm:row-start-2 lg:col-span-6">
+            {project.type}
+          </p>
+        </div>
+      </article>
+
+      {isOpen && <ProjectDetails project={project} />}
+    </div>
+  );
 }
 
 function GalleryImage({
@@ -253,6 +445,249 @@ function SubsectionGallery({
   );
 }
 
+function FilmSetGalleryTail({
+  images,
+  getImageSrc,
+  onOpen,
+}: {
+  images: readonly string[];
+  getImageSrc: (filename: string) => string;
+  onOpen: (src: string) => void;
+}) {
+  if (images.length === 0) {
+    return null;
+  }
+
+  const [second, third, fourth, fifth, sixth, wide, eighth, ninth, tenth] =
+    images;
+
+  return (
+    <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+      {second && third && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+          <GalleryImage src={getImageSrc(second)} onOpen={onOpen} />
+          <GalleryImage src={getImageSrc(third)} onOpen={onOpen} />
+        </div>
+      )}
+
+      {fourth && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
+          {[fourth, fifth, sixth]
+            .filter(Boolean)
+            .map((filename) => (
+              <GalleryImage
+                key={filename}
+                src={getImageSrc(filename)}
+                onOpen={onOpen}
+              />
+            ))}
+        </div>
+      )}
+
+      {wide && <GalleryImage src={getImageSrc(wide)} onOpen={onOpen} />}
+
+      {eighth && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
+          {[eighth, ninth, tenth]
+            .filter(Boolean)
+            .map((filename) => (
+              <GalleryImage
+                key={filename}
+                src={getImageSrc(filename)}
+                onOpen={onOpen}
+              />
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FilmSetGallery({
+  images,
+  getImageSrc,
+  onOpen,
+}: {
+  images: readonly string[];
+  getImageSrc: (filename: string) => string;
+  onOpen: (src: string) => void;
+}) {
+  if (images.length === 0) {
+    return null;
+  }
+
+  const [hero, ...rest] = images;
+
+  return (
+    <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+      {hero && <GalleryImage src={getImageSrc(hero)} onOpen={onOpen} />}
+      <FilmSetGalleryTail
+        images={rest}
+        getImageSrc={getImageSrc}
+        onOpen={onOpen}
+      />
+    </div>
+  );
+}
+
+function FilmStageNarrative({
+  paragraphs,
+  closingQuestion,
+  closingAnswer,
+}: {
+  paragraphs: readonly string[];
+  closingQuestion?: string;
+  closingAnswer?: string;
+}) {
+  return (
+    <div className="mx-auto max-w-xl space-y-6 sm:space-y-8 lg:max-w-2xl">
+      {paragraphs.map((paragraph, index) => (
+        <p
+          key={index}
+          className={`leading-relaxed text-black/70 ${
+            index === 0
+              ? "text-base font-light italic tracking-wide text-black/85 sm:text-lg sm:leading-9"
+              : "text-sm font-light sm:text-base sm:leading-8"
+          }`}
+        >
+          {paragraph}
+        </p>
+      ))}
+
+      {closingQuestion && (
+        <div className="border-t border-black/10 pt-8 sm:pt-10">
+          <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-black/40">
+            Through these environments, the project asks a simple question:
+          </p>
+          <p className="mt-5 text-xl font-light uppercase tracking-[0.12em] text-black sm:mt-6 sm:text-2xl sm:tracking-[0.15em] lg:text-3xl">
+            &ldquo;{closingQuestion}&rdquo;
+          </p>
+          {closingAnswer && (
+            <p className="mt-5 text-sm font-light italic leading-relaxed text-black/65 sm:mt-6 sm:text-base sm:leading-8">
+              {closingAnswer}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FilmStageProjectCard({
+  project,
+  onSelect,
+}: {
+  project: FilmStageProject;
+  onSelect: (slug: string) => void;
+}) {
+  const hasThumbnail = project.images.length > 0;
+  const thumbnailSrc = hasThumbnail
+    ? getFilmStageThumbnailSrc(project)
+    : null;
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(project.slug)}
+      className="group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8"
+    >
+      <div className="grid grid-cols-[1fr_5.5rem] items-center gap-x-5 sm:grid-cols-[1fr_7rem] sm:gap-x-8 lg:grid-cols-[1fr_8.5rem]">
+        <div className="min-w-0">
+          <h4 className="text-xl font-light uppercase tracking-[0.18em] text-black transition-transform duration-300 group-hover:translate-x-1 sm:text-2xl sm:tracking-[0.22em] lg:text-3xl">
+            {project.title}
+          </h4>
+          <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-3">
+            {project.subtitle}
+          </p>
+        </div>
+
+        <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
+          {thumbnailSrc ? (
+            <img
+              src={thumbnailSrc}
+              alt=""
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            />
+          ) : (
+            <div className="h-full w-full bg-black/[0.04]" />
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function FilmStageProjectDetail({
+  project,
+  onOpen,
+}: {
+  project: FilmStageProject;
+  onOpen: (src: string) => void;
+}) {
+  const getImageSrc = (filename: string) =>
+    getFilmStageImageSrc(project.folder, filename);
+  const hasGallery = project.images.length > 0;
+  const hasNarrative =
+    (project.paragraphs?.length ?? 0) > 0 ||
+    Boolean(project.closingQuestion);
+
+  return (
+    <>
+      <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+        {project.category}
+      </p>
+      <h4 className="mt-3 text-3xl font-light uppercase tracking-[0.2em] text-black sm:text-4xl sm:tracking-[0.25em] lg:text-5xl">
+        {project.title}
+      </h4>
+      <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-5 sm:text-[11px]">
+        {project.subtitle}
+      </p>
+
+      {hasGallery && (
+        <div className="mt-12 sm:mt-16 lg:mt-20">
+          <GalleryImage
+            src={getImageSrc(project.images[0])}
+            alt={project.title}
+            onOpen={onOpen}
+          />
+        </div>
+      )}
+
+      {hasNarrative && project.paragraphs && (
+        <div
+          className={
+            hasGallery
+              ? "mt-16 sm:mt-20 lg:mt-24"
+              : "mt-12 sm:mt-16 lg:mt-20"
+          }
+        >
+          <FilmStageNarrative
+            paragraphs={project.paragraphs}
+            closingQuestion={project.closingQuestion}
+            closingAnswer={project.closingAnswer}
+          />
+        </div>
+      )}
+
+      {hasGallery && project.images.length > 1 && (
+        <div className="mt-16 sm:mt-20 lg:mt-24">
+          <FilmSetGalleryTail
+            images={project.images.slice(1)}
+            getImageSrc={getImageSrc}
+            onOpen={onOpen}
+          />
+        </div>
+      )}
+
+      {!hasGallery && !hasNarrative && (
+        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+          Gallery coming soon.
+        </p>
+      )}
+    </>
+  );
+}
+
 function MetadataItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="border-t border-black/10 py-5 sm:py-6">
@@ -266,7 +701,7 @@ function MetadataItem({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ProjectInfoLayout({ project }: { project: Project }) {
+function ProjectInfoLayout({ project }: { project: ProjectData }) {
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20 xl:gap-28">
       <div className="lg:col-span-7">
@@ -350,7 +785,7 @@ function OilDepotProjectDetails({
   project,
   onOpen,
 }: {
-  project: Project;
+  project: ProjectData;
   onOpen: (src: string) => void;
 }) {
   return (
@@ -365,6 +800,66 @@ function OilDepotProjectDetails({
         />
       </div>
     </>
+  );
+}
+
+function SingaporeProjectDetails({
+  onOpen,
+}: {
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <div className="mt-20 sm:mt-28 lg:mt-36">
+      <SubsectionGallery
+        images={nscProjectImages}
+        getImageSrc={getNscImageSrc}
+        onOpen={onOpen}
+      />
+    </div>
+  );
+}
+
+function FilmStageSetDesignDetails({
+  onOpen,
+}: {
+  onOpen: (src: string) => void;
+}) {
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const selectedProject = filmStageProjects.find(
+    (project) => project.slug === selectedSlug,
+  );
+
+  if (selectedProject) {
+    return (
+      <div className="mt-10 sm:mt-12 lg:mt-14">
+        <button
+          type="button"
+          onClick={() => setSelectedSlug(null)}
+          className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
+        >
+          ← All Film Projects
+        </button>
+
+        <div className="mt-8 sm:mt-10 lg:mt-12">
+          <FilmStageProjectDetail
+            project={selectedProject}
+            onOpen={onOpen}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-10 border-t border-black/10 sm:mt-12 lg:mt-14">
+      {filmStageProjects.map((project) => (
+        <FilmStageProjectCard
+          key={project.slug}
+          project={project}
+          onSelect={setSelectedSlug}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -404,20 +899,32 @@ function ConceptVisualizationDetails({
 function ProjectDetails({ project }: { project: Project }) {
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
-  if (project.number !== "01" && project.number !== "03" && project.number !== "04") {
+  if (
+    project.number !== "01" &&
+    project.number !== "02" &&
+    project.number !== "03" &&
+    project.number !== "04" &&
+    project.number !== "05"
+  ) {
     return null;
   }
 
   return (
-    <div className="pb-16 pt-4 sm:pb-24 sm:pt-8 lg:pb-32">
+    <div className="pb-10 pt-2 sm:pb-12 sm:pt-4 lg:pb-16">
       {project.number === "01" && (
         <OrbitProjectDetails project={project} onOpen={setActiveImage} />
       )}
+      {project.number === "02" && (
+        <ConceptVisualizationDetails onOpen={setActiveImage} />
+      )}
       {project.number === "03" && (
-        <OilDepotProjectDetails project={project} onOpen={setActiveImage} />
+        <FilmStageSetDesignDetails onOpen={setActiveImage} />
       )}
       {project.number === "04" && (
-        <ConceptVisualizationDetails onOpen={setActiveImage} />
+        <OilDepotProjectDetails project={project} onOpen={setActiveImage} />
+      )}
+      {project.number === "05" && (
+        <SingaporeProjectDetails onOpen={setActiveImage} />
       )}
 
       {activeImage && (
@@ -501,48 +1008,25 @@ export default function Home() {
 
       <section
         id="work"
-        className="px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
+        className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
       >
         <div className="mx-auto w-full max-w-7xl">
           <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
             Featured Projects
           </h2>
-          <div className="mt-24 divide-y divide-black/10 sm:mt-32">
+          <div className="mt-6 border-t border-black/10 sm:mt-8">
             {projects.map((project) => {
               const isOpen = openProject === project.number;
 
               return (
-                <div key={project.number}>
-                  <article
-                    onClick={() =>
-                      setOpenProject(isOpen ? null : project.number)
-                    }
-                    className="group cursor-pointer py-14 transition-all duration-500 sm:py-20 lg:py-28"
-                  >
-                    <div className="grid grid-cols-1 items-end gap-6 sm:grid-cols-12 sm:gap-8 lg:gap-12">
-                      <span
-                        className={`text-6xl font-light leading-none tracking-tighter transition-colors duration-500 sm:col-span-3 sm:text-7xl lg:col-span-2 lg:text-8xl ${
-                          isOpen
-                            ? "text-black/30"
-                            : "text-black/15 group-hover:text-black/25"
-                        }`}
-                      >
-                        {project.number}
-                      </span>
-                      <h3
-                        className={`text-2xl font-light tracking-tight transition-all duration-500 sm:col-span-6 sm:text-3xl lg:col-span-7 lg:text-4xl xl:text-5xl ${
-                          isOpen ? "text-black" : "group-hover:translate-x-2"
-                        }`}
-                      >
-                        {project.title}
-                      </h3>
-                      <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 transition-colors duration-500 group-hover:text-black/60 sm:col-span-3 sm:pb-1 sm:text-right lg:col-span-3">
-                        {project.type}
-                      </p>
-                    </div>
-                  </article>
-                  {isOpen && <ProjectDetails project={project} />}
-                </div>
+                <ProjectListItem
+                  key={project.number}
+                  project={project}
+                  isOpen={isOpen}
+                  onToggle={() =>
+                    setOpenProject(isOpen ? null : project.number)
+                  }
+                />
               );
             })}
           </div>
