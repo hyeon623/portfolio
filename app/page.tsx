@@ -20,61 +20,182 @@ type ProjectData = {
   description: string | null;
 };
 
-const projects: ProjectData[] = [
+type PortfolioProjectId = string;
+
+type PortfolioProjectItem = {
+  id: PortfolioProjectId;
+  title: string;
+  subtitle: string;
+  comingSoon?: boolean;
+};
+
+type PortfolioCategory = {
+  number: string;
+  title: string;
+  subtitle: string;
+  projects: PortfolioProjectItem[];
+};
+
+const orbitProjectData: ProjectData = {
+  number: "01",
+  title: "ORBIT Dome Theater",
+  type: "Exhibition & Immersive Design",
+  year: "2024 - Present",
+  role: "Lead Spatial Designer",
+  scope: "Exterior Design, Landscape Design, Architectural Visualization",
+  location: "South Korea",
+  description:
+    "Immersive dome theater project developed for cultural and educational experiences. Responsible for architectural exterior design, landscape planning, spatial design and visualization.",
+};
+
+const oilDepotProjectData: ProjectData = {
+  number: "04",
+  title: "Oil Depot Cultural Renewal",
+  type: "Architectural & Exhibition Renewal",
+  year: "2024",
+  role: "Lead Spatial Designer",
+  scope: "Exterior Design, Landscape Design, Architectural Visualization",
+  location: "Seoul, South Korea",
+  description:
+    "Cultural renewal project transforming a former oil depot into a contemporary public destination. Responsible for exterior design development, landscape planning, spatial composition, and architectural visualization.",
+};
+
+const portfolioCategories: PortfolioCategory[] = [
   {
     number: "01",
-    title: "ORBIT Dome Theater",
-    type: "Exhibition & Immersive Design",
-    year: "2024 - Present",
-
-    role: "Lead Spatial Designer",
-
-    scope: "Exterior Design, Landscape Design, Architectural Visualization",
-
-    location: "South Korea",
-    description:
-      "Immersive dome theater project developed for cultural and educational experiences. Responsible for architectural exterior design, landscape planning, spatial design and visualization.",
+    title: "Architecture & Environmental Design",
+    subtitle: "3 Projects",
+    projects: [
+      {
+        id: "orbit",
+        title: "Orbit Dome Theater",
+        subtitle: orbitProjectData.type,
+      },
+      {
+        id: "oil-depot",
+        title: "Oil Depot Cultural Renewal",
+        subtitle: oilDepotProjectData.type,
+      },
+      {
+        id: "hanok-renewal",
+        title: "Hanok Renewal",
+        subtitle: "Architectural Visualization & Environment Design",
+      },
+    ],
   },
   {
     number: "02",
-    title: "Concept Visualization Works",
-    type: "Architectural Visualization & Environment Design",
-    year: null,
-    role: null,
-    scope: null,
-    location: null,
-    description: null,
+    title: "Exhibition & Spatial Design",
+    subtitle: "13 Projects",
+    projects: [
+      {
+        id: "singapore-nsc",
+        title: "Singapore NSC Science Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "aquarium-science-center",
+        title: "Aquarium Science Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "gangneung-metaverse-experience-center",
+        title: "Gangneung Metaverse Experience Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "national-miryang-meteorological-science-museum",
+        title: "National Miryang Meteorological Science Museum",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "national-daegu-museum",
+        title: "National Daegu Museum",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "national-west-coast-climate-atmospheric-center",
+        title: "National West Coast Climate & Atmospheric Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "shinhan-bank-giheung-training-center",
+        title: "Shinhan Bank Giheung Training Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "geumsan-ginseng-experience-village",
+        title: "Geumsan Ginseng Experience Village",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "hongcheon-animal-sculpture-theme-park",
+        title: "Hongcheon Animal Sculpture Theme Park",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "jeju-seogwipo-citrus-museum",
+        title: "Jeju Seogwipo Citrus Museum",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "national-medicinal-plant-resource-center",
+        title: "National Medicinal Plant Resource Center",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "korean-church-of-new-york",
+        title: "Korean Church of New York",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "busan-motor-studio",
+        title: "Busan Motor Studio",
+        subtitle: "Exhibition Design",
+      },
+    ],
   },
   {
     number: "03",
-    title: "Film & Stage Set Design",
-    type: "Production Design & Set Visualization",
-    year: null,
-    role: null,
-    scope: null,
-    location: null,
-    description: null,
+    title: "Production Design",
+    subtitle: "2 Projects",
+    projects: [
+      {
+        id: "human",
+        title: "Human",
+        subtitle: "Production Design Concept",
+      },
+      {
+        id: "the-last-24-hours",
+        title: "The Last 24 Hours",
+        subtitle: "Production Design Concept",
+      },
+    ],
   },
   {
     number: "04",
-    title: "Oil Depot Cultural Renewal",
-    type: "Architectural & Exhibition Renewal",
-    year: "2024",
-    role: "Lead Spatial Designer",
-    scope: "Exterior Design, Landscape Design, Architectural Visualization",
-    location: "Seoul, South Korea",
-    description:
-      "Cultural renewal project transforming a former oil depot into a contemporary public destination. Responsible for exterior design development, landscape planning, spatial composition, and architectural visualization.",
+    title: "Interior Design",
+    subtitle: "1 Project",
+    projects: [
+      {
+        id: "shinhan-bank-gwanghwamun-office-interior",
+        title: "Shinhan Bank Gwanghwamun Office Interior",
+        subtitle: "Interior Design",
+      },
+    ],
   },
   {
     number: "05",
-    title: "Singapore NSC Science Center",
-    type: "Exhibition Design",
-    year: null,
-    role: null,
-    scope: null,
-    location: null,
-    description: null,
+    title: "Concept Visualization",
+    subtitle: "Coming Soon",
+    projects: [
+      {
+        id: "coming-soon-concept",
+        title: "Coming Soon",
+        subtitle: "Concept Visualization",
+        comingSoon: true,
+      },
+    ],
   },
 ];
 
@@ -153,13 +274,149 @@ const nscProjectImages = [
   "강연_002.png",
   "파티_003.png",
   "파티_005.png",
+  "3_ph.png",
 ] as const;
+
+type FolderGalleryProject = {
+  title: string;
+  imageDir: string;
+  images: readonly string[];
+  description?: string;
+};
+
+const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
+  "gangneung-metaverse-experience-center": {
+    title: "Gangneung Metaverse Experience Center",
+    imageDir: "/images/강릉 메타버스 체험관",
+    images: ["01.png", "02.png", "03.png"],
+  },
+  "national-miryang-meteorological-science-museum": {
+    title: "National Miryang Meteorological Science Museum",
+    imageDir: "/images/국립밀양기상과학관",
+    images: ["01.png", "02.png"],
+  },
+  "national-daegu-museum": {
+    title: "National Daegu Museum",
+    imageDir: "/images/국립대구박물관",
+    images: [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.png",
+      "05.png",
+      "06.png",
+      "07.png",
+    ],
+  },
+  "national-west-coast-climate-atmospheric-center": {
+    title: "National West Coast Climate & Atmospheric Center",
+    imageDir: "/images/국립서해안기후대기센터",
+    images: [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.png",
+      "05.png",
+      "06.png",
+      "07.png",
+    ],
+  },
+  "geumsan-ginseng-experience-village": {
+    title: "Geumsan Ginseng Experience Village",
+    imageDir: "/images/금산뿌리깊은인삼체험마을",
+    images: ["01.png", "02.png", "03.png", "04.png"],
+  },
+  "korean-church-of-new-york": {
+    title: "Korean Church of New York",
+    imageDir: "/images/뉴욕한인교회",
+    images: ["01.png", "02.png", "03.png"],
+  },
+  "national-medicinal-plant-resource-center": {
+    title: "National Medicinal Plant Resource Center",
+    imageDir: "/images/제주국가생약자원관리센터",
+    images: ["01.jpg", "02.png", "03.png"],
+  },
+  "jeju-seogwipo-citrus-museum": {
+    title: "Jeju Seogwipo Citrus Museum",
+    imageDir: "/images/제주서귀포감귤박물관",
+    images: [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.png",
+      "05.png",
+      "06.png",
+    ],
+  },
+  "hongcheon-animal-sculpture-theme-park": {
+    title: "Hongcheon Animal Sculpture Theme Park",
+    imageDir: "/images/홍천동물조각테마파크",
+    images: [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.jpg",
+      "05.png",
+      "06.png",
+    ],
+  },
+  "busan-motor-studio": {
+    title: "Busan Motor Studio",
+    imageDir: "/images/부산모터스튜디오",
+    images: [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.png",
+      "05.png",
+      "21.png",
+      "22.png",
+      "23.png",
+      "24.png",
+      "25.png",
+    ],
+  },
+  "shinhan-bank-giheung-training-center": {
+    title: "Shinhan Bank Giheung Training Center",
+    imageDir: "/images/신한은행기흥연수원",
+    images: [
+      "1-1.jpg",
+      "1-2.jpg",
+      "1-3.jpg",
+      "1-4.jpg",
+      "1-5.jpg",
+      "1-6.jpg",
+      "1-7.jpg",
+      "1-8.jpg",
+      "1-9.jpg",
+      "1-10.jpg",
+      "2-1.png",
+      "2-2.png",
+      "2-3.png",
+      "2-4.png",
+      "2-5.png",
+      "2-6.png",
+      "2-7.png",
+    ],
+  },
+};
+
+const gwanghwamunInteriorProject: FolderGalleryProject = {
+  title: "Shinhan Bank Gwanghwamun Office Interior",
+  imageDir: "/images/신한은행광화문집무실",
+  images: ["01.png", "02.png", "03.png", "04.png", "05.png", "06.png"],
+};
+
+function getFolderImageSrc(imageDir: string, filename: string) {
+  return publicImageSrc(imageDir, filename);
+}
 
 const FILM_STAGE_IMAGE_DIR = "/images/film stage set design";
 
 type FilmStageProject = {
   slug: string;
   title: string;
+  displayTitle?: string;
   subtitle: string;
   folder: string;
   category: string;
@@ -168,6 +425,7 @@ type FilmStageProject = {
   closingQuestion?: string;
   closingAnswer?: string;
   images: readonly string[];
+  imageLabels?: readonly string[];
 };
 
 const filmStageProjects: FilmStageProject[] = [
@@ -202,31 +460,44 @@ const filmStageProjects: FilmStageProject[] = [
     ],
   },
   {
-    slug: "revive",
-    folder: "02_revive",
-    title: "REVIVE",
-    subtitle: "Production Design Concept",
-    category: "Film & Stage Set Design",
-    thumbnail: "01_cover.png",
-    images: [],
-  },
-  {
-    slug: "memory",
-    folder: "03_memory",
-    title: "MEMORY",
-    subtitle: "Production Design Concept",
-    category: "Film & Stage Set Design",
-    thumbnail: "01_cover.png",
-    images: [],
-  },
-  {
-    slug: "lost",
-    folder: "04_lost",
-    title: "LOST",
-    subtitle: "Production Design Concept",
-    category: "Film & Stage Set Design",
-    thumbnail: "01_cover.png",
-    images: [],
+    slug: "the-last-24-hours",
+    folder: "02_the last 24 hour",
+    title: "THE LAST 24 HOURS",
+    displayTitle: "The Last 24 Hours",
+    subtitle: "PRODUCTION DESIGN CONCEPT",
+    category: "Film Stage Set Design",
+    thumbnail: "01_last_screening.png",
+    paragraphs: [
+      "A production design project exploring spaces during their final 24 hours before disappearance. Each environment captures the emotional traces left behind by people, revealing stories of memory, farewell, transition, and time through architectural storytelling.",
+    ],
+    imageLabels: [
+      "Last Screening",
+      "Final Class",
+      "Last Train",
+      "Closing Time",
+      "Checkout",
+      "Last Performance",
+      "The Last Shift",
+      "Empty Shelves",
+      "Final Service",
+      "The Last Wedding Hall",
+      "The Lost Terminal",
+      "The Last Dance",
+    ],
+    images: [
+      "01_last_screening.png",
+      "02_final_class.jpg",
+      "03_last_train.png",
+      "04_closing_time.jpg",
+      "05_checkout.png",
+      "06_last_performance.png",
+      "07_the_last_shift.png",
+      "08_empty_shelves.png",
+      "09_final_service.png",
+      "11_the_last_wedding_hall.png",
+      "12_the_lost_terminal.jpg",
+      "13_the_last_dance.jpg",
+    ],
   },
 ];
 
@@ -248,6 +519,9 @@ const conceptVisualizationSections = [
     images: ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
   },
 ] as const;
+
+const hanokRenewalSection = conceptVisualizationSections[1];
+const aquariumScienceCenterSection = conceptVisualizationSections[0];
 
 function publicImageSrc(baseDir: string, filename: string) {
   return `${baseDir}/${encodeURIComponent(filename)}`;
@@ -281,57 +555,79 @@ function getFilmStageCoverSrc() {
   return getFilmStageThumbnailSrc(filmStageProjects[0]);
 }
 
-function getProjectThumbnailSrc(projectNumber: string): string | null {
-  switch (projectNumber) {
+function getCategoryThumbnailSrc(categoryNumber: string): string | null {
+  switch (categoryNumber) {
     case "01":
       return getOrbitImageSrc(orbitProjectImages[0]);
     case "02":
-      return getConceptImageSrc(conceptVisualizationSections[0].images[0]);
+      return getNscImageSrc(nscProjectImages[0]);
     case "03":
       return getFilmStageCoverSrc();
-    case "04":
-      return getOilDepotImageSrc(oilDepotProjectImages[0]);
-    case "05":
-      return getNscImageSrc(nscProjectImages[0]);
     default:
       return null;
   }
 }
 
-function ProjectListItem({
-  project,
-  isOpen,
-  onToggle,
+function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null {
+  switch (projectId) {
+    case "orbit":
+      return getOrbitImageSrc(orbitProjectImages[0]);
+    case "oil-depot":
+      return getOilDepotImageSrc(oilDepotProjectImages[0]);
+    case "hanok-renewal":
+      return getConceptImageSrc(hanokRenewalSection.images[0]);
+    case "singapore-nsc":
+      return getNscImageSrc(nscProjectImages[0]);
+    case "aquarium-science-center":
+      return getConceptImageSrc(aquariumScienceCenterSection.images[0]);
+    case "human":
+      return getFilmStageThumbnailSrc(
+        filmStageProjects.find((project) => project.slug === "human")!,
+      );
+    case "the-last-24-hours":
+      return getFilmStageThumbnailSrc(
+        filmStageProjects.find((project) => project.slug === "the-last-24-hours")!,
+      );
+    case "shinhan-bank-gwanghwamun-office-interior":
+      return getFolderImageSrc(
+        gwanghwamunInteriorProject.imageDir,
+        gwanghwamunInteriorProject.images[0],
+      );
+    default: {
+      const folderProject = exhibitionFolderProjects[projectId];
+      if (folderProject) {
+        return getFolderImageSrc(
+          folderProject.imageDir,
+          folderProject.images[0],
+        );
+      }
+      return null;
+    }
+  }
+}
+
+function CategoryListItem({
+  category,
+  onSelect,
 }: {
-  project: Project;
-  isOpen: boolean;
-  onToggle: () => void;
+  category: PortfolioCategory;
+  onSelect: () => void;
 }) {
-  const thumbnailSrc = getProjectThumbnailSrc(project.number);
+  const thumbnailSrc = getCategoryThumbnailSrc(category.number);
 
   return (
     <div className="border-b border-black/10 last:border-b-0">
       <article
-        onClick={onToggle}
+        onClick={onSelect}
         className="group cursor-pointer py-3 transition-colors duration-300 sm:py-4 lg:py-5"
       >
         <div className="grid grid-cols-[auto_1fr_4.25rem] items-center gap-x-3 gap-y-0.5 sm:grid-cols-12 sm:grid-rows-[auto_auto] sm:gap-x-6 sm:gap-y-0.5 lg:gap-x-8">
-          <span
-            className={`row-span-2 self-center text-5xl font-light leading-none tracking-tighter transition-colors duration-300 sm:col-span-2 sm:row-span-2 sm:text-6xl lg:text-7xl ${
-              isOpen
-                ? "text-black/30"
-                : "text-black/15 group-hover:text-black/25"
-            }`}
-          >
-            {project.number}
+          <span className="row-span-2 self-center text-5xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:col-span-2 sm:row-span-2 sm:text-6xl lg:text-7xl">
+            {category.number}
           </span>
 
-          <h3
-            className={`min-w-0 self-end sm:col-span-5 sm:row-start-1 lg:col-span-6 ${
-              isOpen ? "text-black" : "group-hover:translate-x-1"
-            } text-2xl font-light tracking-tight transition-all duration-300 sm:text-3xl lg:text-4xl xl:text-5xl`}
-          >
-            {project.title}
+          <h3 className="min-w-0 self-end text-2xl font-light tracking-tight transition-all duration-300 group-hover:translate-x-1 sm:col-span-5 sm:row-start-1 sm:text-3xl lg:col-span-6 lg:text-4xl xl:text-5xl">
+            {category.title}
           </h3>
 
           {thumbnailSrc && (
@@ -347,12 +643,10 @@ function ProjectListItem({
           )}
 
           <p className="self-start text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 transition-colors duration-300 group-hover:text-black/60 sm:col-span-5 sm:row-start-2 lg:col-span-6">
-            {project.type}
+            {category.subtitle}
           </p>
         </div>
       </article>
-
-      {isOpen && <ProjectDetails project={project} />}
     </div>
   );
 }
@@ -449,24 +743,49 @@ function FilmSetGalleryTail({
   images,
   getImageSrc,
   onOpen,
+  imageLabels,
+  labelOffset = 1,
 }: {
   images: readonly string[];
   getImageSrc: (filename: string) => string;
   onOpen: (src: string) => void;
+  imageLabels?: readonly string[];
+  labelOffset?: number;
 }) {
   if (images.length === 0) {
     return null;
   }
 
-  const [second, third, fourth, fifth, sixth, wide, eighth, ninth, tenth] =
-    images;
+  const getAlt = (index: number) => imageLabels?.[labelOffset + index] ?? "";
+
+  const [
+    second,
+    third,
+    fourth,
+    fifth,
+    sixth,
+    wide,
+    eighth,
+    ninth,
+    tenth,
+    eleventh,
+    twelfth,
+  ] = images;
 
   return (
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
       {second && third && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-          <GalleryImage src={getImageSrc(second)} onOpen={onOpen} />
-          <GalleryImage src={getImageSrc(third)} onOpen={onOpen} />
+          <GalleryImage
+            src={getImageSrc(second)}
+            alt={getAlt(0)}
+            onOpen={onOpen}
+          />
+          <GalleryImage
+            src={getImageSrc(third)}
+            alt={getAlt(1)}
+            onOpen={onOpen}
+          />
         </div>
       )}
 
@@ -474,29 +793,54 @@ function FilmSetGalleryTail({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
           {[fourth, fifth, sixth]
             .filter(Boolean)
-            .map((filename) => (
+            .map((filename, index) => (
               <GalleryImage
                 key={filename}
                 src={getImageSrc(filename)}
+                alt={getAlt(2 + index)}
                 onOpen={onOpen}
               />
             ))}
         </div>
       )}
 
-      {wide && <GalleryImage src={getImageSrc(wide)} onOpen={onOpen} />}
+      {wide && (
+        <GalleryImage
+          src={getImageSrc(wide)}
+          alt={getAlt(5)}
+          onOpen={onOpen}
+        />
+      )}
 
       {eighth && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
           {[eighth, ninth, tenth]
             .filter(Boolean)
-            .map((filename) => (
+            .map((filename, index) => (
               <GalleryImage
                 key={filename}
                 src={getImageSrc(filename)}
+                alt={getAlt(6 + index)}
                 onOpen={onOpen}
               />
             ))}
+        </div>
+      )}
+
+      {eleventh && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+          <GalleryImage
+            src={getImageSrc(eleventh)}
+            alt={getAlt(9)}
+            onOpen={onOpen}
+          />
+          {twelfth && (
+            <GalleryImage
+              src={getImageSrc(twelfth)}
+              alt={getAlt(10)}
+              onOpen={onOpen}
+            />
+          )}
         </div>
       )}
     </div>
@@ -637,7 +981,7 @@ function FilmStageProjectDetail({
         {project.category}
       </p>
       <h4 className="mt-3 text-3xl font-light uppercase tracking-[0.2em] text-black sm:text-4xl sm:tracking-[0.25em] lg:text-5xl">
-        {project.title}
+        {project.displayTitle ?? project.title}
       </h4>
       <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-5 sm:text-[11px]">
         {project.subtitle}
@@ -647,7 +991,7 @@ function FilmStageProjectDetail({
         <div className="mt-12 sm:mt-16 lg:mt-20">
           <GalleryImage
             src={getImageSrc(project.images[0])}
-            alt={project.title}
+            alt={project.imageLabels?.[0] ?? project.title}
             onOpen={onOpen}
           />
         </div>
@@ -675,6 +1019,8 @@ function FilmStageProjectDetail({
             images={project.images.slice(1)}
             getImageSrc={getImageSrc}
             onOpen={onOpen}
+            imageLabels={project.imageLabels}
+            labelOffset={project.imageLabels ? 1 : 0}
           />
         </div>
       )}
@@ -819,127 +1165,453 @@ function SingaporeProjectDetails({
   );
 }
 
-function FilmStageSetDesignDetails({
-  onOpen,
+const EXHIBITION_CATEGORY_NUMBER = "02";
+const PRODUCTION_CATEGORY_NUMBER = "03";
+
+function ProductionDesignProjectList({
+  onSelectProject,
 }: {
-  onOpen: (src: string) => void;
+  onSelectProject: (projectId: PortfolioProjectId) => void;
 }) {
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const selectedProject = filmStageProjects.find(
-    (project) => project.slug === selectedSlug,
-  );
-
-  if (selectedProject) {
-    return (
-      <div className="mt-10 sm:mt-12 lg:mt-14">
-        <button
-          type="button"
-          onClick={() => setSelectedSlug(null)}
-          className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
-        >
-          ← All Film Projects
-        </button>
-
-        <div className="mt-8 sm:mt-10 lg:mt-12">
-          <FilmStageProjectDetail
-            project={selectedProject}
-            onOpen={onOpen}
-          />
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="mt-10 border-t border-black/10 sm:mt-12 lg:mt-14">
+    <div className="border-t border-black/10">
       {filmStageProjects.map((project) => (
         <FilmStageProjectCard
           key={project.slug}
           project={project}
-          onSelect={setSelectedSlug}
+          onSelect={(slug) => onSelectProject(slug)}
         />
       ))}
     </div>
   );
 }
 
-function ConceptVisualizationDetails({
+function CategoryProjectListItem({
+  project,
+  onSelect,
+}: {
+  project: PortfolioProjectItem;
+  onSelect: (id: PortfolioProjectId) => void;
+}) {
+  const thumbnailSrc = project.comingSoon
+    ? null
+    : getSubProjectThumbnailSrc(project.id);
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(project.id)}
+      className="group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8"
+    >
+      <div className="grid grid-cols-[1fr_5.5rem] items-center gap-x-5 sm:grid-cols-[1fr_7rem] sm:gap-x-8 lg:grid-cols-[1fr_8.5rem]">
+        <div className="min-w-0">
+          <h4 className="text-xl font-light uppercase tracking-[0.18em] text-black transition-transform duration-300 group-hover:translate-x-1 sm:text-2xl sm:tracking-[0.22em] lg:text-3xl">
+            {project.title}
+          </h4>
+          <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-3">
+            {project.subtitle}
+          </p>
+        </div>
+
+        <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
+          {thumbnailSrc ? (
+            <img
+              src={thumbnailSrc}
+              alt=""
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            />
+          ) : (
+            <div className="h-full w-full bg-black/[0.04]" />
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function CategoryProjectList({
+  category,
+  onSelectProject,
+}: {
+  category: PortfolioCategory;
+  onSelectProject: (id: PortfolioProjectId) => void;
+}) {
+  return (
+    <div className="border-t border-black/10">
+      {category.projects.map((project) => (
+        <CategoryProjectListItem
+          key={project.id}
+          project={project}
+          onSelect={onSelectProject}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ExhibitionProjectCard({
+  project,
+  onSelect,
+}: {
+  project: PortfolioProjectItem;
+  onSelect: (id: PortfolioProjectId) => void;
+}) {
+  const thumbnailSrc = project.comingSoon
+    ? null
+    : getSubProjectThumbnailSrc(project.id);
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(project.id)}
+      className="group flex h-full w-full cursor-pointer flex-col text-left transition-colors duration-300 hover:bg-black/[0.015]"
+    >
+      <div className="aspect-[4/3] w-full shrink-0 overflow-hidden bg-black/[0.03]">
+        {thumbnailSrc ? (
+          <img
+            src={thumbnailSrc}
+            alt=""
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="h-full w-full bg-black/[0.04]" />
+        )}
+      </div>
+
+      <div className="flex h-[5.25rem] shrink-0 flex-col justify-start pt-4 sm:h-[5.75rem] sm:pt-5">
+        <h4 className="line-clamp-2 text-sm font-light uppercase leading-snug tracking-[0.16em] text-black transition-transform duration-300 group-hover:translate-x-0.5 sm:text-base sm:tracking-[0.18em] lg:text-lg lg:tracking-[0.2em]">
+          {project.title}
+        </h4>
+        <p className="mt-auto line-clamp-1 pt-2 text-[10px] font-medium uppercase tracking-[0.3em] text-black/45 transition-colors duration-300 group-hover:text-black/60">
+          {project.subtitle}
+        </p>
+      </div>
+    </button>
+  );
+}
+
+function ExhibitionProjectGrid({
+  category,
+  onSelectProject,
+}: {
+  category: PortfolioCategory;
+  onSelectProject: (id: PortfolioProjectId) => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
+      {category.projects.map((project) => (
+        <ExhibitionProjectCard
+          key={project.id}
+          project={project}
+          onSelect={onSelectProject}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FolderGalleryDetails({
+  project,
+  onOpen,
+}: {
+  project: FolderGalleryProject;
+  onOpen: (src: string) => void;
+}) {
+  const getImageSrc = (filename: string) =>
+    getFolderImageSrc(project.imageDir, filename);
+
+  return (
+    <div className="mt-20 sm:mt-28 lg:mt-36">
+      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+        {project.title}
+      </h4>
+      {project.description && (
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+          {project.description}
+        </p>
+      )}
+      <div
+        className={
+          project.description
+            ? "mt-12 sm:mt-16 lg:mt-20"
+            : "mt-12 sm:mt-16 lg:mt-20"
+        }
+      >
+        <SubsectionGallery
+          images={project.images}
+          getImageSrc={getImageSrc}
+          onOpen={onOpen}
+        />
+      </div>
+    </div>
+  );
+}
+
+function HanokRenewalDetails({
   onOpen,
 }: {
   onOpen: (src: string) => void;
 }) {
   return (
-    <div className="mt-20 space-y-20 sm:mt-28 sm:space-y-28 lg:mt-36 lg:space-y-36">
-      {conceptVisualizationSections.map((section, index) => (
-        <section
-          key={section.id}
-          className={
-            index > 0 ? "border-t border-black/10 pt-20 sm:pt-28 lg:pt-36" : ""
-          }
-        >
-          <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
-            {section.title}
-          </h4>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-            {section.description}
-          </p>
-          <div className="mt-12 sm:mt-16 lg:mt-20">
-            <SubsectionGallery
-              images={section.images}
-              getImageSrc={getConceptImageSrc}
-              onOpen={onOpen}
-            />
-          </div>
-        </section>
-      ))}
+    <div className="mt-20 sm:mt-28 lg:mt-36">
+      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+        {hanokRenewalSection.title}
+      </h4>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+        {hanokRenewalSection.description}
+      </p>
+      <div className="mt-12 sm:mt-16 lg:mt-20">
+        <SubsectionGallery
+          images={hanokRenewalSection.images}
+          getImageSrc={getConceptImageSrc}
+          onOpen={onOpen}
+        />
+      </div>
     </div>
   );
 }
 
-function ProjectDetails({ project }: { project: Project }) {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+function AquariumScienceCenterDetails({
+  onOpen,
+}: {
+  onOpen: (src: string) => void;
+}) {
+  return (
+    <div className="mt-20 sm:mt-28 lg:mt-36">
+      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+        {aquariumScienceCenterSection.title}
+      </h4>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+        {aquariumScienceCenterSection.description}
+      </p>
+      <div className="mt-12 sm:mt-16 lg:mt-20">
+        <SubsectionGallery
+          images={aquariumScienceCenterSection.images}
+          getImageSrc={getConceptImageSrc}
+          onOpen={onOpen}
+        />
+      </div>
+    </div>
+  );
+}
 
-  if (
-    project.number !== "01" &&
-    project.number !== "02" &&
-    project.number !== "03" &&
-    project.number !== "04" &&
-    project.number !== "05"
-  ) {
-    return null;
+function PortfolioProjectDetail({
+  projectId,
+  project,
+  onOpen,
+}: {
+  projectId: PortfolioProjectId;
+  project?: PortfolioProjectItem;
+  onOpen: (src: string) => void;
+}) {
+  if (project?.comingSoon) {
+    return (
+      <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+        Coming soon.
+      </p>
+    );
   }
 
-  return (
-    <div className="pb-10 pt-2 sm:pb-12 sm:pt-4 lg:pb-16">
-      {project.number === "01" && (
-        <OrbitProjectDetails project={project} onOpen={setActiveImage} />
-      )}
-      {project.number === "02" && (
-        <ConceptVisualizationDetails onOpen={setActiveImage} />
-      )}
-      {project.number === "03" && (
-        <FilmStageSetDesignDetails onOpen={setActiveImage} />
-      )}
-      {project.number === "04" && (
-        <OilDepotProjectDetails project={project} onOpen={setActiveImage} />
-      )}
-      {project.number === "05" && (
-        <SingaporeProjectDetails onOpen={setActiveImage} />
-      )}
+  const humanProject = filmStageProjects.find((item) => item.slug === "human");
+  const last24Project = filmStageProjects.find(
+    (item) => item.slug === "the-last-24-hours",
+  );
 
-      {activeImage && (
-        <ImageLightbox
-          activeImage={activeImage}
-          onClose={() => setActiveImage(null)}
+  switch (projectId) {
+    case "orbit":
+      return <OrbitProjectDetails project={orbitProjectData} onOpen={onOpen} />;
+    case "oil-depot":
+      return (
+        <OilDepotProjectDetails project={oilDepotProjectData} onOpen={onOpen} />
+      );
+    case "hanok-renewal":
+      return <HanokRenewalDetails onOpen={onOpen} />;
+    case "singapore-nsc":
+      return <SingaporeProjectDetails onOpen={onOpen} />;
+    case "aquarium-science-center":
+      return <AquariumScienceCenterDetails onOpen={onOpen} />;
+    case "human":
+      return humanProject ? (
+        <FilmStageProjectDetail project={humanProject} onOpen={onOpen} />
+      ) : null;
+    case "the-last-24-hours":
+      return last24Project ? (
+        <FilmStageProjectDetail project={last24Project} onOpen={onOpen} />
+      ) : null;
+    case "shinhan-bank-gwanghwamun-office-interior":
+      return (
+        <FolderGalleryDetails
+          project={gwanghwamunInteriorProject}
+          onOpen={onOpen}
         />
-      )}
-    </div>
+      );
+    case "coming-soon-concept":
+      return (
+        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+          Coming soon.
+        </p>
+      );
+    default: {
+      const folderProject = exhibitionFolderProjects[projectId];
+      if (folderProject) {
+        return (
+          <FolderGalleryDetails project={folderProject} onOpen={onOpen} />
+        );
+      }
+      return (
+        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+          Coming soon.
+        </p>
+      );
+    }
+  }
+}
+
+function WorkPortfolioSection() {
+  const [workView, setWorkView] = useState<
+    | { level: "categories" }
+    | { level: "projects"; categoryNumber: string }
+    | { level: "detail"; categoryNumber: string; projectId: string }
+  >({ level: "categories" });
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  const activeCategory = portfolioCategories.find(
+    (category) =>
+      workView.level !== "categories" &&
+      category.number === workView.categoryNumber,
+  );
+
+  const activeProject =
+    activeCategory && workView.level === "detail"
+      ? activeCategory.projects.find(
+          (project) => project.id === workView.projectId,
+        )
+      : undefined;
+
+  const goToCategories = () => {
+    setWorkView({ level: "categories" });
+    setActiveImage(null);
+  };
+
+  const goToProjects = (categoryNumber: string) => {
+    setWorkView({ level: "projects", categoryNumber });
+    setActiveImage(null);
+  };
+
+  return (
+    <section
+      id="work"
+      className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        {workView.level === "categories" && (
+          <>
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+              Featured Projects
+            </h2>
+            <div className="mt-6 border-t border-black/10 sm:mt-8">
+              {portfolioCategories.map((category) => (
+                <CategoryListItem
+                  key={category.number}
+                  category={category}
+                  onSelect={() => goToProjects(category.number)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {workView.level === "projects" && activeCategory && (
+          <>
+            <button
+              type="button"
+              onClick={goToCategories}
+              className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
+            >
+              ← All Categories
+            </button>
+            <div className="mt-8 sm:mt-10">
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+                {activeCategory.number}
+              </p>
+              <h2 className="mt-3 text-2xl font-light tracking-tight text-black sm:text-3xl lg:text-4xl">
+                {activeCategory.title}
+              </h2>
+              <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.25em] text-black/40">
+                {activeCategory.subtitle}
+              </p>
+            </div>
+            <div className="mt-12 sm:mt-16">
+              {activeCategory.number === EXHIBITION_CATEGORY_NUMBER ? (
+                <ExhibitionProjectGrid
+                  category={activeCategory}
+                  onSelectProject={(projectId) =>
+                    setWorkView({
+                      level: "detail",
+                      categoryNumber: activeCategory.number,
+                      projectId,
+                    })
+                  }
+                />
+              ) : activeCategory.number === PRODUCTION_CATEGORY_NUMBER ? (
+                <ProductionDesignProjectList
+                  onSelectProject={(projectId) =>
+                    setWorkView({
+                      level: "detail",
+                      categoryNumber: activeCategory.number,
+                      projectId,
+                    })
+                  }
+                />
+              ) : (
+                <CategoryProjectList
+                  category={activeCategory}
+                  onSelectProject={(projectId) =>
+                    setWorkView({
+                      level: "detail",
+                      categoryNumber: activeCategory.number,
+                      projectId,
+                    })
+                  }
+                />
+              )}
+            </div>
+          </>
+        )}
+
+        {workView.level === "detail" && activeCategory && activeProject && (
+          <>
+            <button
+              type="button"
+              onClick={() => goToProjects(activeCategory.number)}
+              className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
+            >
+              {activeCategory.number === PRODUCTION_CATEGORY_NUMBER
+                ? "← All Film Projects"
+                : `← All ${activeCategory.title}`}
+            </button>
+            <div className="mt-8 sm:mt-10 lg:mt-12">
+              <PortfolioProjectDetail
+                projectId={workView.projectId}
+                project={activeProject}
+                onOpen={setActiveImage}
+              />
+            </div>
+            {activeImage && (
+              <ImageLightbox
+                activeImage={activeImage}
+                onClose={() => setActiveImage(null)}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </section>
   );
 }
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [openProject, setOpenProject] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -1006,32 +1678,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section
-        id="work"
-        className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
-      >
-        <div className="mx-auto w-full max-w-7xl">
-          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-            Featured Projects
-          </h2>
-          <div className="mt-6 border-t border-black/10 sm:mt-8">
-            {projects.map((project) => {
-              const isOpen = openProject === project.number;
-
-              return (
-                <ProjectListItem
-                  key={project.number}
-                  project={project}
-                  isOpen={isOpen}
-                  onToggle={() =>
-                    setOpenProject(isOpen ? null : project.number)
-                  }
-                />
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <WorkPortfolioSection />
 
       <section
         id="about"
