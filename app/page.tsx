@@ -1,6 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const WORK_VIEW_HEADER_OFFSET = 88;
+
+function scrollToWorkViewTop(element: HTMLElement | null) {
+  if (!element) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    const top =
+      element.getBoundingClientRect().top +
+      window.scrollY -
+      WORK_VIEW_HEADER_OFFSET;
+    window.scrollTo({ top: Math.max(0, top), left: 0, behavior: "auto" });
+  });
+}
 
 const navLinks = [
   { label: "Work", href: "#work" },
@@ -105,22 +121,22 @@ const portfolioCategories: PortfolioCategory[] = [
       },
       {
         id: "national-miryang-meteorological-science-museum",
-        title: "National Miryang Meteorological Science Museum",
+        title: "Miryang National Meteorological Science Museum",
         subtitle: "Exhibition Design",
       },
       {
         id: "national-daegu-museum",
-        title: "National Daegu Museum",
+        title: "Daegu National Museum",
         subtitle: "Exhibition Design",
       },
       {
         id: "national-west-coast-climate-atmospheric-center",
-        title: "National West Coast Climate & Atmospheric Center",
+        title: "National Seohaean Climate & Atmospheric Center",
         subtitle: "Exhibition Design",
       },
       {
         id: "shinhan-bank-giheung-training-center",
-        title: "Shinhan Bank Giheung Training Center",
+        title: "Shinhan Bank Human Resources Center",
         subtitle: "Exhibition Design",
       },
       {
@@ -135,17 +151,17 @@ const portfolioCategories: PortfolioCategory[] = [
       },
       {
         id: "jeju-seogwipo-citrus-museum",
-        title: "Jeju Seogwipo Citrus Museum",
+        title: "Jeju Citrus Museum",
         subtitle: "Exhibition Design",
       },
       {
         id: "national-medicinal-plant-resource-center",
-        title: "National Medicinal Plant Resource Center",
+        title: "Jeju National Medicinal Resources Center",
         subtitle: "Exhibition Design",
       },
       {
         id: "korean-church-of-new-york",
-        title: "Korean Church of New York",
+        title: "New York Korean Church",
         subtitle: "Exhibition Design",
       },
       {
@@ -175,12 +191,17 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "04",
     title: "Interior Design",
-    subtitle: "1 Project",
+    subtitle: "2 Projects",
     projects: [
       {
         id: "shinhan-bank-gwanghwamun-office-interior",
-        title: "Shinhan Bank Gwanghwamun Office Interior",
+        title: "Shinhan Bank Gwanghwamun Branch",
         subtitle: "Interior Design",
+      },
+      {
+        id: "cafe-interior",
+        title: "Cafe Interior",
+        subtitle: "Hospitality Interior Design",
       },
     ],
   },
@@ -194,6 +215,23 @@ const portfolioCategories: PortfolioCategory[] = [
         title: "Coming Soon",
         subtitle: "Concept Visualization",
         comingSoon: true,
+      },
+    ],
+  },
+  {
+    number: "06",
+    title: "Design Explorations",
+    subtitle: "2 Projects",
+    projects: [
+      {
+        id: "furniture-design-study",
+        title: "Furniture Design Study",
+        subtitle: "Design Explorations",
+      },
+      {
+        id: "graphic-installation-study",
+        title: "Graphic Installation Study",
+        subtitle: "Design Explorations",
       },
     ],
   },
@@ -282,22 +320,40 @@ type FolderGalleryProject = {
   imageDir: string;
   images: readonly string[];
   description?: string;
+  year?: string;
+  role?: string;
+  location?: string;
 };
 
 const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
   "gangneung-metaverse-experience-center": {
     title: "Gangneung Metaverse Experience Center",
     imageDir: "/images/강릉 메타버스 체험관",
+    year: "2023",
+    role: "Spatial Designer",
+    location: "Gangneung, South Korea",
+    description:
+      "Immersive exhibition space exploring digital technologies and metaverse experiences through interactive environments.",
     images: ["01.png", "02.png", "03.png"],
   },
   "national-miryang-meteorological-science-museum": {
-    title: "National Miryang Meteorological Science Museum",
+    title: "Miryang National Meteorological Science Museum",
     imageDir: "/images/국립밀양기상과학관",
+    year: "2024",
+    role: "Spatial Designer",
+    location: "Miryang, South Korea",
+    description:
+      "Science exhibition inspired by weather phenomena, combining educational content with immersive spatial experiences.",
     images: ["01.png", "02.png"],
   },
   "national-daegu-museum": {
-    title: "National Daegu Museum",
+    title: "Daegu National Museum",
     imageDir: "/images/국립대구박물관",
+    year: "2023",
+    role: "Spatial Designer",
+    location: "Daegu, South Korea",
+    description:
+      "Interactive exhibition designed to introduce traditional Korean costume culture through hands-on learning experiences.",
     images: [
       "01.png",
       "02.png",
@@ -309,8 +365,13 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
     ],
   },
   "national-west-coast-climate-atmospheric-center": {
-    title: "National West Coast Climate & Atmospheric Center",
+    title: "National Seohaean Climate & Atmospheric Center",
     imageDir: "/images/국립서해안기후대기센터",
+    year: "2022",
+    role: "Spatial Designer",
+    location: "Hongseong, South Korea",
+    description:
+      "Outdoor exhibition environment designed to communicate climate science through interactive learning experiences.",
     images: [
       "01.png",
       "02.png",
@@ -324,21 +385,41 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
   "geumsan-ginseng-experience-village": {
     title: "Geumsan Ginseng Experience Village",
     imageDir: "/images/금산뿌리깊은인삼체험마을",
+    year: "2023",
+    role: "Spatial Designer",
+    location: "Geumsan, South Korea",
+    description:
+      "Interactive exhibition designed to promote Korean ginseng culture through educational content and hands-on visitor experiences.",
     images: ["01.png", "02.png", "03.png", "04.png"],
   },
   "korean-church-of-new-york": {
-    title: "Korean Church of New York",
+    title: "New York Korean Church",
     imageDir: "/images/뉴욕한인교회",
+    year: "2023",
+    role: "Spatial Designer",
+    location: "New York, USA",
+    description:
+      "Exhibition space designed to present the history and cultural identity of the Korean community through spatial storytelling.",
     images: ["01.png", "02.png", "03.png"],
   },
   "national-medicinal-plant-resource-center": {
-    title: "National Medicinal Plant Resource Center",
+    title: "Jeju National Medicinal Resources Center",
     imageDir: "/images/제주국가생약자원관리센터",
+    year: "2023",
+    role: "Spatial Designer",
+    location: "Jeju, South Korea",
+    description:
+      "Exhibition design showcasing Korea's medicinal plant resources through educational displays and immersive visitor experiences.",
     images: ["01.jpg", "02.png", "03.png"],
   },
   "jeju-seogwipo-citrus-museum": {
-    title: "Jeju Seogwipo Citrus Museum",
+    title: "Jeju Citrus Museum",
     imageDir: "/images/제주서귀포감귤박물관",
+    year: "2022",
+    role: "Spatial Designer",
+    location: "Jeju, South Korea",
+    description:
+      "Museum renewal project focused on interactive learning, family engagement, and the cultural heritage of Jeju citrus.",
     images: [
       "01.png",
       "02.png",
@@ -351,6 +432,11 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
   "hongcheon-animal-sculpture-theme-park": {
     title: "Hongcheon Animal Sculpture Theme Park",
     imageDir: "/images/홍천동물조각테마파크",
+    year: "2023 – 2024",
+    role: "Spatial Designer",
+    location: "Hongcheon, South Korea",
+    description:
+      "Outdoor thematic environment integrating animal sculptures, landscape design, and visitor-centered experiences.",
     images: [
       "01.png",
       "02.png",
@@ -377,8 +463,13 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
     ],
   },
   "shinhan-bank-giheung-training-center": {
-    title: "Shinhan Bank Giheung Training Center",
+    title: "Shinhan Bank Human Resources Center",
     imageDir: "/images/신한은행기흥연수원",
+    year: "2022 – 2023",
+    role: "Spatial Designer",
+    location: "Yongin, South Korea",
+    description:
+      "Corporate exhibition space designed to communicate Shinhan Bank's history, values, and legacy through immersive visitor experiences.",
     images: [
       "1-1.jpg",
       "1-2.jpg",
@@ -402,9 +493,39 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
 };
 
 const gwanghwamunInteriorProject: FolderGalleryProject = {
-  title: "Shinhan Bank Gwanghwamun Office Interior",
+  title: "Shinhan Bank Gwanghwamun Branch",
   imageDir: "/images/신한은행광화문집무실",
+  year: "2023",
+  role: "Spatial Designer",
+  location: "Seoul, South Korea",
+  description:
+    "Workplace exhibition and interior project designed to communicate corporate identity within an office environment.",
   images: ["01.png", "02.png", "03.png", "04.png", "05.png", "06.png"],
+};
+
+const cafeInteriorProject: FolderGalleryProject = {
+  title: "Cafe Interior",
+  imageDir: "/images/cafe interior",
+  images: ["01.jpg", "02.png", "03.png", "04.png"],
+};
+
+const DESIGN_EXPLORATIONS_IMAGE_DIR = "/images/design explorations";
+
+const designExplorationProjects: Record<string, FolderGalleryProject> = {
+  "furniture-design-study": {
+    title: "Furniture Design Study",
+    imageDir: DESIGN_EXPLORATIONS_IMAGE_DIR,
+    description:
+      "Experimental furniture design exploring structure, materiality, and ergonomic form through contemporary fabrication methods.",
+    images: ["01.png"],
+  },
+  "graphic-installation-study": {
+    title: "Graphic Installation Study",
+    imageDir: DESIGN_EXPLORATIONS_IMAGE_DIR,
+    description:
+      "Visual and spatial exploration using graphic systems, transparency, layering, and physical composition.",
+    images: ["02.png"],
+  },
 };
 
 function getFolderImageSrc(imageDir: string, filename: string) {
@@ -563,6 +684,13 @@ function getCategoryThumbnailSrc(categoryNumber: string): string | null {
       return getNscImageSrc(nscProjectImages[0]);
     case "03":
       return getFilmStageCoverSrc();
+    case "04":
+      return getFolderImageSrc(
+        cafeInteriorProject.imageDir,
+        cafeInteriorProject.images[0],
+      );
+    case "06":
+      return getFolderImageSrc(DESIGN_EXPLORATIONS_IMAGE_DIR, "01.png");
     default:
       return null;
   }
@@ -593,7 +721,19 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
         gwanghwamunInteriorProject.imageDir,
         gwanghwamunInteriorProject.images[0],
       );
+    case "cafe-interior":
+      return getFolderImageSrc(
+        cafeInteriorProject.imageDir,
+        cafeInteriorProject.images[0],
+      );
     default: {
+      const designProject = designExplorationProjects[projectId];
+      if (designProject) {
+        return getFolderImageSrc(
+          designProject.imageDir,
+          designProject.images[0],
+        );
+      }
       const folderProject = exhibitionFolderProjects[projectId];
       if (folderProject) {
         return getFolderImageSrc(
@@ -619,32 +759,31 @@ function CategoryListItem({
     <div className="border-b border-black/10 last:border-b-0">
       <article
         onClick={onSelect}
-        className="group cursor-pointer py-3 transition-colors duration-300 sm:py-4 lg:py-5"
+        className="group cursor-pointer py-2 transition-colors duration-300 sm:py-2.5 lg:py-3"
       >
-        <div className="grid grid-cols-[auto_1fr_4.25rem] items-center gap-x-3 gap-y-0.5 sm:grid-cols-12 sm:grid-rows-[auto_auto] sm:gap-x-6 sm:gap-y-0.5 lg:gap-x-8">
-          <span className="row-span-2 self-center text-5xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:col-span-2 sm:row-span-2 sm:text-6xl lg:text-7xl">
+        <div className="flex items-center gap-x-3 sm:gap-x-5 lg:gap-x-8">
+          <span className="w-8 shrink-0 text-3xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:w-10 sm:text-4xl lg:w-12 lg:text-5xl">
             {category.number}
           </span>
 
-          <h3 className="min-w-0 self-end text-2xl font-light tracking-tight transition-all duration-300 group-hover:translate-x-1 sm:col-span-5 sm:row-start-1 sm:text-3xl lg:col-span-6 lg:text-4xl xl:text-5xl">
-            {category.title}
-          </h3>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-xl font-light tracking-tight text-black transition-transform duration-300 group-hover:translate-x-1 sm:whitespace-nowrap sm:text-2xl lg:text-3xl xl:text-4xl">
+              {category.title}
+            </h3>
+            <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 transition-colors duration-300 group-hover:text-black/60 sm:mt-1">
+              {category.subtitle}
+            </p>
+          </div>
 
           {thumbnailSrc && (
-            <div className="row-span-2 flex items-center justify-end sm:col-span-5 sm:col-start-8 sm:row-span-2 sm:row-start-1 lg:col-span-4 lg:col-start-9">
-              <div className="h-[3.25rem] w-[4.25rem] overflow-hidden bg-black/[0.03] sm:h-14 sm:w-24 lg:h-16 lg:w-28">
-                <img
-                  src={thumbnailSrc}
-                  alt=""
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-              </div>
+            <div className="aspect-video w-[7.875rem] shrink-0 overflow-hidden bg-black/[0.03] sm:w-48 md:w-52 lg:w-56 xl:w-60">
+              <img
+                src={thumbnailSrc}
+                alt=""
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              />
             </div>
           )}
-
-          <p className="self-start text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 transition-colors duration-300 group-hover:text-black/60 sm:col-span-5 sm:row-start-2 lg:col-span-6">
-            {category.subtitle}
-          </p>
         </div>
       </article>
     </div>
@@ -700,6 +839,33 @@ function ImageLightbox({
         className="max-h-full max-w-full object-contain"
         onClick={(event) => event.stopPropagation()}
       />
+    </div>
+  );
+}
+
+function CompactInteriorGallery({
+  images,
+  getImageSrc,
+  onOpen,
+}: {
+  images: readonly string[];
+  getImageSrc: (filename: string) => string;
+  onOpen: (src: string) => void;
+}) {
+  const [hero, second, third, fourth] = images;
+
+  return (
+    <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+      {hero && <GalleryImage src={getImageSrc(hero)} onOpen={onOpen} />}
+
+      {second && third && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+          <GalleryImage src={getImageSrc(second)} onOpen={onOpen} />
+          <GalleryImage src={getImageSrc(third)} onOpen={onOpen} />
+        </div>
+      )}
+
+      {fourth && <GalleryImage src={getImageSrc(fourth)} onOpen={onOpen} />}
     </div>
   );
 }
@@ -1155,13 +1321,11 @@ function SingaporeProjectDetails({
   onOpen: (src: string) => void;
 }) {
   return (
-    <div className="mt-20 sm:mt-28 lg:mt-36">
-      <SubsectionGallery
-        images={nscProjectImages}
-        getImageSrc={getNscImageSrc}
-        onOpen={onOpen}
-      />
-    </div>
+    <SubsectionGallery
+      images={nscProjectImages}
+      getImageSrc={getNscImageSrc}
+      onOpen={onOpen}
+    />
   );
 }
 
@@ -1310,6 +1474,60 @@ function ExhibitionProjectGrid({
   );
 }
 
+function CafeInteriorDetails({
+  onOpen,
+}: {
+  onOpen: (src: string) => void;
+}) {
+  const getImageSrc = (filename: string) =>
+    getFolderImageSrc(cafeInteriorProject.imageDir, filename);
+
+  return (
+    <>
+      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+        {cafeInteriorProject.title}
+      </h4>
+      <div className="mt-12 sm:mt-16 lg:mt-20">
+        <CompactInteriorGallery
+          images={cafeInteriorProject.images}
+          getImageSrc={getImageSrc}
+          onOpen={onOpen}
+        />
+      </div>
+    </>
+  );
+}
+
+function ExhibitionProjectInfoLayout({
+  year,
+  role,
+  location,
+  description,
+}: {
+  year: string;
+  role: string;
+  location: string;
+  description: string;
+}) {
+  return (
+    <div className="mt-12 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
+      <div className="lg:col-span-5">
+        <MetadataItem label="Year" value={year} />
+        <MetadataItem label="Role" value={role} />
+        <MetadataItem label="Location" value={location} />
+      </div>
+      <div className="lg:col-span-7">
+        <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+          Description
+        </p>
+        <p className="mt-2 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-3 sm:text-lg sm:leading-8 lg:text-xl">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function FolderGalleryDetails({
   project,
   onOpen,
@@ -1319,31 +1537,39 @@ function FolderGalleryDetails({
 }) {
   const getImageSrc = (filename: string) =>
     getFolderImageSrc(project.imageDir, filename);
+  const hasExhibitionMetadata =
+    Boolean(project.year) &&
+    Boolean(project.role) &&
+    Boolean(project.location) &&
+    Boolean(project.description);
 
   return (
-    <div className="mt-20 sm:mt-28 lg:mt-36">
+    <>
       <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
         {project.title}
       </h4>
-      {project.description && (
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-          {project.description}
-        </p>
+      {hasExhibitionMetadata ? (
+        <ExhibitionProjectInfoLayout
+          year={project.year!}
+          role={project.role!}
+          location={project.location!}
+          description={project.description!}
+        />
+      ) : (
+        project.description && (
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+            {project.description}
+          </p>
+        )
       )}
-      <div
-        className={
-          project.description
-            ? "mt-12 sm:mt-16 lg:mt-20"
-            : "mt-12 sm:mt-16 lg:mt-20"
-        }
-      >
+      <div className="mt-12 sm:mt-16 lg:mt-20">
         <SubsectionGallery
           images={project.images}
           getImageSrc={getImageSrc}
           onOpen={onOpen}
         />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -1353,7 +1579,7 @@ function HanokRenewalDetails({
   onOpen: (src: string) => void;
 }) {
   return (
-    <div className="mt-20 sm:mt-28 lg:mt-36">
+    <>
       <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
         {hanokRenewalSection.title}
       </h4>
@@ -1367,7 +1593,7 @@ function HanokRenewalDetails({
           onOpen={onOpen}
         />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -1377,7 +1603,7 @@ function AquariumScienceCenterDetails({
   onOpen: (src: string) => void;
 }) {
   return (
-    <div className="mt-20 sm:mt-28 lg:mt-36">
+    <>
       <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
         {aquariumScienceCenterSection.title}
       </h4>
@@ -1391,7 +1617,7 @@ function AquariumScienceCenterDetails({
           onOpen={onOpen}
         />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -1445,6 +1671,8 @@ function PortfolioProjectDetail({
           onOpen={onOpen}
         />
       );
+    case "cafe-interior":
+      return <CafeInteriorDetails onOpen={onOpen} />;
     case "coming-soon-concept":
       return (
         <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
@@ -1452,6 +1680,12 @@ function PortfolioProjectDetail({
         </p>
       );
     default: {
+      const designProject = designExplorationProjects[projectId];
+      if (designProject) {
+        return (
+          <FolderGalleryDetails project={designProject} onOpen={onOpen} />
+        );
+      }
       const folderProject = exhibitionFolderProjects[projectId];
       if (folderProject) {
         return (
@@ -1467,6 +1701,38 @@ function PortfolioProjectDetail({
   }
 }
 
+function HomeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 12 12 5l8 7" />
+      <path d="M6 10v9h12v-9" />
+    </svg>
+  );
+}
+
+function PortfolioHomeButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Back to portfolio home"
+      className="fixed left-6 top-6 z-[60] text-black/45 transition-all duration-300 hover:scale-105 hover:text-black/75 sm:left-12 lg:left-24"
+    >
+      <HomeIcon className="h-5 w-5" />
+    </button>
+  );
+}
+
 function WorkPortfolioSection() {
   const [workView, setWorkView] = useState<
     | { level: "categories" }
@@ -1474,6 +1740,7 @@ function WorkPortfolioSection() {
     | { level: "detail"; categoryNumber: string; projectId: string }
   >({ level: "categories" });
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const workViewTopRef = useRef<HTMLDivElement>(null);
 
   const activeCategory = portfolioCategories.find(
     (category) =>
@@ -1493,23 +1760,34 @@ function WorkPortfolioSection() {
     setActiveImage(null);
   };
 
+  const goHome = () => {
+    goToCategories();
+    if (window.location.pathname !== "/" || window.location.hash) {
+      window.history.replaceState(null, "", "/");
+    }
+  };
+
   const goToProjects = (categoryNumber: string) => {
     setWorkView({ level: "projects", categoryNumber });
     setActiveImage(null);
   };
+
+  useEffect(() => {
+    scrollToWorkViewTop(workViewTopRef.current);
+  }, [workView]);
 
   return (
     <section
       id="work"
       className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
     >
-      <div className="mx-auto w-full max-w-7xl">
+      <div ref={workViewTopRef} className="mx-auto w-full max-w-7xl">
         {workView.level === "categories" && (
           <>
             <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
               Featured Projects
             </h2>
-            <div className="mt-6 border-t border-black/10 sm:mt-8">
+            <div className="mt-4 border-t border-black/10 sm:mt-5">
               {portfolioCategories.map((category) => (
                 <CategoryListItem
                   key={category.number}
@@ -1581,6 +1859,7 @@ function WorkPortfolioSection() {
 
         {workView.level === "detail" && activeCategory && activeProject && (
           <>
+            <PortfolioHomeButton onClick={goHome} />
             <button
               type="button"
               onClick={() => goToProjects(activeCategory.number)}
