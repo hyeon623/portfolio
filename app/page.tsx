@@ -102,16 +102,11 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "02",
     title: "Exhibition & Spatial Design",
-    subtitle: "13 Projects",
+    subtitle: "12 Projects",
     projects: [
       {
         id: "singapore-nsc",
         title: "Singapore NSC Science Center",
-        subtitle: "Exhibition Design",
-      },
-      {
-        id: "aquarium-science-center",
-        title: "Aquarium Science Center",
         subtitle: "Exhibition Design",
       },
       {
@@ -208,13 +203,17 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "05",
     title: "Concept Visualization",
-    subtitle: "Coming Soon",
+    subtitle: "2 Projects",
     projects: [
       {
-        id: "coming-soon-concept",
-        title: "Coming Soon",
+        id: "aquarium-science-center",
+        title: "Aquarium Science Center",
         subtitle: "Concept Visualization",
-        comingSoon: true,
+      },
+      {
+        id: "stage-design-concept",
+        title: "Stage Design Concept",
+        subtitle: "Concept Visualization",
       },
     ],
   },
@@ -622,27 +621,33 @@ const filmStageProjects: FilmStageProject[] = [
   },
 ];
 
-const CONCEPT_IMAGE_DIR = "/images/concept visualization works";
+const HANOK_IMAGE_DIR = "/images/hanok";
+const AQUARIUM_CONCEPT_IMAGE_DIR =
+  "/images/concept visualization works/acuarium";
+const STAGE_CONCEPT_IMAGE_DIR = "/images/concept visualization works/stage";
 
-const conceptVisualizationSections = [
-  {
-    id: "aquarium-science-center",
+const hanokRenewalProject: FolderGalleryProject = {
+  title: "Hanok Renewal",
+  imageDir: HANOK_IMAGE_DIR,
+  description:
+    "Concept design and visualization study exploring the renewal and adaptive reuse of traditional Korean architectural heritage. Focused on spatial atmosphere, cultural identity, architectural preservation, and contemporary interpretation.",
+  images: ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
+};
+
+const conceptVisualizationProjects: Record<string, FolderGalleryProject> = {
+  "aquarium-science-center": {
     title: "Aquarium Science Center",
+    imageDir: AQUARIUM_CONCEPT_IMAGE_DIR,
     description:
       "Concept design and visualization studies for an immersive aquarium and science center environment.",
     images: ["a1.png", "a2.png", "a3.png"],
   },
-  {
-    id: "hanok-renewal",
-    title: "Hanok Renewal",
-    description:
-      "Concept design and visualization study exploring the renewal and adaptive reuse of traditional Korean architectural heritage. Focused on spatial atmosphere, cultural identity, architectural preservation, and contemporary interpretation.",
-    images: ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
+  "stage-design-concept": {
+    title: "Stage Design Concept",
+    imageDir: STAGE_CONCEPT_IMAGE_DIR,
+    images: ["1.PNG", "2.PNG", "3.PNG"],
   },
-] as const;
-
-const hanokRenewalSection = conceptVisualizationSections[1];
-const aquariumScienceCenterSection = conceptVisualizationSections[0];
+};
 
 function publicImageSrc(baseDir: string, filename: string) {
   return `${baseDir}/${encodeURIComponent(filename)}`;
@@ -652,8 +657,8 @@ function getOrbitImageSrc(filename: string) {
   return publicImageSrc(ORBIT_IMAGE_DIR, filename);
 }
 
-function getConceptImageSrc(filename: string) {
-  return publicImageSrc(CONCEPT_IMAGE_DIR, filename);
+function getHanokImageSrc(filename: string) {
+  return publicImageSrc(HANOK_IMAGE_DIR, filename);
 }
 
 function getOilDepotImageSrc(filename: string) {
@@ -689,6 +694,8 @@ function getCategoryThumbnailSrc(categoryNumber: string): string | null {
         cafeInteriorProject.imageDir,
         cafeInteriorProject.images[0],
       );
+    case "05":
+      return getFolderImageSrc(AQUARIUM_CONCEPT_IMAGE_DIR, "a1.png");
     case "06":
       return getFolderImageSrc(DESIGN_EXPLORATIONS_IMAGE_DIR, "01.png");
     default:
@@ -703,11 +710,19 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
     case "oil-depot":
       return getOilDepotImageSrc(oilDepotProjectImages[0]);
     case "hanok-renewal":
-      return getConceptImageSrc(hanokRenewalSection.images[0]);
+      return getHanokImageSrc(hanokRenewalProject.images[0]);
     case "singapore-nsc":
       return getNscImageSrc(nscProjectImages[0]);
     case "aquarium-science-center":
-      return getConceptImageSrc(aquariumScienceCenterSection.images[0]);
+      return getFolderImageSrc(
+        conceptVisualizationProjects["aquarium-science-center"].imageDir,
+        conceptVisualizationProjects["aquarium-science-center"].images[0],
+      );
+    case "stage-design-concept":
+      return getFolderImageSrc(
+        conceptVisualizationProjects["stage-design-concept"].imageDir,
+        conceptVisualizationProjects["stage-design-concept"].images[0],
+      );
     case "human":
       return getFilmStageThumbnailSrc(
         filmStageProjects.find((project) => project.slug === "human")!,
@@ -1573,54 +1588,6 @@ function FolderGalleryDetails({
   );
 }
 
-function HanokRenewalDetails({
-  onOpen,
-}: {
-  onOpen: (src: string) => void;
-}) {
-  return (
-    <>
-      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
-        {hanokRenewalSection.title}
-      </h4>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-        {hanokRenewalSection.description}
-      </p>
-      <div className="mt-12 sm:mt-16 lg:mt-20">
-        <SubsectionGallery
-          images={hanokRenewalSection.images}
-          getImageSrc={getConceptImageSrc}
-          onOpen={onOpen}
-        />
-      </div>
-    </>
-  );
-}
-
-function AquariumScienceCenterDetails({
-  onOpen,
-}: {
-  onOpen: (src: string) => void;
-}) {
-  return (
-    <>
-      <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
-        {aquariumScienceCenterSection.title}
-      </h4>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
-        {aquariumScienceCenterSection.description}
-      </p>
-      <div className="mt-12 sm:mt-16 lg:mt-20">
-        <SubsectionGallery
-          images={aquariumScienceCenterSection.images}
-          getImageSrc={getConceptImageSrc}
-          onOpen={onOpen}
-        />
-      </div>
-    </>
-  );
-}
-
 function PortfolioProjectDetail({
   projectId,
   project,
@@ -1651,11 +1618,11 @@ function PortfolioProjectDetail({
         <OilDepotProjectDetails project={oilDepotProjectData} onOpen={onOpen} />
       );
     case "hanok-renewal":
-      return <HanokRenewalDetails onOpen={onOpen} />;
+      return (
+        <FolderGalleryDetails project={hanokRenewalProject} onOpen={onOpen} />
+      );
     case "singapore-nsc":
       return <SingaporeProjectDetails onOpen={onOpen} />;
-    case "aquarium-science-center":
-      return <AquariumScienceCenterDetails onOpen={onOpen} />;
     case "human":
       return humanProject ? (
         <FilmStageProjectDetail project={humanProject} onOpen={onOpen} />
@@ -1673,13 +1640,13 @@ function PortfolioProjectDetail({
       );
     case "cafe-interior":
       return <CafeInteriorDetails onOpen={onOpen} />;
-    case "coming-soon-concept":
-      return (
-        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
-          Coming soon.
-        </p>
-      );
     default: {
+      const conceptProject = conceptVisualizationProjects[projectId];
+      if (conceptProject) {
+        return (
+          <FolderGalleryDetails project={conceptProject} onOpen={onOpen} />
+        );
+      }
       const designProject = designExplorationProjects[projectId];
       if (designProject) {
         return (
@@ -1701,6 +1668,25 @@ function PortfolioProjectDetail({
   }
 }
 
+function BackIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M19 12H5" />
+      <path d="m12 19-7-7 7-7" />
+    </svg>
+  );
+}
+
 function HomeIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -1720,16 +1706,35 @@ function HomeIcon({ className }: { className?: string }) {
   );
 }
 
-function PortfolioHomeButton({ onClick }: { onClick: () => void }) {
+function PortfolioDetailNav({
+  onBack,
+  onHome,
+}: {
+  onBack: () => void;
+  onHome: () => void;
+}) {
+  const buttonClassName =
+    "text-black/45 transition-all duration-300 hover:scale-105 hover:text-black/75";
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label="Back to portfolio home"
-      className="fixed left-6 top-6 z-[60] text-black/45 transition-all duration-300 hover:scale-105 hover:text-black/75 sm:left-12 lg:left-24"
-    >
-      <HomeIcon className="h-5 w-5" />
-    </button>
+    <div className="fixed left-6 top-6 z-[60] flex items-center gap-3 sm:left-12 sm:gap-4 lg:left-24">
+      <button
+        type="button"
+        onClick={onBack}
+        aria-label="Go back one level"
+        className={buttonClassName}
+      >
+        <BackIcon className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        onClick={onHome}
+        aria-label="Back to portfolio home"
+        className={buttonClassName}
+      >
+        <HomeIcon className="h-5 w-5" />
+      </button>
+    </div>
   );
 }
 
@@ -1767,6 +1772,17 @@ function WorkPortfolioSection() {
     }
   };
 
+  const goBack = () => {
+    if (workView.level === "detail") {
+      goToProjects(workView.categoryNumber);
+      return;
+    }
+
+    if (workView.level === "projects") {
+      goToCategories();
+    }
+  };
+
   const goToProjects = (categoryNumber: string) => {
     setWorkView({ level: "projects", categoryNumber });
     setActiveImage(null);
@@ -1782,6 +1798,10 @@ function WorkPortfolioSection() {
       className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
     >
       <div ref={workViewTopRef} className="mx-auto w-full max-w-7xl">
+        {workView.level !== "categories" && (
+          <PortfolioDetailNav onBack={goBack} onHome={goHome} />
+        )}
+
         {workView.level === "categories" && (
           <>
             <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
@@ -1859,7 +1879,6 @@ function WorkPortfolioSection() {
 
         {workView.level === "detail" && activeCategory && activeProject && (
           <>
-            <PortfolioHomeButton onClick={goHome} />
             <button
               type="button"
               onClick={() => goToProjects(activeCategory.number)}
