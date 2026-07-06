@@ -186,17 +186,22 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "04",
     title: "Interior Design",
-    subtitle: "2 Projects",
+    subtitle: "3 Projects",
     projects: [
       {
-        id: "shinhan-bank-gwanghwamun-office-interior",
-        title: "Shinhan Bank Gwanghwamun Branch",
-        subtitle: "Interior Design",
+        id: "residential-interior-design",
+        title: "Residential Interior Design",
+        subtitle: "Contemporary Living Space",
       },
       {
         id: "cafe-interior",
         title: "Cafe Interior",
         subtitle: "Hospitality Interior Design",
+      },
+      {
+        id: "shinhan-bank-gwanghwamun-office-interior",
+        title: "Shinhan Bank Gwanghwamun Office",
+        subtitle: "Interior Design",
       },
     ],
   },
@@ -508,6 +513,14 @@ const cafeInteriorProject: FolderGalleryProject = {
   images: ["01.jpg", "02.png", "03.png", "04.png"],
 };
 
+const RESIDENTIAL_INTERIOR_IMAGE_DIR = "/images/residential interior design";
+
+const residentialInteriorProject: FolderGalleryProject = {
+  title: "Residential Interior Design",
+  imageDir: RESIDENTIAL_INTERIOR_IMAGE_DIR,
+  images: ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png", "8.png"],
+};
+
 const DESIGN_EXPLORATIONS_IMAGE_DIR = "/images/design explorations";
 
 const designExplorationProjects: Record<string, FolderGalleryProject> = {
@@ -690,10 +703,7 @@ function getCategoryThumbnailSrc(categoryNumber: string): string | null {
     case "03":
       return getFilmStageCoverSrc();
     case "04":
-      return getFolderImageSrc(
-        cafeInteriorProject.imageDir,
-        cafeInteriorProject.images[0],
-      );
+      return getFolderImageSrc(RESIDENTIAL_INTERIOR_IMAGE_DIR, "1.png");
     case "05":
       return getFolderImageSrc(AQUARIUM_CONCEPT_IMAGE_DIR, "a1.png");
     case "06":
@@ -740,6 +750,11 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
       return getFolderImageSrc(
         cafeInteriorProject.imageDir,
         cafeInteriorProject.images[0],
+      );
+    case "residential-interior-design":
+      return getFolderImageSrc(
+        residentialInteriorProject.imageDir,
+        residentialInteriorProject.images[0],
       );
     default: {
       const designProject = designExplorationProjects[projectId];
@@ -858,6 +873,73 @@ function ImageLightbox({
   );
 }
 
+function InteriorGalleryTail({
+  images,
+  getImageSrc,
+  onOpen,
+}: {
+  images: readonly string[];
+  getImageSrc: (filename: string) => string;
+  onOpen: (src: string) => void;
+}) {
+  if (images.length === 0) {
+    return null;
+  }
+
+  const blocks: React.ReactNode[] = [];
+  let index = 0;
+
+  while (index < images.length) {
+    const remaining = images.length - index;
+
+    if (remaining >= 2) {
+      const pair = images.slice(index, index + 2);
+      index += 2;
+
+      blocks.push(
+        <div
+          key={`pair-${pair[0]}`}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
+        >
+          {pair.map((filename) => (
+            <GalleryImage
+              key={filename}
+              src={getImageSrc(filename)}
+              onOpen={onOpen}
+            />
+          ))}
+        </div>,
+      );
+
+      if (index < images.length) {
+        const wide = images[index];
+        index += 1;
+        blocks.push(
+          <GalleryImage
+            key={wide}
+            src={getImageSrc(wide)}
+            onOpen={onOpen}
+          />,
+        );
+      }
+
+      continue;
+    }
+
+    const wide = images[index];
+    index += 1;
+    blocks.push(
+      <GalleryImage
+        key={wide}
+        src={getImageSrc(wide)}
+        onOpen={onOpen}
+      />,
+    );
+  }
+
+  return <>{blocks}</>;
+}
+
 function CompactInteriorGallery({
   images,
   getImageSrc,
@@ -867,20 +949,16 @@ function CompactInteriorGallery({
   getImageSrc: (filename: string) => string;
   onOpen: (src: string) => void;
 }) {
-  const [hero, second, third, fourth] = images;
+  const [hero, ...rest] = images;
 
   return (
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
       {hero && <GalleryImage src={getImageSrc(hero)} onOpen={onOpen} />}
-
-      {second && third && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-          <GalleryImage src={getImageSrc(second)} onOpen={onOpen} />
-          <GalleryImage src={getImageSrc(third)} onOpen={onOpen} />
-        </div>
-      )}
-
-      {fourth && <GalleryImage src={getImageSrc(fourth)} onOpen={onOpen} />}
+      <InteriorGalleryTail
+        images={rest}
+        getImageSrc={getImageSrc}
+        onOpen={onOpen}
+      />
     </div>
   );
 }
@@ -1489,22 +1567,24 @@ function ExhibitionProjectGrid({
   );
 }
 
-function CafeInteriorDetails({
+function InteriorProjectDetails({
+  project,
   onOpen,
 }: {
+  project: FolderGalleryProject;
   onOpen: (src: string) => void;
 }) {
   const getImageSrc = (filename: string) =>
-    getFolderImageSrc(cafeInteriorProject.imageDir, filename);
+    getFolderImageSrc(project.imageDir, filename);
 
   return (
     <>
       <h4 className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
-        {cafeInteriorProject.title}
+        {project.title}
       </h4>
       <div className="mt-12 sm:mt-16 lg:mt-20">
         <CompactInteriorGallery
-          images={cafeInteriorProject.images}
+          images={project.images}
           getImageSrc={getImageSrc}
           onOpen={onOpen}
         />
@@ -1639,7 +1719,16 @@ function PortfolioProjectDetail({
         />
       );
     case "cafe-interior":
-      return <CafeInteriorDetails onOpen={onOpen} />;
+      return (
+        <InteriorProjectDetails project={cafeInteriorProject} onOpen={onOpen} />
+      );
+    case "residential-interior-design":
+      return (
+        <InteriorProjectDetails
+          project={residentialInteriorProject}
+          onOpen={onOpen}
+        />
+      );
     default: {
       const conceptProject = conceptVisualizationProjects[projectId];
       if (conceptProject) {
