@@ -9,23 +9,15 @@ import {
   type RefObject,
 } from "react";
 import {
-  BilingualContactRow,
-  BilingualMetadataItem,
   BilingualParagraph,
-  BilingualSectionLabel,
   BilingualTitle,
-  koreanCaption,
-  koreanNav,
-  koreanButton,
-  koreanBodySm,
-  koreanBodyMd,
-  koreanBodyLg,
-  koreanValue,
-  koreanLocation,
-  koreanLineClamp,
+  koreanClass,
 } from "./components/bilingual";
 
 const WORK_VIEW_HEADER_OFFSET = 88;
+const TOP_MIST_BAND_PX = 88;
+const TOP_MIST_FADE_PX = 16;
+const TOP_MIST_TOTAL_PX = TOP_MIST_BAND_PX + TOP_MIST_FADE_PX;
 
 function scrollToPageTop() {
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -1017,7 +1009,6 @@ function CategoryListItem({
           <div className="min-w-0 flex-1">
             <BilingualTitle
               title={category.title}
-              titleKo={getCategoryTitleKo(category)}
               size="category-row"
               as="h3"
             />
@@ -1356,66 +1347,40 @@ function FilmSetGallery({
 
 function FilmStageNarrative({
   paragraphs,
-  paragraphsKo,
   closingQuestion,
-  closingQuestionKo,
   closingAnswer,
-  closingAnswerKo,
 }: {
   paragraphs: readonly string[];
-  paragraphsKo?: readonly string[];
   closingQuestion?: string;
-  closingQuestionKo?: string;
   closingAnswer?: string;
-  closingAnswerKo?: string;
 }) {
   return (
     <div className="mx-auto max-w-xl space-y-6 sm:space-y-8 lg:max-w-2xl">
       {paragraphs.map((paragraph, index) => (
-        <div key={index}>
-          <p
-            className={`leading-relaxed text-black/70 ${
-              index === 0
-                ? "text-base font-light italic tracking-wide text-black/85 sm:text-lg sm:leading-9"
-                : "text-sm font-light sm:text-base sm:leading-8"
-            }`}
-          >
-            {paragraph}
-          </p>
-          {paragraphsKo?.[index] && (
-            <p className={koreanBodySm}>
-              {paragraphsKo[index]}
-            </p>
-          )}
-        </div>
+        <p
+          key={index}
+          className={`leading-relaxed text-black/70 ${
+            index === 0
+              ? "text-base font-light italic tracking-wide text-black/85 sm:text-lg sm:leading-9"
+              : "text-sm font-light sm:text-base sm:leading-8"
+          }`}
+        >
+          {paragraph}
+        </p>
       ))}
 
       {closingQuestion && (
         <div className="border-t border-black/10 pt-8 sm:pt-10">
-          <BilingualSectionLabel
-            text="Through these environments, the project asks a simple question:"
-            textKo="이러한 환경들을 통해, 프로젝트는 하나의 질문을 던집니다."
-            className="[&_h2]:normal-case [&_h2]:tracking-normal [&_h2]:text-black/40 [&_h2]:text-[10px] [&_h2]:font-medium [&_h2]:uppercase [&_h2]:tracking-[0.35em]"
-          />
+          <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-black/40">
+            Through these environments, the project asks a simple question:
+          </p>
           <p className="mt-5 text-xl font-light uppercase tracking-[0.12em] text-black sm:mt-6 sm:text-2xl sm:tracking-[0.15em] lg:text-3xl">
             &ldquo;{closingQuestion}&rdquo;
           </p>
-          {closingQuestionKo && (
-            <p className={koreanBodyLg}>
-              &ldquo;{closingQuestionKo}&rdquo;
-            </p>
-          )}
           {closingAnswer && (
-            <>
-              <p className="mt-5 text-sm font-light italic leading-relaxed text-black/65 sm:mt-6 sm:text-base sm:leading-8">
-                {closingAnswer}
-              </p>
-              {closingAnswerKo && (
-                <p className={koreanBodyMd}>
-                  {closingAnswerKo}
-                </p>
-              )}
-            </>
+            <p className="mt-5 text-sm font-light italic leading-relaxed text-black/65 sm:mt-6 sm:text-base sm:leading-8">
+              {closingAnswer}
+            </p>
           )}
         </div>
       )}
@@ -1456,11 +1421,6 @@ function FilmStageProjectCard({
           <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-3">
             {project.subtitle}
           </p>
-          {project.subtitleKo && (
-            <p className={koreanCaption}>
-              {project.subtitleKo}
-            </p>
-          )}
         </div>
 
         <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
@@ -1495,11 +1455,9 @@ function FilmStageProjectDetail({
 
   return (
     <>
-      <BilingualSectionLabel
-        text={project.category}
-        textKo={project.categoryKo}
-        className="[&_h2]:text-[10px] [&_h2]:font-medium [&_h2]:uppercase [&_h2]:tracking-[0.3em] [&_h2]:text-black/40"
-      />
+      <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+        {project.category}
+      </p>
       <BilingualTitle
         title={project.displayTitle ?? project.title}
         titleKo={getTitleKo(project.slug)}
@@ -1510,11 +1468,6 @@ function FilmStageProjectDetail({
       <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-5 sm:text-[11px]">
         {project.subtitle}
       </p>
-      {project.subtitleKo && (
-        <p className={koreanCaption}>
-          {project.subtitleKo}
-        </p>
-      )}
 
       {hasGallery && (
         <div className="mt-12 sm:mt-16 lg:mt-20">
@@ -1536,11 +1489,8 @@ function FilmStageProjectDetail({
         >
           <FilmStageNarrative
             paragraphs={project.paragraphs}
-            paragraphsKo={project.paragraphsKo}
             closingQuestion={project.closingQuestion}
-            closingQuestionKo={project.closingQuestionKo}
             closingAnswer={project.closingAnswer}
-            closingAnswerKo={project.closingAnswerKo}
           />
         </div>
       )}
@@ -1558,28 +1508,24 @@ function FilmStageProjectDetail({
       )}
 
       {!hasGallery && !hasNarrative && (
-        <BilingualParagraph
-          text="Gallery coming soon."
-          textKo="갤러리 준비 중입니다."
-          variant="sm"
-          className="mt-12 sm:mt-16"
-        />
+        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+          Gallery coming soon.
+        </p>
       )}
     </>
   );
 }
 
-function MetadataItem({
-  label,
-  value,
-  valueKo,
-}: {
-  label: string;
-  value: string;
-  valueKo?: string;
-}) {
+function MetadataItem({ label, value }: { label: string; value: string }) {
   return (
-    <BilingualMetadataItem label={label} value={value} valueKo={valueKo} />
+    <div className="border-t border-black/10 py-5 sm:py-6">
+      <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+        {label}
+      </p>
+      <p className="mt-2 whitespace-pre-line text-sm font-light tracking-tight text-black sm:text-base">
+        {value}
+      </p>
+    </div>
   );
 }
 
@@ -1588,23 +1534,14 @@ function ProjectInfoLayout({ project }: { project: ProjectData }) {
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20 xl:gap-28">
       <div className="lg:col-span-7">
         {project.description && (
-          <BilingualParagraph
-            text={project.description}
-            textKo={project.descriptionKo ?? undefined}
-            variant="lg"
-            className="max-w-2xl"
-          />
+          <p className="max-w-2xl text-base leading-relaxed text-black/75 sm:text-lg sm:leading-8 lg:text-xl">
+            {project.description}
+          </p>
         )}
       </div>
       <div className="lg:col-span-5">
         {project.year && <MetadataItem label="Year" value={project.year} />}
-        {project.role && (
-          <MetadataItem
-            label="Role"
-            value={project.role}
-            valueKo={project.roleKo}
-          />
-        )}
+        {project.role && <MetadataItem label="Role" value={project.role} />}
         {project.scope && (
           <MetadataItem
             label="Scope"
@@ -1612,23 +1549,11 @@ function ProjectInfoLayout({ project }: { project: ProjectData }) {
               .split(",")
               .map((item) => item.trim())
               .join("\n")}
-            valueKo={project.scopeKo
-              ?.split(",")
-              .map((item) => item.trim())
-              .join("\n")}
           />
         )}
-        <MetadataItem
-          label="Project Type"
-          value={project.type}
-          valueKo={project.typeKo}
-        />
+        <MetadataItem label="Project Type" value={project.type} />
         {project.location && (
-          <MetadataItem
-            label="Location"
-            value={project.location}
-            valueKo={project.locationKo}
-          />
+          <MetadataItem label="Location" value={project.location} />
         )}
       </div>
     </div>
@@ -1850,11 +1775,6 @@ function CategoryProjectListItem({
           <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.35em] text-black/45 sm:mt-3">
             {project.subtitle}
           </p>
-          {getSubtitleKo(project.subtitle, project.subtitleKo) && (
-            <p className={koreanCaption}>
-              {getSubtitleKo(project.subtitle, project.subtitleKo)}
-            </p>
-          )}
         </div>
 
         <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
@@ -1953,11 +1873,6 @@ function ExhibitionProjectCard({
         <p className="mt-auto line-clamp-1 pt-2 text-[10px] font-medium uppercase tracking-[0.3em] text-black/45 transition-colors duration-300 group-hover:text-black/60">
           {project.subtitle}
         </p>
-        {getSubtitleKo(project.subtitle, project.subtitleKo) && (
-          <p className={koreanLineClamp}>
-            {getSubtitleKo(project.subtitle, project.subtitleKo)}
-          </p>
-        )}
       </div>
     </button>
   );
@@ -2038,40 +1953,26 @@ function ExhibitionProjectInfoLayout({
   role,
   location,
   description,
-  roleKo,
-  locationKo,
-  descriptionKo,
 }: {
   year: string;
   role: string;
   location: string;
   description: string;
-  roleKo?: string;
-  locationKo?: string;
-  descriptionKo?: string;
 }) {
   return (
     <div className="mt-12 grid grid-cols-1 gap-12 sm:mt-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
       <div className="lg:col-span-5">
         <MetadataItem label="Year" value={year} />
-        <MetadataItem label="Role" value={role} valueKo={roleKo} />
-        <MetadataItem label="Location" value={location} valueKo={locationKo} />
+        <MetadataItem label="Role" value={role} />
+        <MetadataItem label="Location" value={location} />
       </div>
       <div className="lg:col-span-7">
         <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
           Description
         </p>
-        <p className={koreanCaption}>
-          설명
+        <p className="mt-2 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-3 sm:text-lg sm:leading-8 lg:text-xl">
+          {description}
         </p>
-        <div className="mt-2 sm:mt-3">
-          <BilingualParagraph
-            text={description}
-            textKo={descriptionKo}
-            variant="lg"
-            className="max-w-2xl"
-          />
-        </div>
       </div>
     </div>
   );
@@ -2108,19 +2009,12 @@ function FolderGalleryDetails({
           role={project.role!}
           location={project.location!}
           description={project.description!}
-          roleKo={project.roleKo}
-          locationKo={project.locationKo}
-          descriptionKo={project.descriptionKo}
         />
       ) : (
         project.description && (
-          <div className="mt-4 max-w-2xl sm:mt-6">
-            <BilingualParagraph
-              text={project.description}
-              textKo={project.descriptionKo}
-              variant="lg"
-            />
-          </div>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-6 sm:text-lg sm:leading-8 lg:text-xl">
+            {project.description}
+          </p>
         )
       )}
       <div className="mt-12 sm:mt-16 lg:mt-20">
@@ -2145,12 +2039,9 @@ function PortfolioProjectDetail({
 }) {
   if (project?.comingSoon) {
     return (
-      <BilingualParagraph
-        text="Coming soon."
-        textKo="준비 중입니다."
-        variant="sm"
-        className="mt-12 sm:mt-16"
-      />
+      <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+        Coming soon.
+      </p>
     );
   }
 
@@ -2240,12 +2131,9 @@ function PortfolioProjectDetail({
         );
       }
       return (
-        <BilingualParagraph
-          text="Coming soon."
-          textKo="준비 중입니다."
-          variant="sm"
-          className="mt-12 sm:mt-16"
-        />
+        <p className="mt-12 text-sm font-light text-black/45 sm:mt-16">
+          Coming soon.
+        </p>
       );
     }
   }
@@ -2427,7 +2315,9 @@ function WorkPortfolioSection() {
 
         {workView.level === "categories" && (
           <>
-            <BilingualSectionLabel text="Featured Projects" />
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+              Featured Projects
+            </h2>
             <div className="mt-4 border-t border-black/10 sm:mt-5">
               {portfolioCategories.map((category) => (
                 <CategoryListItem
@@ -2445,20 +2335,16 @@ function WorkPortfolioSection() {
             <button
               type="button"
               onClick={goToCategories}
-              className="text-left text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
+              className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
             >
               ← All Categories
             </button>
-            <p className={koreanCaption}>
-              ← 전체 카테고리
-            </p>
             <div className="mt-8 sm:mt-10">
               <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
                 {activeCategory.number}
               </p>
               <BilingualTitle
                 title={activeCategory.title}
-                titleKo={getCategoryTitleKo(activeCategory)}
                 size="category-main"
                 as="h2"
                 className="mt-3"
@@ -2507,7 +2393,9 @@ function WorkPortfolioSection() {
 }
 
 export default function Home() {
+  const heroSectionRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [heroProgress, setHeroProgress] = useState(0);
 
   useEffect(() => {
     if ("scrollRestoration" in history) {
@@ -2518,43 +2406,66 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 48);
+
+      const heroEl = heroSectionRef.current;
+      if (!heroEl) {
+        setHeroProgress(0);
+        return;
+      }
+
+      const scrollRange = heroEl.offsetHeight - window.innerHeight;
+      const progress =
+        scrollRange > 0 ? Math.min(1, Math.max(0, scrollY / scrollRange)) : 0;
+      setHeroProgress(progress);
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
+
+  const heroMistOpacity = 1 - Math.pow(1 - heroProgress, 1.45);
+  const heroWhiteOverlay = heroMistOpacity * 0.48;
+  const heroContentLift = heroMistOpacity * 22;
+  const heroContentFade = Math.max(0, 1 - heroMistOpacity * 1.05);
+  const navMistOpacity = Math.min(0.42, 0.04 + heroMistOpacity * 0.22);
+  const navTextOnLight = heroMistOpacity > 0.36 || scrolled;
 
   return (
     <div className="bg-white text-black font-sans">
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "border-b border-black/5 bg-white/90 backdrop-blur-md"
-            : "border-b border-white/10 bg-transparent"
-        }`}
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full transition-[border-color] duration-500"
+        style={{
+          height: `${TOP_MIST_TOTAL_PX}px`,
+          background: `linear-gradient(to bottom, rgba(255, 255, 255, ${navMistOpacity}) 0px, rgba(255, 255, 255, ${navMistOpacity}) ${TOP_MIST_BAND_PX}px, rgba(255, 255, 255, 0) ${TOP_MIST_TOTAL_PX}px)`,
+          borderBottom:
+            heroMistOpacity > 0.55 || scrolled
+              ? "1px solid rgba(0, 0, 0, 0.05)"
+              : "1px solid transparent",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+        }}
       >
-        <nav className="mx-auto flex max-w-7xl items-center justify-center px-6 py-6 sm:px-12 lg:px-24">
-          <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 sm:gap-x-14">
+        <nav className="pointer-events-auto mx-auto flex h-[88px] w-full max-w-7xl items-center justify-center px-6 sm:px-12 lg:px-24">
+          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-12 lg:gap-x-16">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className={`text-left transition-colors duration-300 ${
-                    scrolled
-                      ? "text-black/60 hover:text-black"
-                      : "text-white/75 hover:text-white"
+                  className={`text-[10px] font-normal uppercase tracking-[0.4em] transition-colors duration-300 sm:text-[11px] sm:tracking-[0.45em] ${
+                    navTextOnLight
+                      ? "text-black/50 hover:text-black"
+                      : "text-white/78 hover:text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.28)]"
                   }`}
                 >
-                  <span className="block text-[10px] font-medium uppercase tracking-[0.3em] sm:text-[11px]">
-                    {link.label}
-                  </span>
-                  <span
-                    className={`${koreanNav} ${
-                      scrolled ? "text-[#777]" : "!text-white/45"
-                    }`}
-                  >
-                    {link.labelKo}
-                  </span>
+                  {link.label}
                 </a>
               </li>
             ))}
@@ -2562,50 +2473,91 @@ export default function Home() {
         </nav>
       </header>
 
-      <section className="relative flex h-screen min-h-screen flex-col justify-center px-6 sm:px-12 lg:px-24">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[url('/images/orbit/orbit-hero.png')] bg-cover bg-center bg-no-repeat"
-        />
-        <div aria-hidden className="absolute inset-0 bg-black/50" />
+      <section ref={heroSectionRef} className="relative h-[175vh]">
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[url('/images/orbit/orbit-hero.png')] bg-cover bg-[center_42%] bg-no-repeat"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/15 to-black/5"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-white"
+            style={{ opacity: heroWhiteOverlay }}
+          />
 
-        <div className="relative z-10 w-full max-w-7xl">
-          <h1 className="text-4xl font-light tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl">
-            KIM DONG HYEON
-          </h1>
-          <div className="mt-6 sm:mt-8">
-            <BilingualTitle
-              title="Spatial Designer"
-              titleKo="공간 디자이너"
-              size="hero-role"
-              as="p"
-            />
-            <BilingualTitle
-              title="& Exhibition Designer"
-              titleKo="& 전시 디자이너"
-              size="hero-role"
-              as="p"
-              className="mt-2"
-            />
-          </div>
-          <div className="mt-10 sm:mt-12">
-            <BilingualParagraph
-              text="Designing experiences through architecture, exhibition and interior environments."
-              textKo="건축, 전시, 인테리어 공간을 통해 사람들의 경험을 설계하는 공간디자이너입니다."
-              variant="hero"
-            />
-          </div>
-          <a
-            href="#work"
-            className="mt-12 inline-block border border-white px-10 py-4 text-left transition-colors duration-300 hover:bg-white hover:text-black sm:mt-16"
+          <div
+            className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-12 pt-28 will-change-transform sm:px-12 sm:pb-16 sm:pt-32 lg:px-24 lg:pb-20"
+            style={{
+              transform: `translate3d(0, ${-heroContentLift}vh, 0)`,
+              opacity: heroContentFade,
+            }}
           >
-            <span className="block text-xs font-medium uppercase tracking-[0.2em] text-white">
-              View Projects
-            </span>
-            <span className={`${koreanButton} text-white/55`}>
-              보기
-            </span>
-          </a>
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+            <div className="max-w-2xl lg:col-span-8">
+              <p className="text-[10px] font-normal uppercase tracking-[0.45em] text-white/50 sm:text-[11px]">
+                Portfolio
+              </p>
+              <h1 className="mt-4 text-[1.625rem] font-light uppercase tracking-[0.14em] text-white sm:mt-5 sm:text-3xl sm:tracking-[0.16em] lg:text-[2.625rem] lg:tracking-[0.18em]">
+                Kim Dong Hyeon
+              </h1>
+
+              <div className="mt-6 sm:mt-8">
+                <p className="text-[10px] font-normal uppercase tracking-[0.38em] text-white/85 sm:text-[11px] sm:tracking-[0.42em]">
+                  Spatial Designer
+                </p>
+                <p className="mt-1.5 text-[10px] font-normal uppercase tracking-[0.38em] text-white/85 sm:text-[11px] sm:tracking-[0.42em]">
+                  & Exhibition Designer
+                </p>
+                <p
+                  className={`mt-2.5 text-[0.625rem] leading-[1.45] text-white/45 sm:text-[0.6875rem] ${koreanClass}`}
+                >
+                  공간 디자이너
+                  <br />
+                  & 전시 디자이너
+                </p>
+              </div>
+
+              <div className="mt-8 max-w-md sm:mt-10">
+                <p className="text-sm font-light leading-relaxed text-white/78 sm:text-[0.9375rem] sm:leading-7">
+                  Designing experiences through architecture, exhibition and
+                  interior environments.
+                </p>
+                <p
+                  className={`mt-2.5 text-[0.6875rem] leading-[1.45] text-white/42 sm:text-[0.75rem] ${koreanClass}`}
+                >
+                  건축, 전시, 인테리어 환경을 통해
+                  <br />
+                  공간의 경험을 디자인합니다.
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 lg:flex lg:justify-end lg:pb-1">
+              <a
+                href="#work"
+                className="group inline-flex items-center gap-3 text-[10px] font-normal uppercase tracking-[0.38em] text-white/75 transition-colors duration-300 hover:text-white sm:text-[11px] sm:tracking-[0.42em]"
+              >
+                <span className="border-b border-white/35 pb-1 transition-colors duration-300 group-hover:border-white/80">
+                  Explore Work
+                </span>
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
         </div>
       </section>
 
@@ -2616,7 +2568,9 @@ export default function Home() {
         className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
       >
         <div className="mx-auto w-full max-w-7xl">
-          <BilingualSectionLabel text="About" textKo="소개" />
+          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+            About
+          </h2>
           <div className="mt-14 max-w-3xl space-y-8 sm:mt-16 sm:space-y-10 lg:mt-20 lg:space-y-12">
             {aboutParagraphs.map((paragraph) => (
               <BilingualParagraph
@@ -2629,7 +2583,9 @@ export default function Home() {
           </div>
 
           <div className="mt-32 sm:mt-40 lg:mt-48">
-            <BilingualSectionLabel text="Experience" textKo="경력" />
+            <h3 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+              Experience
+            </h3>
             <div className="relative mt-16 sm:mt-20">
               <div
                 aria-hidden
@@ -2645,23 +2601,13 @@ export default function Home() {
                       {item.period}
                     </p>
                     <div className="sm:col-span-8 lg:col-span-9">
-                      <BilingualTitle
-                        title={item.role}
-                        titleKo={item.roleKo}
-                        size="experience-role"
-                        as="p"
-                      />
+                      <p className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+                        {item.role}
+                      </p>
                       {item.company && (
-                        <>
-                          <p className="mt-3 text-sm tracking-wide text-black/50 sm:text-base">
-                            {item.company}
-                          </p>
-                          {item.companyKo && (
-                            <p className={koreanValue}>
-                              {item.companyKo}
-                            </p>
-                          )}
-                        </>
+                        <p className="mt-3 text-sm tracking-wide text-black/50 sm:text-base">
+                          {item.company}
+                        </p>
                       )}
                     </div>
                   </li>
@@ -2677,24 +2623,18 @@ export default function Home() {
         className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
       >
         <div className="mx-auto w-full max-w-7xl">
-          <BilingualSectionLabel text="Resume" textKo="이력서" />
-          <div className="mt-14 max-w-2xl sm:mt-16 lg:mt-20">
-            <BilingualParagraph
-              text="Spatial designer with experience across exhibition design, architectural visualization and cultural space renewal."
-              textKo="전시 디자인, 건축 시각화, 문화 공간 리뉴얼 분야의 경험을 보유한 공간 디자이너입니다."
-              variant="lg"
-            />
-          </div>
+          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+            Resume
+          </h2>
+          <p className="mt-14 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl">
+            Spatial designer with experience across exhibition design,
+            architectural visualization and cultural space renewal.
+          </p>
           <a
             href="#"
-            className="mt-14 inline-block border border-black px-10 py-4 text-left transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
+            className="mt-14 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
           >
-            <span className="block text-xs font-medium uppercase tracking-[0.2em]">
-              Download Resume
-            </span>
-            <span className={koreanButton}>
-              이력서 다운로드
-            </span>
+            Download Resume
           </a>
         </div>
       </section>
@@ -2704,43 +2644,46 @@ export default function Home() {
         className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
       >
         <div className="mx-auto w-full max-w-7xl">
-          <BilingualSectionLabel text="Contact" textKo="연락처" />
-          <div className="mt-14 max-w-2xl sm:mt-16 lg:mt-20">
-            <BilingualParagraph
-              text="Feel free to reach out for collaborations, exhibitions, spatial design projects, or creative opportunities."
-              textKo="협업, 전시, 공간 디자인 프로젝트, 크리에이티브 기회에 대해 편하게 연락해 주세요."
-              variant="md"
-            />
-          </div>
+          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+            Contact
+          </h2>
+          <p className="mt-14 max-w-2xl text-base leading-relaxed text-black sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl">
+            Feel free to reach out for collaborations, exhibitions, spatial
+            design projects, or creative opportunities.
+          </p>
           <ul className="mt-24 divide-y divide-black/10 sm:mt-32">
-            <BilingualContactRow label="Email">
+            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
+              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+                Email
+              </span>
               <a
                 href="mailto:ehdgus1213@gmail.com"
-                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:text-xl lg:text-2xl"
+                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
               >
                 ehdgus1213@gmail.com
               </a>
-            </BilingualContactRow>
-            <BilingualContactRow label="LinkedIn">
+            </li>
+            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
+              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+                LinkedIn
+              </span>
               <a
                 href="http://www.linkedin.com/in/dong-hyeon-kim-staycalm"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:text-xl lg:text-2xl"
+                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
               >
                 Dong Hyeon Kim
               </a>
-            </BilingualContactRow>
-            <BilingualContactRow label="Location">
-              <div>
-                <p className="text-lg font-light tracking-tight text-black sm:text-xl lg:text-2xl">
-                  Seoul, South Korea
-                </p>
-                <p className={koreanLocation}>
-                  대한민국 서울
-                </p>
-              </div>
-            </BilingualContactRow>
+            </li>
+            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
+              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+                Location
+              </span>
+              <p className="text-lg font-light tracking-tight text-black sm:col-span-9 sm:text-xl lg:text-2xl">
+                Seoul, South Korea
+              </p>
+            </li>
           </ul>
         </div>
       </section>

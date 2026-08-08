@@ -1,4 +1,4 @@
-import { BilingualParagraph, BilingualTitle } from "../../components/bilingual";
+import { BilingualTitle } from "../../components/bilingual";
 
 export default function OrbitPage() {
   return (
@@ -12,13 +12,10 @@ export default function OrbitPage() {
         koreanClassName="mt-2 text-[2.025rem] font-[350] tracking-[0.03em] leading-[1.35] text-[#777] font-korean"
       />
 
-      <div className="mb-12 mt-8">
-        <BilingualParagraph
-          text="Immersive dome theater project developed for cultural and educational experiences."
-          textKo="문화와 교육 경험을 위한 몰입형 돔 극장 프로젝트입니다."
-          variant="lg"
-        />
-      </div>
+      <p className="mb-12 mt-8 text-xl text-black/70">
+        Immersive dome theater project developed for cultural and educational
+        experiences.
+      </p>
 
       <img
         src="/images/orbit/orbit-hero02.png"
