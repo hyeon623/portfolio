@@ -11,7 +11,7 @@ module NanoRender
       @dialog = nil
 
       def show
-        if @dialog&.visible?
+        if @dialog && @dialog.visible?
           @dialog.bring_to_front
           return
         end
