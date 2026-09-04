@@ -14,10 +14,7 @@ import {
   koreanClass,
 } from "./components/bilingual";
 
-const WORK_VIEW_HEADER_OFFSET = 88;
-const TOP_MIST_BAND_PX = 88;
-const TOP_MIST_FADE_PX = 16;
-const TOP_MIST_TOTAL_PX = TOP_MIST_BAND_PX + TOP_MIST_FADE_PX;
+const WORK_VIEW_HEADER_OFFSET = 24;
 
 function scrollToPageTop() {
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -107,6 +104,7 @@ const PROJECT_TITLE_KO: Record<string, string> = {
   human: "휴먼",
   "the-last-24-hours": "마지막 24시간",
   "residential-interior-design": "주거공간 인테리어 디자인",
+  "residential-interior-design-2": "주거 공간 디자인",
   "cafe-interior": "카페 인테리어",
   "shinhan-bank-gwanghwamun-office-interior": "신한은행 광화문 지점",
   "aquarium-science-center": "아쿠아리움 과학관",
@@ -285,12 +283,18 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "04",
     title: "Interior Design",
-    subtitle: "3 Projects",
+    subtitle: "4 Projects",
     projects: [
       {
         id: "residential-interior-design",
         title: "Residential Interior Design",
         subtitle: "Contemporary Living Space",
+      },
+      {
+        id: "residential-interior-design-2",
+        title: "Residential Interior Design",
+        titleKo: "주거 공간 디자인",
+        subtitle: "Residential Space Design",
       },
       {
         id: "cafe-interior",
@@ -697,6 +701,13 @@ const residentialInteriorProject: FolderGalleryProject = {
   images: ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png", "8.png"],
 };
 
+const residentialInteriorProject2: FolderGalleryProject = {
+  title: "Residential Interior Design",
+  titleKo: "주거 공간 디자인",
+  imageDir: RESIDENTIAL_INTERIOR_IMAGE_DIR,
+  images: ["9.png", "10.png", "11.png", "12.png", "13.png"],
+};
+
 const DESIGN_EXPLORATIONS_IMAGE_DIR = "/images/design explorations";
 
 const designExplorationProjects: Record<string, FolderGalleryProject> = {
@@ -965,6 +976,11 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
       return getFolderImageSrc(
         residentialInteriorProject.imageDir,
         residentialInteriorProject.images[0],
+      );
+    case "residential-interior-design-2":
+      return getFolderImageSrc(
+        residentialInteriorProject2.imageDir,
+        residentialInteriorProject2.images[0],
       );
     default: {
       const designProject = designExplorationProjects[projectId];
@@ -2099,6 +2115,14 @@ function PortfolioProjectDetail({
           onOpen={onOpen}
         />
       );
+    case "residential-interior-design-2":
+      return (
+        <InteriorProjectDetails
+          project={residentialInteriorProject2}
+          projectId="residential-interior-design-2"
+          onOpen={onOpen}
+        />
+      );
     default: {
       const conceptProject = conceptVisualizationProjects[projectId];
       if (conceptProject) {
@@ -2441,10 +2465,9 @@ export default function Home() {
   return (
     <div className="bg-white text-black font-sans">
       <header
-        className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full transition-[border-color] duration-500"
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 h-[2em] w-full text-[10px] transition-[border-color] duration-500 sm:text-[11px]"
         style={{
-          height: `${TOP_MIST_TOTAL_PX}px`,
-          background: `linear-gradient(to bottom, rgba(255, 255, 255, ${navMistOpacity}) 0px, rgba(255, 255, 255, ${navMistOpacity}) ${TOP_MIST_BAND_PX}px, rgba(255, 255, 255, 0) ${TOP_MIST_TOTAL_PX}px)`,
+          backgroundColor: `rgba(255, 255, 255, ${navMistOpacity})`,
           borderBottom:
             heroMistOpacity > 0.55 || scrolled
               ? "1px solid rgba(0, 0, 0, 0.05)"
@@ -2453,13 +2476,13 @@ export default function Home() {
           WebkitBackdropFilter: "blur(4px)",
         }}
       >
-        <nav className="pointer-events-auto mx-auto flex h-[88px] w-full max-w-7xl items-center justify-center px-6 sm:px-12 lg:px-24">
-          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-12 lg:gap-x-16">
+        <nav className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl items-center justify-center px-6 sm:px-12 lg:px-24">
+          <ul className="flex flex-nowrap items-center justify-center gap-x-8 sm:gap-x-12 lg:gap-x-16">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className={`text-[10px] font-normal uppercase tracking-[0.4em] transition-colors duration-300 sm:text-[11px] sm:tracking-[0.45em] ${
+                  className={`leading-none text-[1em] font-normal uppercase tracking-[0.4em] transition-colors duration-300 sm:tracking-[0.45em] ${
                     navTextOnLight
                       ? "text-black/50 hover:text-black"
                       : "text-white/78 hover:text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.28)]"
