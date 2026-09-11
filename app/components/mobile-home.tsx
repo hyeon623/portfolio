@@ -109,7 +109,7 @@ export function MobileHome() {
                 <button
                   type="button"
                   onClick={() => setTab(item.id)}
-                  className={`flex h-full w-full flex-col items-center justify-center gap-1 transition-colors ${
+                  className={`flex h-full w-full touch-manipulation flex-col items-center justify-center gap-1 transition-colors ${
                     active ? "text-black" : "text-black/35"
                   }`}
                 >

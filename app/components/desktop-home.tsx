@@ -91,7 +91,7 @@ function CategoryListItem({
       <button
         type="button"
         onClick={onSelect}
-        className="group w-full cursor-pointer py-3 text-left transition-colors duration-300 active:bg-black/[0.02] sm:py-2.5 lg:py-3"
+        className="group w-full cursor-pointer touch-manipulation py-3 text-left transition-colors duration-300 active:bg-black/[0.02] sm:py-2.5 lg:py-3"
       >
         <div className="flex items-center gap-x-3 sm:gap-x-5 lg:gap-x-8">
           <span className="w-8 shrink-0 text-3xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:w-10 sm:text-4xl lg:w-12 lg:text-5xl">
@@ -498,7 +498,7 @@ function FilmStageProjectCard({
     <button
       type="button"
       onClick={() => onSelect(project.slug)}
-      className={`group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8 ${
+      className={`group w-full cursor-pointer touch-manipulation border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] active:bg-black/[0.03] sm:py-8 ${
         isSelected ? "bg-black/[0.025]" : ""
       }`}
     >
@@ -852,7 +852,7 @@ function CategoryProjectListItem({
     <button
       type="button"
       onClick={() => onSelect(project.id)}
-      className={`group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8 ${
+      className={`group w-full cursor-pointer touch-manipulation border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] active:bg-black/[0.03] sm:py-8 ${
         isSelected ? "bg-black/[0.025]" : ""
       }`}
     >
@@ -939,7 +939,7 @@ function ExhibitionProjectCard({
     <button
       type="button"
       onClick={() => onSelect(project.id)}
-      className={`group flex h-full w-full cursor-pointer flex-col text-left transition-colors duration-300 hover:bg-black/[0.015] ${
+      className={`group flex h-full w-full cursor-pointer touch-manipulation flex-col text-left transition-colors duration-300 hover:bg-black/[0.015] active:bg-black/[0.03] ${
         isSelected ? "bg-black/[0.025]" : ""
       }`}
     >

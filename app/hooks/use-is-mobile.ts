@@ -1,24 +1,30 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 
-const MOBILE_MAX_WIDTH = 767;
+const MOBILE_MAX = 767;
 
-function subscribe(onStoreChange: () => void) {
-  const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
-  mediaQuery.addEventListener("change", onStoreChange);
-  return () => mediaQuery.removeEventListener("change", onStoreChange);
+function getIsMobile() {
+  if (typeof window === "undefined") {
+    return true;
+  }
+  return window.innerWidth <= MOBILE_MAX;
 }
 
-function getSnapshot() {
-  return window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH}px)`).matches;
-}
-
-function getServerSnapshot() {
-  return false;
-}
-
-/** True for phone-width viewports. Same URL; layout switches client-side. */
+/** Client-only mobile detection; remounts on resize. */
 export function useIsMobile() {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const update = () => setIsMobile(getIsMobile());
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
+  }, []);
+
+  return isMobile;
 }
