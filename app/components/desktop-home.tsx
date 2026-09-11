@@ -1325,6 +1325,11 @@ export function WorkPortfolioSection({
   const [workView, setWorkView] = useState<
     | { level: "categories" }
     | { level: "projects"; categoryNumber: string }
+    | {
+        level: "detail";
+        categoryNumber: string;
+        projectId: PortfolioProjectId;
+      }
   >({ level: "categories" });
   const [expandedProjectId, setExpandedProjectId] = useState<string | null>(
     null,
@@ -1339,6 +1344,13 @@ export function WorkPortfolioSection({
       workView.level !== "categories" &&
       category.number === workView.categoryNumber,
   );
+
+  const activeProject =
+    workView.level === "detail"
+      ? activeCategory?.projects.find(
+          (project) => project.id === workView.projectId,
+        )
+      : undefined;
 
   const goToCategories = () => {
     setWorkView({ level: "categories" });
@@ -1355,6 +1367,16 @@ export function WorkPortfolioSection({
   };
 
   const goBack = () => {
+    if (workView.level === "detail") {
+      setWorkView({
+        level: "projects",
+        categoryNumber: workView.categoryNumber,
+      });
+      setExpandedProjectId(null);
+      setActiveImage(null);
+      return;
+    }
+
     if (expandedProjectId) {
       setExpandedProjectId(null);
       setActiveImage(null);
@@ -1373,10 +1395,21 @@ export function WorkPortfolioSection({
   };
 
   const selectProject = (projectId: PortfolioProjectId) => {
+    setActiveImage(null);
+    if (compact && workView.level === "projects") {
+      setWorkView({
+        level: "detail",
+        categoryNumber: workView.categoryNumber,
+        projectId,
+      });
+      setExpandedProjectId(null);
+      scrollToPageTop();
+      return;
+    }
+
     setExpandedProjectId((current) =>
       current === projectId ? null : projectId,
     );
-    setActiveImage(null);
   };
 
   useEffect(() => {
@@ -1385,8 +1418,9 @@ export function WorkPortfolioSection({
     if (workView.level === "categories") {
       scrollToPageTop();
     } else if (
-      workView.level === "projects" &&
-      previousWorkView.level === "categories"
+      (workView.level === "projects" &&
+        previousWorkView.level === "categories") ||
+      workView.level === "detail"
     ) {
       scrollToWorkViewTop(workViewTopRef.current);
     }
@@ -1455,7 +1489,9 @@ export function WorkPortfolioSection({
             <button
               type="button"
               onClick={goToCategories}
-              className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
+              className={`text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70 ${
+                compact ? "mt-10" : ""
+              }`}
             >
               ← All Categories
             </button>
@@ -1498,6 +1534,48 @@ export function WorkPortfolioSection({
                   expansionRef={expansionRef}
                 />
               )}
+            </div>
+            {activeImage && (
+              <ImageLightbox
+                activeImage={activeImage}
+                onClose={() => setActiveImage(null)}
+              />
+            )}
+          </>
+        )}
+
+        {workView.level === "detail" && activeCategory && activeProject && (
+          <>
+            <button
+              type="button"
+              onClick={goBack}
+              className={`text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70 ${
+                compact ? "mt-10" : ""
+              }`}
+            >
+              ← {activeCategory.title}
+            </button>
+            <div className="mt-8 sm:mt-10">
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40">
+                {activeCategory.number}
+              </p>
+              <BilingualTitle
+                title={activeProject.title}
+                titleKo={getTitleKo(activeProject.id, activeProject.titleKo)}
+                size="category-main"
+                as="h2"
+                className="mt-3"
+              />
+              <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.25em] text-black/40">
+                {activeProject.subtitle}
+              </p>
+            </div>
+            <div className="mt-10 sm:mt-12">
+              <PortfolioProjectDetail
+                projectId={activeProject.id}
+                project={activeProject}
+                onOpen={setActiveImage}
+              />
             </div>
             {activeImage && (
               <ImageLightbox
