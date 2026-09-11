@@ -88,9 +88,10 @@ function CategoryListItem({
 
   return (
     <div className="border-b border-black/10 last:border-b-0">
-      <article
+      <button
+        type="button"
         onClick={onSelect}
-        className="group cursor-pointer py-2 transition-colors duration-300 sm:py-2.5 lg:py-3"
+        className="group w-full cursor-pointer py-3 text-left transition-colors duration-300 active:bg-black/[0.02] sm:py-2.5 lg:py-3"
       >
         <div className="flex items-center gap-x-3 sm:gap-x-5 lg:gap-x-8">
           <span className="w-8 shrink-0 text-3xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:w-10 sm:text-4xl lg:w-12 lg:text-5xl">
@@ -118,7 +119,7 @@ function CategoryListItem({
             </div>
           )}
         </div>
-      </article>
+      </button>
     </div>
   );
 }
@@ -1279,15 +1280,23 @@ function HomeIcon({ className }: { className?: string }) {
 function PortfolioDetailNav({
   onBack,
   onHome,
+  compact = false,
 }: {
   onBack: () => void;
   onHome: () => void;
+  compact?: boolean;
 }) {
   const buttonClassName =
-    "text-black/45 transition-all duration-300 hover:scale-105 hover:text-black/75";
+    "flex h-10 w-10 items-center justify-center text-black/45 transition-all duration-300 hover:scale-105 hover:text-black/75 active:text-black";
 
   return (
-    <div className="fixed left-6 top-6 z-[60] flex items-center gap-3 sm:left-12 sm:gap-4 lg:left-24">
+    <div
+      className={
+        compact
+          ? "fixed left-3 top-14 z-[60] flex items-center gap-1"
+          : "fixed left-6 top-6 z-[60] flex items-center gap-3 sm:left-12 sm:gap-4 lg:left-24"
+      }
+    >
       <button
         type="button"
         onClick={onBack}
@@ -1308,7 +1317,11 @@ function PortfolioDetailNav({
   );
 }
 
-function WorkPortfolioSection() {
+export function WorkPortfolioSection({
+  compact = false,
+}: {
+  compact?: boolean;
+} = {}) {
   const [workView, setWorkView] = useState<
     | { level: "categories" }
     | { level: "projects"; categoryNumber: string }
@@ -1405,11 +1418,19 @@ function WorkPortfolioSection() {
   return (
     <section
       id="work"
-      className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
+      className={
+        compact
+          ? "px-4 py-8 sm:px-6"
+          : "px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
+      }
     >
       <div ref={workViewTopRef} className="mx-auto w-full max-w-7xl">
         {workView.level !== "categories" && (
-          <PortfolioDetailNav onBack={goBack} onHome={goHome} />
+          <PortfolioDetailNav
+            onBack={goBack}
+            onHome={goHome}
+            compact={compact}
+          />
         )}
 
         {workView.level === "categories" && (
@@ -1486,6 +1507,205 @@ function WorkPortfolioSection() {
             )}
           </>
         )}
+      </div>
+    </section>
+  );
+}
+
+export function AboutSection({ compact = false }: { compact?: boolean } = {}) {
+  return (
+    <section
+      id="about"
+      className={
+        compact
+          ? "border-t border-black/10 px-4 py-16"
+          : "border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
+      }
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+          About
+        </h2>
+        <div
+          className={
+            compact
+              ? "mt-8 max-w-3xl space-y-6"
+              : "mt-14 max-w-3xl space-y-8 sm:mt-16 sm:space-y-10 lg:mt-20 lg:space-y-12"
+          }
+        >
+          {aboutParagraphs.map((paragraph) => (
+            <BilingualParagraph
+              key={paragraph.en}
+              text={paragraph.en}
+              textKo={paragraph.ko}
+              variant="md"
+            />
+          ))}
+        </div>
+
+        <div className={compact ? "mt-16" : "mt-32 sm:mt-40 lg:mt-48"}>
+          <h3 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+            Experience
+          </h3>
+          <div className={compact ? "relative mt-8" : "relative mt-16 sm:mt-20"}>
+            <div
+              aria-hidden
+              className="absolute left-0 top-0 hidden h-full w-px bg-black/10 sm:left-[11rem] sm:block lg:left-[13rem]"
+            />
+            <ul className="divide-y divide-black/10">
+              {experience.map((item) => (
+                <li
+                  key={item.period}
+                  className={
+                    compact
+                      ? "grid grid-cols-1 gap-3 py-8 first:pt-0"
+                      : "grid grid-cols-1 gap-4 py-12 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-16 lg:py-20"
+                  }
+                >
+                  <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-4 lg:col-span-3">
+                    {item.period}
+                  </p>
+                  <div className="sm:col-span-8 lg:col-span-9">
+                    <p className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
+                      {item.role}
+                    </p>
+                    {item.company && (
+                      <p className="mt-3 text-sm tracking-wide text-black/50 sm:text-base">
+                        {item.company}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function ResumeSection({ compact = false }: { compact?: boolean } = {}) {
+  return (
+    <section
+      id="resume"
+      className={
+        compact
+          ? "border-t border-black/10 px-4 py-16"
+          : "border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
+      }
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+          Resume
+        </h2>
+        <p
+          className={
+            compact
+              ? "mt-8 max-w-2xl text-base leading-relaxed text-black/75"
+              : "mt-14 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl"
+          }
+        >
+          Spatial designer with experience across exhibition design,
+          architectural visualization and cultural space renewal.
+        </p>
+        <a
+          href="#"
+          className={
+            compact
+              ? "mt-8 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white"
+              : "mt-14 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
+          }
+        >
+          Download Resume
+        </a>
+      </div>
+    </section>
+  );
+}
+
+export function ContactSection({ compact = false }: { compact?: boolean } = {}) {
+  return (
+    <section
+      id="contact"
+      className={
+        compact
+          ? "border-t border-black/10 px-4 py-16"
+          : "border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
+      }
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+          Contact
+        </h2>
+        <p
+          className={
+            compact
+              ? "mt-8 max-w-2xl text-base leading-relaxed text-black"
+              : "mt-14 max-w-2xl text-base leading-relaxed text-black sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl"
+          }
+        >
+          Feel free to reach out for collaborations, exhibitions, spatial
+          design projects, or creative opportunities.
+        </p>
+        <ul
+          className={
+            compact
+              ? "mt-10 divide-y divide-black/10"
+              : "mt-24 divide-y divide-black/10 sm:mt-32"
+          }
+        >
+          <li
+            className={
+              compact
+                ? "grid grid-cols-1 gap-3 py-8"
+                : "grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16"
+            }
+          >
+            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+              Email
+            </span>
+            <a
+              href="mailto:ehdgus1213@gmail.com"
+              className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
+            >
+              ehdgus1213@gmail.com
+            </a>
+          </li>
+          <li
+            className={
+              compact
+                ? "grid grid-cols-1 gap-3 py-8"
+                : "grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16"
+            }
+          >
+            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+              LinkedIn
+            </span>
+            <a
+              href="http://www.linkedin.com/in/dong-hyeon-kim-staycalm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
+            >
+              Dong Hyeon Kim
+            </a>
+          </li>
+          <li
+            className={
+              compact
+                ? "grid grid-cols-1 gap-3 py-8"
+                : "grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16"
+            }
+          >
+            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
+              Location
+            </span>
+            <p className="text-lg font-light tracking-tight text-black sm:col-span-9 sm:text-xl lg:text-2xl">
+              Seoul, South Korea
+            </p>
+          </li>
+        </ul>
       </div>
     </section>
   );
@@ -1661,130 +1881,11 @@ export function DesktopHome() {
 
       <WorkPortfolioSection />
 
-      <section
-        id="about"
-        className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
-      >
-        <div className="mx-auto w-full max-w-7xl">
-          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-            About
-          </h2>
-          <div className="mt-14 max-w-3xl space-y-8 sm:mt-16 sm:space-y-10 lg:mt-20 lg:space-y-12">
-            {aboutParagraphs.map((paragraph) => (
-              <BilingualParagraph
-                key={paragraph.en}
-                text={paragraph.en}
-                textKo={paragraph.ko}
-                variant="md"
-              />
-            ))}
-          </div>
+      <AboutSection />
 
-          <div className="mt-32 sm:mt-40 lg:mt-48">
-            <h3 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-              Experience
-            </h3>
-            <div className="relative mt-16 sm:mt-20">
-              <div
-                aria-hidden
-                className="absolute left-0 top-0 hidden h-full w-px bg-black/10 sm:left-[11rem] sm:block lg:left-[13rem]"
-              />
-              <ul className="divide-y divide-black/10">
-                {experience.map((item) => (
-                  <li
-                    key={item.period}
-                    className="grid grid-cols-1 gap-4 py-12 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-16 lg:py-20"
-                  >
-                    <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-4 lg:col-span-3">
-                      {item.period}
-                    </p>
-                    <div className="sm:col-span-8 lg:col-span-9">
-                      <p className="text-xl font-light tracking-tight text-black sm:text-2xl lg:text-3xl">
-                        {item.role}
-                      </p>
-                      {item.company && (
-                        <p className="mt-3 text-sm tracking-wide text-black/50 sm:text-base">
-                          {item.company}
-                        </p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ResumeSection />
 
-      <section
-        id="resume"
-        className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
-      >
-        <div className="mx-auto w-full max-w-7xl">
-          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-            Resume
-          </h2>
-          <p className="mt-14 max-w-2xl text-base leading-relaxed text-black/75 sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl">
-            Spatial designer with experience across exhibition design,
-            architectural visualization and cultural space renewal.
-          </p>
-          <a
-            href="#"
-            className="mt-14 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
-          >
-            Download Resume
-          </a>
-        </div>
-      </section>
-
-      <section
-        id="contact"
-        className="border-t border-black/10 px-6 py-40 sm:px-12 sm:py-48 lg:px-24 lg:py-56"
-      >
-        <div className="mx-auto w-full max-w-7xl">
-          <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-            Contact
-          </h2>
-          <p className="mt-14 max-w-2xl text-base leading-relaxed text-black sm:mt-16 sm:text-lg sm:leading-9 lg:mt-20 lg:text-xl">
-            Feel free to reach out for collaborations, exhibitions, spatial
-            design projects, or creative opportunities.
-          </p>
-          <ul className="mt-24 divide-y divide-black/10 sm:mt-32">
-            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
-              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
-                Email
-              </span>
-              <a
-                href="mailto:ehdgus1213@gmail.com"
-                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
-              >
-                ehdgus1213@gmail.com
-              </a>
-            </li>
-            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
-              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
-                LinkedIn
-              </span>
-              <a
-                href="http://www.linkedin.com/in/dong-hyeon-kim-staycalm"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lg font-light tracking-tight text-black underline decoration-black/15 underline-offset-8 transition-all duration-500 hover:translate-x-1 hover:decoration-black sm:col-span-9 sm:text-xl lg:text-2xl"
-              >
-                Dong Hyeon Kim
-              </a>
-            </li>
-            <li className="grid grid-cols-1 gap-4 py-12 sm:grid-cols-12 sm:gap-8 sm:py-16">
-              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-black/40 sm:col-span-3">
-                Location
-              </span>
-              <p className="text-lg font-light tracking-tight text-black sm:col-span-9 sm:text-xl lg:text-2xl">
-                Seoul, South Korea
-              </p>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <ContactSection />
 
       <footer className="border-t border-black/10 px-6 py-12 sm:px-12 lg:px-24">
         <p className="mx-auto max-w-7xl text-center text-[10px] uppercase tracking-[0.25em] text-black/35">
