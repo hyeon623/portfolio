@@ -79,8 +79,8 @@ type PortfolioCategory = {
 const CATEGORY_TITLE_KO: Record<string, string> = {
   "01": "건축 및 환경 디자인",
   "02": "전시공간 디자인",
-  "03": "프로덕션 디자인",
-  "04": "인테리어 디자인",
+  "03": "인테리어 디자인",
+  "04": "프로덕션 디자인",
   "05": "컨셉 비주얼라이제이션",
   "06": "디자인 탐구",
 };
@@ -266,23 +266,6 @@ const portfolioCategories: PortfolioCategory[] = [
   },
   {
     number: "03",
-    title: "Production Design",
-    subtitle: "2 Projects",
-    projects: [
-      {
-        id: "human",
-        title: "Human",
-        subtitle: "Production Design Concept",
-      },
-      {
-        id: "the-last-24-hours",
-        title: "The Last 24 Hours",
-        subtitle: "Production Design Concept",
-      },
-    ],
-  },
-  {
-    number: "04",
     title: "Interior Design",
     subtitle: "5 Projects",
     projects: [
@@ -312,6 +295,23 @@ const portfolioCategories: PortfolioCategory[] = [
         title: "IT Office Interior Design",
         titleKo: "IT 회사 인테리어",
         subtitle: "Corporate Office Interior",
+      },
+    ],
+  },
+  {
+    number: "04",
+    title: "Production Design",
+    subtitle: "2 Projects",
+    projects: [
+      {
+        id: "human",
+        title: "Human",
+        subtitle: "Production Design Concept",
+      },
+      {
+        id: "the-last-24-hours",
+        title: "The Last 24 Hours",
+        subtitle: "Production Design Concept",
       },
     ],
   },
@@ -1008,9 +1008,9 @@ function getCategoryThumbnailSrc(categoryNumber: string): string | null {
     case "02":
       return getNscImageSrc(nscProjectImages[0]);
     case "03":
-      return getFilmStageCoverSrc();
-    case "04":
       return getFolderImageSrc(RESIDENTIAL_INTERIOR_IMAGE_DIR, "1.png");
+    case "04":
+      return getFilmStageCoverSrc();
     case "05":
       return getFolderImageSrc(AQUARIUM_CONCEPT_IMAGE_DIR, "a1.png");
     case "06":
@@ -1786,7 +1786,7 @@ function SingaporeProjectDetails({
 }
 
 const EXHIBITION_CATEGORY_NUMBER = "02";
-const PRODUCTION_CATEGORY_NUMBER = "03";
+const PRODUCTION_CATEGORY_NUMBER = "04";
 
 function InlineProjectExpansion({
   panelRef,
@@ -2576,7 +2576,7 @@ function WorkPortfolioSection() {
         {workView.level === "categories" && (
           <>
             <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
-              Featured Projects
+              Projects
             </h2>
             <div className="mt-4 border-t border-black/10 sm:mt-5">
               {portfolioCategories.map((category) => (
