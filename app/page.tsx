@@ -107,6 +107,7 @@ const PROJECT_TITLE_KO: Record<string, string> = {
   "residential-interior-design-2": "주거 공간 디자인",
   "cafe-interior": "카페 인테리어",
   "shinhan-bank-gwanghwamun-office-interior": "신한은행 광화문 지점",
+  "it-office-interior-design": "IT 회사 인테리어",
   "aquarium-science-center": "아쿠아리움 과학관",
   "stage-design-concept": "무대 디자인 컨셉",
   "furniture-design-study": "가구 디자인 연구",
@@ -283,7 +284,7 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "04",
     title: "Interior Design",
-    subtitle: "4 Projects",
+    subtitle: "5 Projects",
     projects: [
       {
         id: "residential-interior-design",
@@ -305,6 +306,12 @@ const portfolioCategories: PortfolioCategory[] = [
         id: "shinhan-bank-gwanghwamun-office-interior",
         title: "Shinhan Bank Gwanghwamun Office",
         subtitle: "Interior Design",
+      },
+      {
+        id: "it-office-interior-design",
+        title: "IT Office Interior Design",
+        titleKo: "IT 회사 인테리어",
+        subtitle: "Corporate Office Interior",
       },
     ],
   },
@@ -343,6 +350,61 @@ const portfolioCategories: PortfolioCategory[] = [
     ],
   },
 ];
+
+type WorkRouteState = {
+  workView:
+    | { level: "categories" }
+    | { level: "projects"; categoryNumber: string };
+  expandedProjectId: string | null;
+};
+
+function isProjectInCategory(categoryNumber: string, projectId: string) {
+  const category = portfolioCategories.find((item) => item.number === categoryNumber);
+  return category?.projects.some((project) => project.id === projectId) ?? false;
+}
+
+function parseWorkHash(hash: string): WorkRouteState | null {
+  const normalized = hash.replace(/^#/, "");
+  if (!normalized || normalized === "work") {
+    return { workView: { level: "categories" }, expandedProjectId: null };
+  }
+
+  const match = normalized.match(/^work\/(\d{2})(?:\/(.+))?$/);
+  if (!match) {
+    return null;
+  }
+
+  const categoryNumber = match[1];
+  const projectId = match[2] ?? null;
+  const category = portfolioCategories.find((item) => item.number === categoryNumber);
+  if (!category) {
+    return null;
+  }
+
+  if (projectId && !isProjectInCategory(categoryNumber, projectId)) {
+    return null;
+  }
+
+  return {
+    workView: { level: "projects", categoryNumber },
+    expandedProjectId: projectId,
+  };
+}
+
+function buildWorkHash(
+  workView: WorkRouteState["workView"],
+  expandedProjectId: string | null,
+) {
+  if (workView.level === "categories") {
+    return "#work";
+  }
+
+  if (expandedProjectId) {
+    return `#work/${workView.categoryNumber}/${expandedProjectId}`;
+  }
+
+  return `#work/${workView.categoryNumber}`;
+}
 
 const experience = [
   {
@@ -708,6 +770,30 @@ const residentialInteriorProject2: FolderGalleryProject = {
   images: ["9.png", "10.png", "11.png", "12.png", "13.png"],
 };
 
+const itOfficeInteriorProject: FolderGalleryProject = {
+  title: "IT Office Interior Design",
+  titleKo: "IT 회사 인테리어",
+  imageDir: "/images/IT 회사 인테리어",
+  images: [
+    "2-1.png",
+    "2-2.png",
+    "2-3.png",
+    "2-4.png",
+    "2-5.png",
+    "3-1.png",
+    "3-2.png",
+    "3-3수정.png",
+    "3-4.png",
+    "3-5.png",
+    "3-6.png",
+    "4-1.png",
+    "4-2.png",
+    "5-1.png",
+    "5-2.png",
+    "메인.png",
+  ],
+};
+
 const DESIGN_EXPLORATIONS_IMAGE_DIR = "/images/design explorations";
 
 const designExplorationProjects: Record<string, FolderGalleryProject> = {
@@ -982,6 +1068,11 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
         residentialInteriorProject2.imageDir,
         residentialInteriorProject2.images[0],
       );
+    case "it-office-interior-design":
+      return getFolderImageSrc(
+        itOfficeInteriorProject.imageDir,
+        itOfficeInteriorProject.images[0],
+      );
     default: {
       const designProject = designExplorationProjects[projectId];
       if (designProject) {
@@ -1013,9 +1104,10 @@ function CategoryListItem({
 
   return (
     <div className="border-b border-black/10 last:border-b-0">
-      <article
+      <button
+        type="button"
         onClick={onSelect}
-        className="group cursor-pointer py-2 transition-colors duration-300 sm:py-2.5 lg:py-3"
+        className="group w-full cursor-pointer py-2 text-left transition-colors duration-300 sm:py-2.5 lg:py-3"
       >
         <div className="flex items-center gap-x-3 sm:gap-x-5 lg:gap-x-8">
           <span className="w-8 shrink-0 text-3xl font-light leading-none tracking-tighter text-black/15 transition-colors duration-300 group-hover:text-black/25 sm:w-10 sm:text-4xl lg:w-12 lg:text-5xl">
@@ -1038,12 +1130,12 @@ function CategoryListItem({
               <img
                 src={thumbnailSrc}
                 alt=""
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>
           )}
         </div>
-      </article>
+      </button>
     </div>
   );
 }
@@ -1065,7 +1157,11 @@ function GalleryImage({
       onClick={() => onOpen(src)}
       className={`block w-full text-left ${className ?? ""}`}
     >
-      <img src={src} alt={alt} className="w-full cursor-zoom-in" />
+      <img
+        src={src}
+        alt={alt}
+        className="pointer-events-none w-full max-w-full cursor-zoom-in"
+      />
     </button>
   );
 }
@@ -1444,7 +1540,7 @@ function FilmStageProjectCard({
             <img
               src={thumbnailSrc}
               alt=""
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             <div className="h-full w-full bg-black/[0.04]" />
@@ -1709,7 +1805,7 @@ function InlineProjectExpansion({
   return (
     <div
       ref={panelRef}
-      className={`border-t border-black/10 transition-all duration-300 ease-out ${
+      className={`scroll-mt-28 border-t border-black/10 transition-all duration-300 ease-out sm:scroll-mt-24 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
       }`}
     >
@@ -1798,7 +1894,7 @@ function CategoryProjectListItem({
             <img
               src={thumbnailSrc}
               alt=""
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             <div className="h-full w-full bg-black/[0.04]" />
@@ -1872,7 +1968,7 @@ function ExhibitionProjectCard({
           <img
             src={thumbnailSrc}
             alt=""
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <div className="h-full w-full bg-black/[0.04]" />
@@ -2123,6 +2219,14 @@ function PortfolioProjectDetail({
           onOpen={onOpen}
         />
       );
+    case "it-office-interior-design":
+      return (
+        <InteriorProjectDetails
+          project={itOfficeInteriorProject}
+          projectId="it-office-interior-design"
+          onOpen={onOpen}
+        />
+      );
     default: {
       const conceptProject = conceptVisualizationProjects[projectId];
       if (conceptProject) {
@@ -2245,6 +2349,7 @@ function WorkPortfolioSection() {
   const workViewTopRef = useRef<HTMLDivElement>(null);
   const expansionRef = useRef<HTMLDivElement>(null);
   const previousWorkViewRef = useRef(workView);
+  const isApplyingHistoryRef = useRef(false);
 
   const activeCategory = portfolioCategories.find(
     (category) =>
@@ -2252,24 +2357,81 @@ function WorkPortfolioSection() {
       category.number === workView.categoryNumber,
   );
 
-  const goToCategories = () => {
-    setWorkView({ level: "categories" });
-    setExpandedProjectId(null);
+  const applyWorkRoute = (route: WorkRouteState) => {
+    isApplyingHistoryRef.current = true;
+    setWorkView(route.workView);
+    setExpandedProjectId(route.expandedProjectId);
     setActiveImage(null);
-    scrollToPageTop();
+    requestAnimationFrame(() => {
+      isApplyingHistoryRef.current = false;
+    });
+  };
+
+  const navigateWorkRoute = (
+    route: WorkRouteState,
+    mode: "push" | "replace" = "push",
+  ) => {
+    applyWorkRoute(route);
+    const nextHash = buildWorkHash(route.workView, route.expandedProjectId);
+
+    if (window.location.hash === nextHash) {
+      return;
+    }
+
+    if (mode === "replace") {
+      window.history.replaceState(null, "", nextHash);
+      return;
+    }
+
+    window.history.pushState(null, "", nextHash);
+  };
+
+  const goToCategories = ({ resetToHome = false }: { resetToHome?: boolean } = {}) => {
+    navigateWorkRoute(
+      { workView: { level: "categories" }, expandedProjectId: null },
+      "replace",
+    );
+
+    if (resetToHome) {
+      scrollToPageTop();
+      return;
+    }
+
+    scrollToWorkViewTop(workViewTopRef.current);
   };
 
   const goHome = () => {
-    goToCategories();
-    if (window.location.pathname !== "/" || window.location.hash) {
-      window.history.replaceState(null, "", "/");
-    }
+    applyWorkRoute({
+      workView: { level: "categories" },
+      expandedProjectId: null,
+    });
+    setActiveImage(null);
+    window.history.replaceState(null, "", "/");
+    scrollToPageTop();
   };
 
-  const goBack = () => {
-    if (expandedProjectId) {
-      setExpandedProjectId(null);
-      setActiveImage(null);
+  const stepBackWorkRoute = () => {
+    const hash = window.location.hash;
+    const projectMatch = hash.match(/^#work\/(\d{2})\/(.+)$/);
+
+    if (projectMatch) {
+      navigateWorkRoute(
+        {
+          workView: { level: "projects", categoryNumber: projectMatch[1] },
+          expandedProjectId: null,
+        },
+        "replace",
+      );
+      return;
+    }
+
+    if (/^#work\/\d{2}$/.test(hash)) {
+      goToCategories();
+      return;
+    }
+
+    if (expandedProjectId && workView.level === "projects") {
+      navigateWorkRoute({ workView, expandedProjectId: null }, "replace");
       return;
     }
 
@@ -2278,25 +2440,95 @@ function WorkPortfolioSection() {
     }
   };
 
+  const goBack = () => {
+    const startingHash = window.location.hash;
+
+    if (/^#work/.test(startingHash) && window.history.length > 1) {
+      window.history.back();
+      window.setTimeout(() => {
+        if (window.location.hash === startingHash) {
+          stepBackWorkRoute();
+        }
+      }, 100);
+      return;
+    }
+
+    stepBackWorkRoute();
+  };
+
   const goToProjects = (categoryNumber: string) => {
-    setWorkView({ level: "projects", categoryNumber });
-    setExpandedProjectId(null);
-    setActiveImage(null);
+    navigateWorkRoute({
+      workView: { level: "projects", categoryNumber },
+      expandedProjectId: null,
+    });
   };
 
   const selectProject = (projectId: PortfolioProjectId) => {
-    setExpandedProjectId((current) =>
-      current === projectId ? null : projectId,
+    if (workView.level !== "projects") {
+      return;
+    }
+
+    const nextProjectId =
+      expandedProjectId === projectId ? null : projectId;
+
+    navigateWorkRoute(
+      {
+        workView,
+        expandedProjectId: nextProjectId,
+      },
+      nextProjectId ? "push" : "replace",
     );
-    setActiveImage(null);
   };
+
+  useEffect(() => {
+    const syncFromLocation = () => {
+      if (isApplyingHistoryRef.current) {
+        return;
+      }
+
+      if (!window.location.hash) {
+        if (window.location.pathname === "/") {
+          applyWorkRoute({
+            workView: { level: "categories" },
+            expandedProjectId: null,
+          });
+        }
+        return;
+      }
+
+      const route = parseWorkHash(window.location.hash);
+      if (!route) {
+        return;
+      }
+
+      applyWorkRoute(route);
+
+      requestAnimationFrame(() => {
+        if (route.expandedProjectId) {
+          return;
+        }
+
+        if (route.workView.level === "projects") {
+          scrollToWorkViewTop(workViewTopRef.current);
+        } else if (window.location.hash === "#work") {
+          scrollToWorkViewTop(workViewTopRef.current);
+        }
+      });
+    };
+
+    syncFromLocation();
+    window.addEventListener("popstate", syncFromLocation);
+    window.addEventListener("hashchange", syncFromLocation);
+    return () => {
+      window.removeEventListener("popstate", syncFromLocation);
+      window.removeEventListener("hashchange", syncFromLocation);
+    };
+  }, []);
 
   useEffect(() => {
     const previousWorkView = previousWorkViewRef.current;
 
-    if (workView.level === "categories") {
-      scrollToPageTop();
-    } else if (
+    if (
       workView.level === "projects" &&
       previousWorkView.level === "categories"
     ) {
@@ -2311,6 +2543,7 @@ function WorkPortfolioSection() {
       return;
     }
 
+    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
     const timeout = window.setTimeout(() => {
       if (!expansionRef.current) {
         return;
@@ -2321,8 +2554,11 @@ function WorkPortfolioSection() {
         window.scrollY -
         WORK_VIEW_HEADER_OFFSET -
         24;
-      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    }, 320);
+      window.scrollTo({
+        top: Math.max(0, top),
+        behavior: isCoarsePointer ? "auto" : "smooth",
+      });
+    }, isCoarsePointer ? 120 : 320);
 
     return () => window.clearTimeout(timeout);
   }, [expandedProjectId]);
@@ -2330,7 +2566,7 @@ function WorkPortfolioSection() {
   return (
     <section
       id="work"
-      className="px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
+      className="relative z-20 px-6 py-16 sm:px-12 sm:py-20 lg:px-24 lg:py-24"
     >
       <div ref={workViewTopRef} className="mx-auto w-full max-w-7xl">
         {workView.level !== "categories" && (
@@ -2358,7 +2594,7 @@ function WorkPortfolioSection() {
           <>
             <button
               type="button"
-              onClick={goToCategories}
+              onClick={() => goToCategories()}
               className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/40 transition-colors duration-300 hover:text-black/70"
             >
               ← All Categories
@@ -2497,7 +2733,7 @@ export default function Home() {
       </header>
 
       <section ref={heroSectionRef} className="relative h-[175vh]">
-        <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="pointer-events-none sticky top-0 h-screen overflow-hidden">
           <div
             aria-hidden
             className="absolute inset-0 bg-[url('/images/orbit/orbit-hero.png')] bg-cover bg-[center_42%] bg-no-repeat"
@@ -2517,7 +2753,7 @@ export default function Home() {
           />
 
           <div
-            className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-12 pt-28 will-change-transform sm:px-12 sm:pb-16 sm:pt-32 lg:px-24 lg:pb-20"
+            className="pointer-events-auto relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-12 pt-28 will-change-transform sm:px-12 sm:pb-16 sm:pt-32 lg:px-24 lg:pb-20"
             style={{
               transform: `translate3d(0, ${-heroContentLift}vh, 0)`,
               opacity: heroContentFade,
