@@ -2889,12 +2889,30 @@ export default function Home() {
             Spatial designer with experience across exhibition design,
             architectural visualization and cultural space renewal.
           </p>
-          <a
-            href="#"
-            className="mt-14 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            className="mt-14 inline-block cursor-not-allowed border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] opacity-35 sm:mt-16"
           >
             Download Resume
-          </a>
+          </button>
+
+          <div className="mt-32 sm:mt-40 lg:mt-48">
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.3em] text-black/50 sm:text-[11px]">
+              Portfolio
+            </h2>
+            <p className={`mt-3 text-[0.675rem] sm:text-[0.7875rem] ${koreanClass}`}>
+              포트폴리오 PDF
+            </p>
+            <a
+              href="/Kim-Dong-Hyeon-A3-Portfolio.pdf"
+              download="KIM-DONG-HYEON-A3-Portfolio.pdf"
+              className="mt-14 inline-block border border-black px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-black hover:text-white sm:mt-16"
+            >
+              Download Portfolio PDF
+            </a>
+          </div>
         </div>
       </section>
 
