@@ -432,20 +432,20 @@ const experience = [
 
 const aboutParagraphs = [
   {
-    en: "KIM DONG HYEON is a spatial designer based in Seoul, South Korea.",
+    en: "I am a spatial designer based in Seoul, South Korea.",
     ko: "저는 서울을 기반으로 활동하는 공간 디자이너입니다.",
   },
   {
-    en: "His work focuses on exhibition design, spatial experiences, architectural concepts, and visual communication.",
-    ko: "전시 디자인, 공간 경험, 건축 컨셉, 비주얼 커뮤니케이션을 중심으로 작업합니다.",
+    en: "I work across exhibition design, spatial experiences, architectural concepts, and visual communication.",
+    ko: "전시 디자인, 공간 경험, 건축 컨셉, 비주얼 커뮤니케이션을 중심으로 다양한 공간을 디자인합니다.",
   },
   {
-    en: "With professional experience across museums, cultural institutions, educational facilities, and commercial environments, he develops design solutions that connect people, space, and narrative.",
-    ko: "박물관, 문화 기관, 교육 시설, 상업 공간 등 다양한 환경에서 사람과 공간, 이야기를 연결하는 디자인 솔루션을 개발해 왔습니다.",
+    en: "Drawing from experience across museums, cultural institutions, educational spaces, and commercial environments, I design spatial experiences that connect people, space, and narrative.",
+    ko: "박물관, 문화 기관, 교육 공간, 상업 환경 등 다양한 프로젝트 경험을 바탕으로 사람과 공간, 이야기를 연결하는 공간 경험을 디자인합니다.",
   },
   {
-    en: "He believes that space is more than a physical environment—it is a medium that shapes experiences, emotions, and human interaction.",
-    ko: "공간은 단순한 물리적 환경을 넘어, 경험과 감정, 인간 관계를 형성하는 매체라고 믿습니다.",
+    en: "For me, space is more than a physical setting. It is the medium through which experiences, emotions, and interactions between people take shape.",
+    ko: "저에게 공간은 단순한 물리적 환경을 넘어, 경험과 감정, 사람과 사람 사이의 상호작용을 만들어내는 매체입니다.",
   },
 ] as const;
 
