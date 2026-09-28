@@ -114,19 +114,19 @@ const orbit = imgs(
   "/images/orbit",
   [
     "2_night.png",
-    "orbit-hero01.png",
-    "orbit-hero03.png",
-    "orbit-hero04.png",
+    "orbit-hero01.avif",
+    "orbit-hero03.avif",
+    "orbit-hero04.avif",
     "orbit-1f01.png",
     "orbit-1f02.png",
-    "orbit-1f03.png",
-    "orbit-1f04.png",
+    "orbit-1f03.avif",
+    "orbit-1f04.avif",
     "orbit-1f05.png",
-    "orbit-1f06.png",
-    "26-0508 night.png",
+    "orbit-1f06.avif",
+    "26-0508 night.avif",
     "플라네타리움_초실사_렌더.png",
-    "26-0519 Orbyt Section 확장.png",
-    "26-0508 Orbyt Section.png",
+    "26-0519 Orbyt Section 확장.avif",
+    "26-0508 Orbyt Section.avif",
     "26-0430 3F 라운지.png",
     "26-0430 리테일 & 프리미엄 F&B.png",
   ],
@@ -141,29 +141,29 @@ const oil = imgs(
     "3.png",
     "4.png",
     "5.png",
-    "6.png",
-    "7.png",
+    "6.avif",
+    "7.avif",
     "8.png",
-    "9.png",
+    "9.avif",
     "10.png",
-    "11.png",
-    "12.png",
-    "13.png",
-    "14.png",
-    "15.png",
-    "16.png",
+    "11.avif",
+    "12.avif",
+    "13.avif",
+    "14.avif",
+    "15.avif",
+    "16.avif",
   ],
   "Oil Depot Renewal",
 );
 
 const hanok = imgs(
   "/images/hanok",
-  ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
+  ["b1.png", "b2.avif", "b3.avif", "b4.avif", "b5.png"],
   "Hanok Renewal",
 );
 const nsc = imgs(
   "/images/nsc science center",
-  ["강연_001.png", "강연_002.png", "파티_003.png", "파티_005.png", "3_ph.png"],
+  ["강연_001.png", "강연_002.png", "파티_003.avif", "파티_005.avif", "3_ph.png"],
   "Singapore NSC Science Center",
 );
 const gangneung = imgs(
@@ -346,12 +346,12 @@ const last24: Img[] = last24Files.map((file, i) => ({
 
 const aquarium = imgs(
   "/images/concept visualization works/acuarium",
-  ["a1.png", "a2.png", "a3.png"],
+  ["a1.avif", "a2.avif", "a3.avif"],
   "Aquarium Science Center",
 );
 const stage = imgs(
   "/images/concept visualization works/stage",
-  ["1.PNG", "2.PNG", "3.PNG"],
+  ["1.avif", "2.PNG", "3.PNG"],
   "Stage Design Concept",
 );
 
@@ -726,7 +726,7 @@ export const pages: PageSpec[] = [
   { kind: "contact" },
 ];
 
-export const COVER_SRC = asset("/images/orbit", "orbit-hero.png");
+export const COVER_SRC = asset("/images/orbit", "orbit-hero.avif");
 export const TOTAL_PAGES = pages.length;
 
 export const aboutParagraphs = [

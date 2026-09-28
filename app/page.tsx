@@ -469,14 +469,14 @@ const orbitProjectImages = [
   "2_night.png",
   "orbit-1f01.png",
   "orbit-1f02.png",
-  "orbit-1f03.png",
-  "orbit-1f04.png",
+  "orbit-1f03.avif",
+  "orbit-1f04.avif",
   "orbit-1f05.png",
-  "orbit-1f06.png",
-  "26-0508 night.png",
+  "orbit-1f06.avif",
+  "26-0508 night.avif",
   "플라네타리움_초실사_렌더.png",
-  "26-0519 Orbyt Section 확장.png",
-  "26-0508 Orbyt Section.png",
+  "26-0519 Orbyt Section 확장.avif",
+  "26-0508 Orbyt Section.avif",
   "26-0430 3F 라운지.png",
   "26-0430 리테일 & 프리미엄 F&B.png",
 ] as const;
@@ -489,17 +489,17 @@ const oilDepotProjectImages = [
   "3.png",
   "4.png",
   "5.png",
-  "6.png",
-  "7.png",
+  "6.avif",
+  "7.avif",
   "8.png",
-  "9.png",
+  "9.avif",
   "10.png",
-  "11.png",
-  "12.png",
-  "13.png",
-  "14.png",
-  "15.png",
-  "16.png",
+  "11.avif",
+  "12.avif",
+  "13.avif",
+  "14.avif",
+  "15.avif",
+  "16.avif",
 ] as const;
 
 const NSC_IMAGE_DIR = "/images/nsc science center";
@@ -507,8 +507,8 @@ const NSC_IMAGE_DIR = "/images/nsc science center";
 const nscProjectImages = [
   "강연_001.png",
   "강연_002.png",
-  "파티_003.png",
-  "파티_005.png",
+  "파티_003.avif",
+  "파티_005.avif",
   "3_ph.png",
 ] as const;
 
@@ -948,7 +948,7 @@ const hanokRenewalProject: FolderGalleryProject = {
     "Concept design and visualization study exploring the renewal and adaptive reuse of traditional Korean architectural heritage. Focused on spatial atmosphere, cultural identity, architectural preservation, and contemporary interpretation.",
   descriptionKo:
     "전통 한국 건축 유산의 리뉴얼과 적응적 재생을 탐구하는 컨셉 디자인 및 시각화 연구. 공간적 분위기, 문화적 정체성, 건축 보존, 현대적 해석에 중점을 두었습니다.",
-  images: ["b1.png", "b2.png", "b3.png", "b4.png", "b5.png"],
+  images: ["b1.png", "b2.avif", "b3.avif", "b4.avif", "b5.png"],
 };
 
 const conceptVisualizationProjects: Record<string, FolderGalleryProject> = {
@@ -959,7 +959,7 @@ const conceptVisualizationProjects: Record<string, FolderGalleryProject> = {
       "Concept design and visualization studies for an immersive aquarium and science center environment.",
     descriptionKo:
       "몰입형 아쿠아리움 및 과학관 환경을 위한 컨셉 디자인 및 시각화 연구입니다.",
-    images: ["a1.png", "a2.png", "a3.png"],
+    images: ["a1.avif", "a2.avif", "a3.avif"],
   },
   "stage-design-concept": {
     title: "Stage Design Concept",
@@ -968,7 +968,7 @@ const conceptVisualizationProjects: Record<string, FolderGalleryProject> = {
       "Concept visualization exploring stage environments through spatial composition, lighting, and narrative atmosphere.",
     descriptionKo:
       "공간 구성, 조명, 서사적 분위기를 통해 무대 환경을 탐구하는 컨셉 시각화입니다.",
-    images: ["1.PNG", "2.PNG", "3.PNG"],
+    images: ["1.avif", "2.PNG", "3.PNG"],
   },
 };
 
@@ -1015,7 +1015,7 @@ function getCategoryThumbnailSrc(categoryNumber: string): string | null {
     case "04":
       return getFilmStageCoverSrc();
     case "05":
-      return getFolderImageSrc(AQUARIUM_CONCEPT_IMAGE_DIR, "a1.png");
+      return getFolderImageSrc(AQUARIUM_CONCEPT_IMAGE_DIR, "a1.avif");
     case "06":
       return getFolderImageSrc(DESIGN_EXPLORATIONS_IMAGE_DIR, "01.png");
     default:
@@ -1096,7 +1096,7 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
   }
 }
 
-const HERO_IMAGE_SRC = "/images/orbit/orbit-hero.png";
+const HERO_IMAGE_SRC = "/images/orbit/orbit-hero.avif";
 
 const CATEGORY_THUMB_SIZES =
   "(min-width: 1280px) 240px, (min-width: 1024px) 224px, (min-width: 768px) 208px, (min-width: 640px) 192px, 126px";
@@ -1942,19 +1942,19 @@ function OrbitProjectDetails({
 
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10">
           <GalleryImage
-            src={getOrbitImageSrc("orbit-hero01.png")}
+            src={getOrbitImageSrc("orbit-hero01.avif")}
             className="lg:col-span-7"
             sizes={columnSpanSizes(7, "full")}
             onOpen={onOpen}
           />
           <div className="flex flex-col gap-6 sm:gap-8 lg:col-span-5">
             <GalleryImage
-              src={getOrbitImageSrc("orbit-hero03.png")}
+              src={getOrbitImageSrc("orbit-hero03.avif")}
               sizes={columnSpanSizes(5, "full")}
               onOpen={onOpen}
             />
             <GalleryImage
-              src={getOrbitImageSrc("orbit-hero04.png")}
+              src={getOrbitImageSrc("orbit-hero04.avif")}
               sizes={columnSpanSizes(5, "full")}
               onOpen={onOpen}
             />
