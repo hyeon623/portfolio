@@ -5,14 +5,17 @@ import {
   useEffect,
   useRef,
   useState,
+  type MouseEvent,
   type ReactNode,
   type RefObject,
 } from "react";
+import Image from "next/image";
 import {
   BilingualParagraph,
   BilingualTitle,
   koreanClass,
 } from "./components/bilingual";
+import { getImageDimensions } from "./image-dimensions";
 
 const WORK_VIEW_HEADER_OFFSET = 24;
 
@@ -970,7 +973,7 @@ const conceptVisualizationProjects: Record<string, FolderGalleryProject> = {
 };
 
 function publicImageSrc(baseDir: string, filename: string) {
-  return `${baseDir}/${encodeURIComponent(filename)}`;
+  return `${baseDir}/${filename}`;
 }
 
 function getOrbitImageSrc(filename: string) {
@@ -1093,6 +1096,72 @@ function getSubProjectThumbnailSrc(projectId: PortfolioProjectId): string | null
   }
 }
 
+const HERO_IMAGE_SRC = "/images/orbit/orbit-hero.png";
+
+const CATEGORY_THUMB_SIZES =
+  "(min-width: 1280px) 240px, (min-width: 1024px) 224px, (min-width: 768px) 208px, (min-width: 640px) 192px, 126px";
+
+const LIST_THUMB_SIZES =
+  "(min-width: 1024px) 136px, (min-width: 640px) 112px, 88px";
+
+const EXHIBITION_CARD_SIZES =
+  "(min-width: 1472px) 406px, (min-width: 1024px) calc((100vw - 16rem) / 3), (min-width: 640px) calc((100vw - 7.5rem) / 2), calc(100vw - 3rem)";
+
+const FULL_IMAGE_SIZES =
+  "(min-width: 1472px) 1280px, (min-width: 1024px) calc(100vw - 12rem), (min-width: 640px) calc(100vw - 6rem), calc(100vw - 3rem)";
+
+const HALF_IMAGE_SIZES =
+  "(min-width: 1472px) 624px, (min-width: 1024px) calc((100vw - 14rem) / 2), (min-width: 640px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)";
+
+const THIRD_IMAGE_SIZES =
+  "(min-width: 1472px) 400px, (min-width: 1024px) calc((100vw - 17rem) / 3), (min-width: 640px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)";
+
+function columnSpanSizes(span: 4 | 5 | 7 | 8, belowLg: "full" | "half") {
+  const fixed = { 4: "400px", 5: "510px", 7: "730px", 8: "840px" }[span];
+  const fluid = {
+    4: "calc((100vw - 12rem) / 3 - 1.6667rem)",
+    5: "calc((100vw - 12rem) * 5 / 12 - 1.4583rem)",
+    7: "calc((100vw - 12rem) * 7 / 12 - 1.0417rem)",
+    8: "calc((100vw - 12rem) * 2 / 3 - 0.8333rem)",
+  }[span];
+  const below =
+    belowLg === "half"
+      ? "(min-width: 640px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)"
+      : "(min-width: 640px) calc(100vw - 6rem), calc(100vw - 3rem)";
+
+  return `(min-width: 1472px) ${fixed}, (min-width: 1024px) ${fluid}, ${below}`;
+}
+
+const orbitMosaicImageSizes = [
+  columnSpanSizes(8, "full"),
+  columnSpanSizes(4, "half"),
+  columnSpanSizes(5, "half"),
+  columnSpanSizes(7, "half"),
+  columnSpanSizes(4, "half"),
+  columnSpanSizes(8, "half"),
+] as const;
+
+function FillImage({
+  src,
+  sizes,
+  className,
+}: {
+  src: string;
+  sizes: string;
+  className: string;
+}) {
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      loading="lazy"
+      sizes={sizes}
+      className={className}
+    />
+  );
+}
+
 function CategoryListItem({
   category,
   onSelect,
@@ -1126,11 +1195,11 @@ function CategoryListItem({
           </div>
 
           {thumbnailSrc && (
-            <div className="aspect-video w-[7.875rem] shrink-0 overflow-hidden bg-black/[0.03] sm:w-48 md:w-52 lg:w-56 xl:w-60">
-              <img
+            <div className="relative aspect-video w-[7.875rem] shrink-0 overflow-hidden bg-black/[0.03] sm:w-48 md:w-52 lg:w-56 xl:w-60">
+              <FillImage
                 src={thumbnailSrc}
-                alt=""
-                className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                sizes={CATEGORY_THUMB_SIZES}
+                className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>
           )}
@@ -1144,25 +1213,58 @@ function GalleryImage({
   src,
   alt = "",
   className,
+  sizes = FULL_IMAGE_SIZES,
   onOpen,
 }: {
   src: string;
   alt?: string;
   className?: string;
+  sizes?: string;
   onOpen: (src: string) => void;
 }) {
+  const { width, height } = getImageDimensions(src);
+
   return (
     <button
       type="button"
       onClick={() => onOpen(src)}
       className={`block w-full text-left ${className ?? ""}`}
     >
-      <img
+      <Image
         src={src}
         alt={alt}
-        className="pointer-events-none w-full max-w-full cursor-zoom-in"
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading="lazy"
+        className="pointer-events-none h-auto w-full max-w-full cursor-zoom-in"
+        style={{ width: "100%", height: "auto" }}
       />
     </button>
+  );
+}
+
+function LightboxImage({
+  src,
+  onClick,
+}: {
+  src: string;
+  onClick: (event: MouseEvent<HTMLImageElement>) => void;
+}) {
+  const { width, height } = getImageDimensions(src);
+
+  return (
+    <Image
+      src={src}
+      alt=""
+      width={width}
+      height={height}
+      sizes="100vw"
+      loading="eager"
+      className="max-h-full max-w-full object-contain"
+      style={{ width: "auto", height: "auto" }}
+      onClick={onClick}
+    />
   );
 }
 
@@ -1187,10 +1289,8 @@ function ImageLightbox({
       >
         Close
       </button>
-      <img
+      <LightboxImage
         src={activeImage}
-        alt=""
-        className="max-h-full max-w-full object-contain"
         onClick={(event) => event.stopPropagation()}
       />
     </div>
@@ -1229,6 +1329,7 @@ function InteriorGalleryTail({
             <GalleryImage
               key={filename}
               src={getImageSrc(filename)}
+              sizes={HALF_IMAGE_SIZES}
               onOpen={onOpen}
             />
           ))}
@@ -1313,6 +1414,9 @@ function SubsectionGallery({
               className={
                 orbitMosaicColSpans[index % orbitMosaicColSpans.length]
               }
+              sizes={
+                orbitMosaicImageSizes[index % orbitMosaicImageSizes.length]
+              }
               onOpen={onOpen}
             />
           ))}
@@ -1362,11 +1466,13 @@ function FilmSetGalleryTail({
           <GalleryImage
             src={getImageSrc(second)}
             alt={getAlt(0)}
+            sizes={HALF_IMAGE_SIZES}
             onOpen={onOpen}
           />
           <GalleryImage
             src={getImageSrc(third)}
             alt={getAlt(1)}
+            sizes={HALF_IMAGE_SIZES}
             onOpen={onOpen}
           />
         </div>
@@ -1381,6 +1487,7 @@ function FilmSetGalleryTail({
                 key={filename}
                 src={getImageSrc(filename)}
                 alt={getAlt(2 + index)}
+                sizes={THIRD_IMAGE_SIZES}
                 onOpen={onOpen}
               />
             ))}
@@ -1404,6 +1511,7 @@ function FilmSetGalleryTail({
                 key={filename}
                 src={getImageSrc(filename)}
                 alt={getAlt(6 + index)}
+                sizes={THIRD_IMAGE_SIZES}
                 onOpen={onOpen}
               />
             ))}
@@ -1415,12 +1523,14 @@ function FilmSetGalleryTail({
           <GalleryImage
             src={getImageSrc(eleventh)}
             alt={getAlt(9)}
+            sizes={HALF_IMAGE_SIZES}
             onOpen={onOpen}
           />
           {twelfth && (
             <GalleryImage
               src={getImageSrc(twelfth)}
               alt={getAlt(10)}
+              sizes={HALF_IMAGE_SIZES}
               onOpen={onOpen}
             />
           )}
@@ -1535,12 +1645,12 @@ function FilmStageProjectCard({
           </p>
         </div>
 
-        <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
+        <div className="relative aspect-[5/4] overflow-hidden bg-black/[0.03]">
           {thumbnailSrc ? (
-            <img
+            <FillImage
               src={thumbnailSrc}
-              alt=""
-              className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes={LIST_THUMB_SIZES}
+              className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             <div className="h-full w-full bg-black/[0.04]" />
@@ -1702,15 +1812,18 @@ function OrbitProjectDetails({
           <GalleryImage
             src={getOrbitImageSrc("orbit-hero01.png")}
             className="lg:col-span-7"
+            sizes={columnSpanSizes(7, "full")}
             onOpen={onOpen}
           />
           <div className="flex flex-col gap-6 sm:gap-8 lg:col-span-5">
             <GalleryImage
               src={getOrbitImageSrc("orbit-hero03.png")}
+              sizes={columnSpanSizes(5, "full")}
               onOpen={onOpen}
             />
             <GalleryImage
               src={getOrbitImageSrc("orbit-hero04.png")}
+              sizes={columnSpanSizes(5, "full")}
               onOpen={onOpen}
             />
           </div>
@@ -1722,6 +1835,7 @@ function OrbitProjectDetails({
               key={filename}
               src={getOrbitImageSrc(filename)}
               className={orbitMosaicColSpans[index % orbitMosaicColSpans.length]}
+              sizes={orbitMosaicImageSizes[index % orbitMosaicImageSizes.length]}
               onOpen={onOpen}
             />
           ))}
@@ -1889,12 +2003,12 @@ function CategoryProjectListItem({
           </p>
         </div>
 
-        <div className="aspect-[5/4] overflow-hidden bg-black/[0.03]">
+        <div className="relative aspect-[5/4] overflow-hidden bg-black/[0.03]">
           {thumbnailSrc ? (
-            <img
+            <FillImage
               src={thumbnailSrc}
-              alt=""
-              className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes={LIST_THUMB_SIZES}
+              className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             <div className="h-full w-full bg-black/[0.04]" />
@@ -1963,12 +2077,12 @@ function ExhibitionProjectCard({
         isSelected ? "bg-black/[0.025]" : ""
       }`}
     >
-      <div className="aspect-[4/3] w-full shrink-0 overflow-hidden bg-black/[0.03]">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-black/[0.03]">
         {thumbnailSrc ? (
-          <img
+          <FillImage
             src={thumbnailSrc}
-            alt=""
-            className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes={EXHIBITION_CARD_SIZES}
+            className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <div className="h-full w-full bg-black/[0.04]" />
@@ -2734,10 +2848,17 @@ export default function Home() {
 
       <section ref={heroSectionRef} className="relative h-[175vh]">
         <div className="pointer-events-none sticky top-0 h-screen overflow-hidden">
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-[url('/images/orbit/orbit-hero.png')] bg-cover bg-[center_42%] bg-no-repeat"
-          />
+          <div aria-hidden className="absolute inset-0">
+            <Image
+              src={HERO_IMAGE_SRC}
+              alt=""
+              fill
+              preload
+              sizes="100vw"
+              className="object-cover"
+              style={{ objectFit: "cover", objectPosition: "center 42%" }}
+            />
+          </div>
           <div
             aria-hidden
             className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/15 to-black/5"
