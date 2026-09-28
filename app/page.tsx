@@ -9,7 +9,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import {
   BilingualParagraph,
   BilingualTitle,
@@ -1141,6 +1141,124 @@ const orbitMosaicImageSizes = [
   columnSpanSizes(8, "half"),
 ] as const;
 
+const detailPreloadStarted = new Set<string>();
+const detailPreloadQueue: string[] = [];
+let detailPreloadActive = 0;
+const DETAIL_PRELOAD_CONCURRENCY = 2;
+
+function beginDetailImagePreload(src: string, priority: "high" | "low") {
+  if (detailPreloadStarted.has(src)) {
+    return;
+  }
+
+  let width = 0;
+  let height = 0;
+  try {
+    ({ width, height } = getImageDimensions(src));
+  } catch {
+    return;
+  }
+
+  detailPreloadStarted.add(src);
+  detailPreloadActive += 1;
+  const { props } = getImageProps({
+    src,
+    alt: "",
+    width,
+    height,
+    sizes: FULL_IMAGE_SIZES,
+  });
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  if (props.srcSet) {
+    link.imageSrcset = props.srcSet;
+    if (props.sizes) {
+      link.imageSizes = props.sizes;
+    }
+  } else {
+    link.href = props.src;
+  }
+  link.setAttribute("fetchpriority", priority);
+
+  let settled = false;
+  const finish = () => {
+    if (settled) {
+      return;
+    }
+    settled = true;
+    detailPreloadActive -= 1;
+    drainDetailImagePreload();
+  };
+
+  link.onload = finish;
+  link.onerror = finish;
+  document.head.appendChild(link);
+  window.setTimeout(finish, 8000);
+}
+
+function drainDetailImagePreload() {
+  while (
+    detailPreloadActive < DETAIL_PRELOAD_CONCURRENCY &&
+    detailPreloadQueue.length > 0
+  ) {
+    const src = detailPreloadQueue.shift();
+    if (src) {
+      beginDetailImagePreload(src, "low");
+    }
+  }
+}
+
+function scheduleDetailImagePreload(
+  src: string | null,
+  priority: "high" | "low" = "low",
+) {
+  if (!src || detailPreloadStarted.has(src)) {
+    return;
+  }
+
+  if (priority === "high") {
+    const queuedIndex = detailPreloadQueue.indexOf(src);
+    if (queuedIndex >= 0) {
+      detailPreloadQueue.splice(queuedIndex, 1);
+    }
+    beginDetailImagePreload(src, "high");
+    return;
+  }
+
+  if (!detailPreloadQueue.includes(src)) {
+    detailPreloadQueue.push(src);
+  }
+  drainDetailImagePreload();
+}
+
+function useDetailImagePrefetch(src: string | null) {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || !src) {
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        scheduleDetailImagePreload(src, "low");
+        observer.disconnect();
+      }
+    });
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [src]);
+
+  const prefetchNow = () => {
+    scheduleDetailImagePreload(src, "high");
+  };
+
+  return { ref, prefetchNow };
+}
+
 function FillImage({
   src,
   sizes,
@@ -1214,12 +1332,14 @@ function GalleryImage({
   alt = "",
   className,
   sizes = FULL_IMAGE_SIZES,
+  eager = false,
   onOpen,
 }: {
   src: string;
   alt?: string;
   className?: string;
   sizes?: string;
+  eager?: boolean;
   onOpen: (src: string) => void;
 }) {
   const { width, height } = getImageDimensions(src);
@@ -1236,7 +1356,8 @@ function GalleryImage({
         width={width}
         height={height}
         sizes={sizes}
-        loading="lazy"
+        loading={eager ? "eager" : "lazy"}
+        {...(eager ? { fetchPriority: "high" as const } : {})}
         className="pointer-events-none h-auto w-full max-w-full cursor-zoom-in"
         style={{ width: "100%", height: "auto" }}
       />
@@ -1378,7 +1499,9 @@ function CompactInteriorGallery({
 
   return (
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-      {hero && <GalleryImage src={getImageSrc(hero)} onOpen={onOpen} />}
+      {hero && (
+        <GalleryImage src={getImageSrc(hero)} eager onOpen={onOpen} />
+      )}
       <InteriorGalleryTail
         images={rest}
         getImageSrc={getImageSrc}
@@ -1403,7 +1526,7 @@ function SubsectionGallery({
 
   return (
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-      <GalleryImage src={getImageSrc(images[0])} onOpen={onOpen} />
+      <GalleryImage src={getImageSrc(images[0])} eager onOpen={onOpen} />
 
       {images.length > 1 && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-12 lg:gap-10">
@@ -1557,7 +1680,9 @@ function FilmSetGallery({
 
   return (
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-      {hero && <GalleryImage src={getImageSrc(hero)} onOpen={onOpen} />}
+      {hero && (
+        <GalleryImage src={getImageSrc(hero)} eager onOpen={onOpen} />
+      )}
       <FilmSetGalleryTail
         images={rest}
         getImageSrc={getImageSrc}
@@ -1623,10 +1748,15 @@ function FilmStageProjectCard({
   const thumbnailSrc = hasThumbnail
     ? getFilmStageThumbnailSrc(project)
     : null;
+  const { ref: prefetchRef, prefetchNow } = useDetailImagePrefetch(thumbnailSrc);
 
   return (
     <button
+      ref={prefetchRef}
       type="button"
+      onPointerEnter={prefetchNow}
+      onFocus={prefetchNow}
+      onPointerDown={prefetchNow}
       onClick={() => onSelect(project.slug)}
       className={`group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8 ${
         isSelected ? "bg-black/[0.025]" : ""
@@ -1696,6 +1826,7 @@ function FilmStageProjectDetail({
           <GalleryImage
             src={getImageSrc(project.images[0])}
             alt={project.imageLabels?.[0] ?? project.title}
+            eager
             onOpen={onOpen}
           />
         </div>
@@ -1805,6 +1936,7 @@ function OrbitProjectDetails({
         <GalleryImage
           src={getOrbitImageSrc(orbitProjectImages[0])}
           alt="ORBIT Dome Theater"
+          eager
           onOpen={onOpen}
         />
 
@@ -1981,10 +2113,15 @@ function CategoryProjectListItem({
   const thumbnailSrc = project.comingSoon
     ? null
     : getSubProjectThumbnailSrc(project.id);
+  const { ref: prefetchRef, prefetchNow } = useDetailImagePrefetch(thumbnailSrc);
 
   return (
     <button
+      ref={prefetchRef}
       type="button"
+      onPointerEnter={prefetchNow}
+      onFocus={prefetchNow}
+      onPointerDown={prefetchNow}
       onClick={() => onSelect(project.id)}
       className={`group w-full cursor-pointer border-b border-black/10 py-6 text-left transition-colors duration-300 last:border-b-0 hover:bg-black/[0.015] sm:py-8 ${
         isSelected ? "bg-black/[0.025]" : ""
@@ -2068,10 +2205,15 @@ function ExhibitionProjectCard({
   const thumbnailSrc = project.comingSoon
     ? null
     : getSubProjectThumbnailSrc(project.id);
+  const { ref: prefetchRef, prefetchNow } = useDetailImagePrefetch(thumbnailSrc);
 
   return (
     <button
+      ref={prefetchRef}
       type="button"
+      onPointerEnter={prefetchNow}
+      onFocus={prefetchNow}
+      onPointerDown={prefetchNow}
       onClick={() => onSelect(project.id)}
       className={`group flex h-full w-full cursor-pointer flex-col text-left transition-colors duration-300 hover:bg-black/[0.015] ${
         isSelected ? "bg-black/[0.025]" : ""
