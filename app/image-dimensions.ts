@@ -115,16 +115,16 @@ export const imageDimensions: Record<string, ImageDimensions> = {
   "/images/residential interior design/9.png": { width: 1376, height: 768 },
   "/images/국립밀양기상과학관/01.png": { width: 2752, height: 1536 },
   "/images/국립밀양기상과학관/02.png": { width: 2752, height: 1536 },
-  "/images/부산모터스튜디오/01.png": { width: 3000, height: 1000 },
-  "/images/부산모터스튜디오/02.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/03.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/04.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/05.png": { width: 2171, height: 1139 },
-  "/images/부산모터스튜디오/21.png": { width: 3000, height: 1000 },
-  "/images/부산모터스튜디오/22.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/23.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/24.png": { width: 1920, height: 1080 },
-  "/images/부산모터스튜디오/25.png": { width: 2171, height: 1139 },
+  "/images/부산모터스튜디오/01.png": { width: 3000, height: 1000 },
+  "/images/부산모터스튜디오/02.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/03.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/04.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/05.png": { width: 2171, height: 1139 },
+  "/images/부산모터스튜디오/21.png": { width: 3000, height: 1000 },
+  "/images/부산모터스튜디오/22.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/23.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/24.png": { width: 1920, height: 1080 },
+  "/images/부산모터스튜디오/25.png": { width: 2171, height: 1139 },
   "/images/강릉 메타버스 체험관/01.png": { width: 2016, height: 1344 },
   "/images/강릉 메타버스 체험관/02.png": { width: 2752, height: 1536 },
   "/images/강릉 메타버스 체험관/03.png": { width: 2752, height: 1536 },
@@ -189,16 +189,41 @@ export const imageDimensions: Record<string, ImageDimensions> = {
   "/images/홍천동물조각테마파크/06.png": { width: 2752, height: 1536 },
 };
 
+function lookupImageDimensions(path: string): ImageDimensions | undefined {
+  const direct = imageDimensions[path];
+  if (direct) {
+    return direct;
+  }
+
+  const nfc = path.normalize("NFC");
+  if (nfc !== path) {
+    const nfcMatch = imageDimensions[nfc];
+    if (nfcMatch) {
+      return nfcMatch;
+    }
+  }
+
+  const nfd = path.normalize("NFD");
+  if (nfd !== path && nfd !== nfc) {
+    const nfdMatch = imageDimensions[nfd];
+    if (nfdMatch) {
+      return nfdMatch;
+    }
+  }
+
+  return undefined;
+}
+
 export function getImageDimensions(src: string): ImageDimensions {
   const path = src.split("?")[0];
-  const direct = imageDimensions[path];
+  const direct = lookupImageDimensions(path);
   if (direct) {
     return direct;
   }
 
   try {
     const decoded = decodeURIComponent(path);
-    const decodedMatch = imageDimensions[decoded];
+    const decodedMatch = lookupImageDimensions(decoded);
     if (decodedMatch) {
       return decodedMatch;
     }
