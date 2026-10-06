@@ -104,6 +104,7 @@ const PROJECT_TITLE_KO: Record<string, string> = {
   "national-medicinal-plant-resource-center": "제주 국가생약자원관리센터",
   "korean-church-of-new-york": "뉴욕 한인교회",
   "busan-motor-studio": "부산 모터스튜디오",
+  "hyundai-motorstudio-christmas": "현대 모터스튜디오 크리스마스",
   human: "휴먼",
   "the-last-24-hours": "마지막 24시간",
   "residential-interior-design": "주거공간 인테리어 디자인",
@@ -203,7 +204,7 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "02",
     title: "Exhibition & Spatial Design",
-    subtitle: "12 Projects",
+    subtitle: "13 Projects",
     projects: [
       {
         id: "singapore-nsc",
@@ -263,6 +264,11 @@ const portfolioCategories: PortfolioCategory[] = [
       {
         id: "busan-motor-studio",
         title: "Busan Motor Studio",
+        subtitle: "Exhibition Design",
+      },
+      {
+        id: "hyundai-motorstudio-christmas",
+        title: "Hyundai Motorstudio Christmas",
         subtitle: "Exhibition Design",
       },
     ],
@@ -698,6 +704,27 @@ const exhibitionFolderProjects: Record<string, FolderGalleryProject> = {
       "23.png",
       "24.png",
       "25.png",
+    ],
+  },
+  "hyundai-motorstudio-christmas": {
+    title: "Hyundai Motorstudio Christmas",
+    imageDir: "/images/현대모터스튜디오 크리스마스",
+    images: [
+      "현대적 도심형 자동차 쇼룸 아트리움.png",
+      "미래형 크리스마스 쇼룸 아트리움.png",
+      "블록으로 만든 대형 크리스마스 트리 설치물.png",
+      "0923_top.png",
+      "0923_01.png",
+      "0923_02.png",
+      "0923_03.png",
+      "0923_03_사람2.png",
+      "0923_04.png",
+      "0923_05.png",
+      "0923_05_사람2.png",
+      "0923_06.png",
+      "0923_07.png",
+      "0923_08.png",
+      "0923_08_사람2.png",
     ],
   },
   "shinhan-bank-giheung-training-center": {
