@@ -351,6 +351,35 @@ export default function AlarmApp() {
     [ensureAudio, submitAnswer],
   );
 
+  useEffect(() => {
+    if (!ringing) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key >= "0" && event.key <= "9") {
+        event.preventDefault();
+        onPad(event.key);
+        return;
+      }
+      if (event.key === "Backspace") {
+        event.preventDefault();
+        onPad("del");
+        return;
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onPad("clear");
+        return;
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onPad("submit");
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [ringing, onPad]);
+
   const nextLabel = useMemo(() => {
     if (!settings.enabled) return "알람 꺼짐";
     return `${settings.time}에 울림`;
@@ -437,6 +466,7 @@ export default function AlarmApp() {
         <button
           type="button"
           className="alarm-test-btn"
+          data-testid="alarm-test-ring"
           onClick={async () => {
             await ensureAudio();
             triggerAlarm();
@@ -496,17 +526,26 @@ function RingingOverlay({
   ];
 
   return (
-    <div className="alarm-ringing" role="dialog" aria-modal="true" aria-label="알람">
+    <div
+      className="alarm-ringing"
+      role="dialog"
+      aria-modal="true"
+      aria-label="알람"
+      data-testid="alarm-ringing"
+    >
       <div className="alarm-ring-title">Alarm</div>
       <div className="alarm-ring-time">{formatClock(now)}</div>
       <div className="alarm-ring-sub">문제를 맞혀야 알람이 꺼집니다</div>
 
       <div className="alarm-math-card">
         <div className="alarm-math-prompt">다음 계산의 결과는?</div>
-        <div className="alarm-math-eq">{problem.prompt} = ?</div>
+        <div className="alarm-math-eq" data-testid="alarm-math-eq">
+          {problem.prompt} = ?
+        </div>
         <div
           className={`alarm-math-answer${answerError ? " error" : ""}`}
           aria-live="polite"
+          data-testid="alarm-math-answer"
         >
           {answer || "—"}
         </div>
@@ -517,6 +556,7 @@ function RingingOverlay({
               key={key.id}
               type="button"
               className={key.className}
+              data-testid={`alarm-pad-${key.id}`}
               onClick={() => onPad(key.id)}
             >
               {key.label}
@@ -526,6 +566,7 @@ function RingingOverlay({
         <button
           type="button"
           className="alarm-submit-btn"
+          data-testid="alarm-submit"
           disabled={answer === ""}
           onClick={() => onPad("submit")}
         >
