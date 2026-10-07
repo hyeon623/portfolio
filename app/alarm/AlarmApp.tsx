@@ -143,6 +143,10 @@ class AlarmTone {
     }
   }
 
+  isReady() {
+    return this.unlocked && this.ctx?.state === "running";
+  }
+
   stop() {
     if (this.intervalId != null) {
       window.clearInterval(this.intervalId);
@@ -196,10 +200,13 @@ export default function AlarmApp() {
   const [feedback, setFeedback] = useState("");
   const [answerError, setAnswerError] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
+  const [notifyReady, setNotifyReady] = useState(false);
+  const [wakeReady, setWakeReady] = useState(false);
 
   const toneRef = useRef<AlarmTone | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const lastTriggerKeyRef = useRef<string | null>(null);
+  const notifyRef = useRef<Notification | null>(null);
 
   if (isClient && !hydrated) {
     setHydrated(true);
@@ -222,11 +229,13 @@ export default function AlarmApp() {
 
   const requestWakeLock = useCallback(async () => {
     try {
-      if (!("wakeLock" in navigator)) return;
+      if (!("wakeLock" in navigator)) return false;
       await wakeLockRef.current?.release().catch(() => undefined);
       wakeLockRef.current = await navigator.wakeLock.request("screen");
+      return true;
     } catch {
       // iOS may deny wake lock outside secure/user contexts.
+      return false;
     }
   }, []);
 
@@ -239,6 +248,29 @@ export default function AlarmApp() {
       wakeLockRef.current = null;
     }
   }, []);
+
+  const requestNotifications = useCallback(async () => {
+    if (typeof Notification === "undefined") return false;
+    try {
+      const permission =
+        Notification.permission === "granted"
+          ? "granted"
+          : await Notification.requestPermission();
+      return permission === "granted";
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const requestAllPermissions = useCallback(async () => {
+    await toneRef.current?.unlock();
+    const audioOk = Boolean(toneRef.current?.isReady());
+    const notifyOk = await requestNotifications();
+    const wakeOk = await requestWakeLock();
+    setAudioReady(audioOk);
+    setNotifyReady(notifyOk);
+    setWakeReady(wakeOk);
+  }, [requestNotifications, requestWakeLock]);
 
   useEffect(() => {
     if (settings.enabled || ringing) {
@@ -268,6 +300,18 @@ export default function AlarmApp() {
     if (typeof navigator.vibrate === "function") {
       navigator.vibrate([300, 150, 300, 150, 500]);
     }
+    if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+      try {
+        notifyRef.current?.close();
+        notifyRef.current = new Notification("Math Alarm", {
+          body: "문제를 풀어야 알람이 꺼집니다",
+          tag: "math-alarm-ring",
+          requireInteraction: true,
+        });
+      } catch {
+        // Some browsers block Notification construction outside service workers.
+      }
+    }
   }, [settings.difficulty]);
 
   useEffect(() => {
@@ -291,19 +335,25 @@ export default function AlarmApp() {
 
   const ensureAudio = useCallback(async () => {
     await toneRef.current?.unlock();
-    setAudioReady(true);
+    setAudioReady(Boolean(toneRef.current?.isReady()));
   }, []);
 
   const updateSettings = useCallback(
     async (patch: Partial<AlarmSettings>) => {
-      await ensureAudio();
+      if (patch.enabled) {
+        await requestAllPermissions();
+      } else {
+        await ensureAudio();
+      }
       setSettings((prev) => ({ ...prev, ...patch }));
     },
-    [ensureAudio],
+    [ensureAudio, requestAllPermissions],
   );
 
   const dismissAlarm = useCallback(() => {
     toneRef.current?.stop();
+    notifyRef.current?.close();
+    notifyRef.current = null;
     setRinging(false);
     setProblem(null);
     setAnswer("");
@@ -422,9 +472,15 @@ export default function AlarmApp() {
           <div className="alarm-row-label">
             <span className="alarm-row-title">알람 켜기</span>
             <span className="alarm-row-desc">
-              {audioReady
-                ? "소리가 준비됐어요"
-                : "켤 때 소리가 활성화됩니다"}
+              {settings.enabled
+                ? [
+                    audioReady ? "소리" : null,
+                    notifyReady ? "알림" : null,
+                    wakeReady ? "화면유지" : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ") || "권한 요청 중"
+                : "켤 때 소리·알림·화면유지 모두 허용"}
             </span>
           </div>
           <Toggle
@@ -468,7 +524,7 @@ export default function AlarmApp() {
           className="alarm-test-btn"
           data-testid="alarm-test-ring"
           onClick={async () => {
-            await ensureAudio();
+            await requestAllPermissions();
             triggerAlarm();
           }}
         >
@@ -477,8 +533,8 @@ export default function AlarmApp() {
       </section>
 
       <p className="alarm-tip">
-        아이폰: Safari에서 <strong>공유 → 홈 화면에 추가</strong> 후 앱을 켠
-        채로 두세요. 화면이 꺼지면 웹 알람이 멈출 수 있어요.
+        아이폰: Safari에서 <strong>공유 → 홈 화면에 추가</strong> 후, 뜨는
+        권한은 모두 허용하세요. 앱을 켠 채로 두면 가장 안정적입니다.
       </p>
 
       {ringing && problem ? (
