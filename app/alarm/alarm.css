@@ -1,0 +1,388 @@
+.alarm-root {
+  --alarm-bg: #0f1419;
+  --alarm-surface: #1a222c;
+  --alarm-border: #2a3542;
+  --alarm-text: #f2f5f8;
+  --alarm-muted: #8b9aab;
+  --alarm-accent: #3dd6c6;
+  --alarm-danger: #ff5a5f;
+  --alarm-warn: #ffb020;
+  --alarm-pad: #243040;
+  --alarm-pad-active: #314356;
+  --alarm-font: "SF Pro Display", "Pretendard Variable", -apple-system,
+    BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+  --alarm-mono: "SF Mono", ui-monospace, Menlo, monospace;
+
+  min-height: 100dvh;
+  min-height: 100svh;
+  background: radial-gradient(120% 80% at 50% -10%, #1c2a38 0%, var(--alarm-bg) 55%);
+  color: var(--alarm-text);
+  font-family: var(--alarm-font);
+  display: flex;
+  flex-direction: column;
+  padding: max(16px, env(safe-area-inset-top)) 20px
+    max(20px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.alarm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.alarm-brand {
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: var(--alarm-accent);
+}
+
+.alarm-status {
+  font-size: 0.8rem;
+  color: var(--alarm-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alarm-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--alarm-muted);
+}
+
+.alarm-status-dot.on {
+  background: var(--alarm-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--alarm-accent) 25%, transparent);
+}
+
+.alarm-clock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 0 12px;
+}
+
+.alarm-clock-label {
+  font-size: 0.85rem;
+  color: var(--alarm-muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.alarm-clock-time {
+  font-size: clamp(4.5rem, 18vw, 6.5rem);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.alarm-clock-date {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--alarm-muted);
+}
+
+.alarm-panel {
+  background: color-mix(in srgb, var(--alarm-surface) 92%, transparent);
+  border: 1px solid var(--alarm-border);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.alarm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.alarm-row-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alarm-row-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.alarm-row-desc {
+  font-size: 0.8rem;
+  color: var(--alarm-muted);
+  line-height: 1.35;
+}
+
+.alarm-time-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--alarm-pad);
+  color: var(--alarm-text);
+  border: 1px solid var(--alarm-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 1.35rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  font-family: inherit;
+  min-width: 7.5rem;
+  text-align: center;
+}
+
+.alarm-time-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+  opacity: 0.7;
+}
+
+.alarm-seg {
+  display: inline-flex;
+  background: var(--alarm-pad);
+  border: 1px solid var(--alarm-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.alarm-seg button {
+  border: 0;
+  background: transparent;
+  color: var(--alarm-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.alarm-seg button.active {
+  background: var(--alarm-accent);
+  color: #06241f;
+}
+
+.alarm-toggle {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--alarm-pad);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.alarm-toggle.on {
+  background: var(--alarm-accent);
+}
+
+.alarm-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.alarm-toggle.on .alarm-toggle-knob {
+  transform: translateX(24px);
+}
+
+.alarm-test-btn {
+  width: 100%;
+  border: 1px solid var(--alarm-border);
+  background: transparent;
+  color: var(--alarm-text);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 14px;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.alarm-test-btn:active {
+  background: var(--alarm-pad);
+}
+
+.alarm-tip {
+  margin-top: 14px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--alarm-muted);
+  text-align: center;
+  padding: 0 4px;
+}
+
+.alarm-tip strong {
+  color: var(--alarm-text);
+  font-weight: 600;
+}
+
+.alarm-ringing {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: radial-gradient(circle at 50% 20%, #3a1520 0%, #12080c 70%);
+  display: flex;
+  flex-direction: column;
+  padding: max(20px, env(safe-area-inset-top)) 20px
+    max(24px, env(safe-area-inset-bottom));
+  animation: alarm-pulse-bg 1.2s ease-in-out infinite;
+}
+
+@keyframes alarm-pulse-bg {
+  0%,
+  100% {
+    background: radial-gradient(circle at 50% 20%, #3a1520 0%, #12080c 70%);
+  }
+  50% {
+    background: radial-gradient(circle at 50% 20%, #5a1d2a 0%, #1a0a10 70%);
+  }
+}
+
+.alarm-ring-title {
+  text-align: center;
+  color: var(--alarm-danger);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.alarm-ring-time {
+  text-align: center;
+  font-size: clamp(3.2rem, 14vw, 4.5rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  margin: 10px 0 6px;
+}
+
+.alarm-ring-sub {
+  text-align: center;
+  color: color-mix(in srgb, var(--alarm-text) 75%, transparent);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.alarm-math-card {
+  background: color-mix(in srgb, #1b1014 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--alarm-danger) 45%, transparent);
+  border-radius: 22px;
+  padding: 22px 18px 18px;
+  margin-top: auto;
+}
+
+.alarm-math-prompt {
+  text-align: center;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--alarm-text) 70%, transparent);
+  margin-bottom: 10px;
+}
+
+.alarm-math-eq {
+  text-align: center;
+  font-size: clamp(2.4rem, 10vw, 3.2rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.alarm-math-answer {
+  min-height: 56px;
+  border-radius: 14px;
+  border: 1px solid var(--alarm-border);
+  background: #0d080a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
+  letter-spacing: 0.06em;
+}
+
+.alarm-math-answer.error {
+  animation: alarm-shake 0.35s ease;
+  border-color: var(--alarm-danger);
+  color: var(--alarm-danger);
+}
+
+.alarm-math-feedback {
+  text-align: center;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--alarm-danger);
+  margin-bottom: 12px;
+}
+
+@keyframes alarm-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+.alarm-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.alarm-pad button {
+  border: 0;
+  border-radius: 14px;
+  background: var(--alarm-pad);
+  color: var(--alarm-text);
+  font: inherit;
+  font-size: 1.45rem;
+  font-weight: 650;
+  min-height: 56px;
+  cursor: pointer;
+}
+
+.alarm-pad button:active {
+  background: var(--alarm-pad-active);
+}
+
+.alarm-pad button.action {
+  background: color-mix(in srgb, var(--alarm-danger) 22%, var(--alarm-pad));
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.alarm-pad button.submit {
+  background: var(--alarm-accent);
+  color: #06241f;
+}
+
+.alarm-pad button.submit:disabled {
+  opacity: 0.45;
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Math Alarm">
+  <rect width="180" height="180" rx="40" fill="#0f1419"/>
+  <circle cx="90" cy="96" r="48" fill="none" stroke="#3dd6c6" stroke-width="10"/>
+  <path d="M90 70v28l18 12" fill="none" stroke="#f2f5f8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 48l18 14M132 48l-18 14" fill="none" stroke="#ff5a5f" stroke-width="8" stroke-linecap="round"/>
+  <text x="90" y="158" text-anchor="middle" fill="#8b9aab" font-family="system-ui,sans-serif" font-size="18" font-weight="700">2+3</text>
+</svg>
