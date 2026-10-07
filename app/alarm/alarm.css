@@ -380,11 +380,25 @@
   letter-spacing: 0.02em;
 }
 
-.alarm-pad button.submit {
+.alarm-submit-btn {
+  width: 100%;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 14px;
   background: var(--alarm-accent);
   color: #06241f;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-height: 56px;
+  cursor: pointer;
 }
 
-.alarm-pad button.submit:disabled {
+.alarm-submit-btn:disabled {
   opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.alarm-submit-btn:not(:disabled):active {
+  filter: brightness(0.95);
 }

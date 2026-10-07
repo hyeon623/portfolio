@@ -492,11 +492,7 @@ function RingingOverlay({
     { id: "9", label: "9" },
     { id: "del", label: "←", className: "action" },
     { id: "0", label: "0" },
-    {
-      id: "submit",
-      label: "확인",
-      className: "submit",
-    },
+    { id: "clear", label: "C", className: "action" },
   ];
 
   return (
@@ -521,13 +517,20 @@ function RingingOverlay({
               key={key.id}
               type="button"
               className={key.className}
-              disabled={key.id === "submit" && answer === ""}
               onClick={() => onPad(key.id)}
             >
               {key.label}
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className="alarm-submit-btn"
+          disabled={answer === ""}
+          onClick={() => onPad("submit")}
+        >
+          확인
+        </button>
       </div>
     </div>
   );
