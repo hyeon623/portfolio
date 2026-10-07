@@ -114,6 +114,7 @@ const PROJECT_TITLE_KO: Record<string, string> = {
   "it-office-interior-design": "IT 회사 인테리어",
   "aquarium-science-center": "아쿠아리움 과학관",
   "stage-design-concept": "무대 디자인 컨셉",
+  "custom-game-console-shell": "커스텀 게임 콘솔 쉘",
   "furniture-design-study": "가구 디자인 연구",
   "graphic-installation-study": "그래픽 설치 연구",
 };
@@ -344,8 +345,13 @@ const portfolioCategories: PortfolioCategory[] = [
   {
     number: "06",
     title: "Design Explorations",
-    subtitle: "2 Projects",
+    subtitle: "3 Projects",
     projects: [
+      {
+        id: "custom-game-console-shell",
+        title: "Custom Game Console Shell",
+        subtitle: "Design Explorations",
+      },
       {
         id: "furniture-design-study",
         title: "Furniture Design Study",
@@ -825,8 +831,27 @@ const itOfficeInteriorProject: FolderGalleryProject = {
 };
 
 const DESIGN_EXPLORATIONS_IMAGE_DIR = "/images/design explorations";
+const CUSTOM_GAME_CONSOLE_SHELL_IMAGE_DIR =
+  "/images/Custom Game Console Shell";
 
 const designExplorationProjects: Record<string, FolderGalleryProject> = {
+  "custom-game-console-shell": {
+    title: "Custom Game Console Shell",
+    titleKo: "커스텀 게임 콘솔 쉘",
+    imageDir: CUSTOM_GAME_CONSOLE_SHELL_IMAGE_DIR,
+    images: [
+      "1.JPG",
+      "2.JPG",
+      "3 .JPG",
+      "4.JPG",
+      "5.JPG",
+      "6.JPG",
+      "7.JPG",
+      "8.png",
+      "9.png",
+      "10.png",
+    ],
+  },
   "furniture-design-study": {
     title: "Furniture Design Study",
     imageDir: DESIGN_EXPLORATIONS_IMAGE_DIR,
@@ -1360,6 +1385,7 @@ function GalleryImage({
   className,
   sizes = FULL_IMAGE_SIZES,
   eager = false,
+  framed = false,
   onOpen,
 }: {
   src: string;
@@ -1367,6 +1393,7 @@ function GalleryImage({
   className?: string;
   sizes?: string;
   eager?: boolean;
+  framed?: boolean;
   onOpen: (src: string) => void;
 }) {
   const { width, height } = getImageDimensions(src);
@@ -1375,7 +1402,7 @@ function GalleryImage({
     <button
       type="button"
       onClick={() => onOpen(src)}
-      className={`block w-full text-left ${className ?? ""}`}
+      className={`block text-left ${framed ? "flex w-full justify-center" : "w-full"} ${className ?? ""}`}
     >
       <Image
         src={src}
@@ -1385,8 +1412,16 @@ function GalleryImage({
         sizes={sizes}
         loading={eager ? "eager" : "lazy"}
         {...(eager ? { fetchPriority: "high" as const } : {})}
-        className="pointer-events-none h-auto w-full max-w-full cursor-zoom-in"
-        style={{ width: "100%", height: "auto" }}
+        className={
+          framed
+            ? "pointer-events-none h-auto w-auto max-h-[min(70vh,45rem)] max-w-full cursor-zoom-in object-contain"
+            : "pointer-events-none h-auto w-full max-w-full cursor-zoom-in"
+        }
+        style={
+          framed
+            ? { width: "auto", height: "auto", maxWidth: "100%" }
+            : { width: "100%", height: "auto" }
+        }
       />
     </button>
   );
@@ -2373,6 +2408,41 @@ function ExhibitionProjectInfoLayout({
   );
 }
 
+function ConsoleShellDetails({
+  project,
+  projectId,
+  onOpen,
+}: {
+  project: FolderGalleryProject;
+  projectId: string;
+  onOpen: (src: string) => void;
+}) {
+  const getImageSrc = (filename: string) =>
+    getFolderImageSrc(project.imageDir, filename);
+
+  return (
+    <>
+      <BilingualTitle
+        title={project.title}
+        titleKo={getTitleKo(projectId, project.titleKo)}
+        size="detail"
+        as="h4"
+      />
+      <div className="mt-12 space-y-6 sm:mt-16 sm:space-y-8 lg:mt-20 lg:space-y-10">
+        {project.images.map((filename, index) => (
+          <GalleryImage
+            key={filename}
+            src={getImageSrc(filename)}
+            eager={index === 0}
+            framed
+            onOpen={onOpen}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
 function FolderGalleryDetails({
   project,
   projectId,
@@ -2520,6 +2590,18 @@ function PortfolioProjectDetail({
             onOpen={onOpen}
           />
         );
+      }
+      if (projectId === "custom-game-console-shell") {
+        const shellProject = designExplorationProjects[projectId];
+        if (shellProject) {
+          return (
+            <ConsoleShellDetails
+              project={shellProject}
+              projectId={projectId}
+              onOpen={onOpen}
+            />
+          );
+        }
       }
       const designProject = designExplorationProjects[projectId];
       if (designProject) {
