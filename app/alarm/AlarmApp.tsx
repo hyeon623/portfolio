@@ -490,7 +490,7 @@ function RingingOverlay({
     { id: "7", label: "7" },
     { id: "8", label: "8" },
     { id: "9", label: "9" },
-    { id: "clear", label: "전체삭제", className: "action" },
+    { id: "del", label: "←", className: "action" },
     { id: "0", label: "0" },
     {
       id: "submit",
@@ -527,24 +527,6 @@ function RingingOverlay({
               {key.label}
             </button>
           ))}
-        </div>
-        <div style={{ marginTop: 10, textAlign: "center" }}>
-          <button
-            type="button"
-            className="action"
-            style={{
-              border: 0,
-              background: "transparent",
-              color: "#8b9aab",
-              font: "inherit",
-              fontSize: "0.85rem",
-              cursor: "pointer",
-              padding: 8,
-            }}
-            onClick={() => onPad("del")}
-          >
-            한 글자 지우기
-          </button>
         </div>
       </div>
     </div>

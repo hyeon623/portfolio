@@ -364,8 +364,10 @@
   font: inherit;
   font-size: 1.45rem;
   font-weight: 650;
-  min-height: 56px;
+  min-height: 58px;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
 .alarm-pad button:active {
