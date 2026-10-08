@@ -50,7 +50,10 @@
         "RECEIVE_BOOT_COMPLETED",
         "SCHEDULE_EXACT_ALARM",
         "VIBRATE",
-        "WAKE_LOCK"
+        "WAKE_LOCK",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "predictiveBackGestureEnabled": false
     },
@@ -90,8 +93,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "d34340e0-d675-475e-8ef7-49e679e"
+        "projectId": "db852686-8856-498d-aeee-631e5e7f796f"
       }
-    }
+    },
+    "owner": "hyeon623"
   }
 }
