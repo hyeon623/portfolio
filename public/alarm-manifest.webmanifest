@@ -1,0 +1,19 @@
+{
+  "name": "Wake up dongdong",
+  "short_name": "Wake up dongdong",
+  "description": "수학 문제를 풀어야 꺼지는 간단한 알람",
+  "start_url": "/alarm",
+  "scope": "/alarm",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/alarm-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
