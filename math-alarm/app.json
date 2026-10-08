@@ -13,16 +13,23 @@
       "buildNumber": "1",
       "infoPlist": {
         "CFBundleDisplayName": "Math Alarm",
-        "CFBundleLocalizations": ["ko", "en"],
-        "UIBackgroundModes": ["audio"],
+        "CFBundleLocalizations": [
+          "ko",
+          "en"
+        ],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "ITSAppUsesNonExemptEncryption": false,
-        "NSUserNotificationsUsageDescription": "알람 시간에 알림을 보내 깨워주기 위해 알림 권한이 필요합니다."
+        "NSUserNotificationsUsageDescription": "설정한 시간에 알람을 울리고 수학 문제로 해제하기 위해 알림 권한이 필요합니다."
       },
       "privacyManifests": {
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ],
         "NSPrivacyTracking": false,
@@ -56,7 +63,9 @@
         {
           "color": "#3dd6c6",
           "defaultChannel": "alarms",
-          "sounds": [],
+          "sounds": [
+            "./assets/alarm.wav"
+          ],
           "enableBackgroundRemoteNotifications": false
         }
       ],
@@ -67,7 +76,17 @@
           "image": "./assets/splash-icon.png",
           "imageWidth": 200
         }
-      ]
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "enableBackgroundPlayback": true,
+          "enableBackgroundRecording": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-asset"
     ],
     "extra": {
       "eas": {
