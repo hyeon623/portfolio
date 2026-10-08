@@ -1,7 +1,7 @@
 {
   "name": {
-    "ko": "Math Alarm - 수학 알람",
-    "en": "Math Alarm"
+    "ko": "Wake up dongdong",
+    "en": "Wake up dongdong"
   },
   "subtitle": {
     "ko": "문제를 풀어야 꺼지는 알람",
@@ -12,12 +12,12 @@
     "en": "Wake up for real by solving a simple math problem"
   },
   "description": {
-    "ko": "Math Alarm은 간단한 수학 문제를 맞춰야 꺼지는 알람 앱입니다.\n\n• 큰 시계와 명확한 설정\n• 쉬움/보통 난이도\n• 알람이 울리면 계산 문제를 풀어야 종료\n• 알림 예약으로 지정 시각에 울림\n\n계정 가입 없이 기기 안에서만 설정이 저장됩니다.",
-    "en": "Math Alarm is a wake-up alarm you can dismiss only after solving a simple math problem.\n\n• Large clock and clear settings\n• Easy/Normal difficulty\n• Dismiss only by solving the challenge\n• Local notifications at your set time\n\nNo account required. Settings stay on your device."
+    "ko": "Wake up dongdong은 간단한 수학 문제를 맞춰야 꺼지는 알람 앱입니다.\n\n• 큰 시계와 명확한 설정\n• 쉬움/보통 난이도\n• 알람이 울리면 계산 문제를 풀어야 종료\n• 알림 예약으로 지정 시각에 울림\n\n계정 가입 없이 기기 안에서만 설정이 저장됩니다.",
+    "en": "Wake up dongdong is a wake-up alarm you can dismiss only after solving a simple math problem.\n\n• Large clock and clear settings\n• Easy/Normal difficulty\n• Dismiss only by solving the challenge\n• Local notifications at your set time\n\nNo account required. Settings stay on your device."
   },
   "keywords": {
-    "ko": "알람,수학,기상,문제,모닝콜",
-    "en": "alarm,math,wake,puzzle,morning"
+    "ko": "알람,수학,기상,문제,모닝콜,dongdong",
+    "en": "alarm,math,wake,puzzle,morning,dongdong"
   },
   "supportUrl": "https://github.com/hyeon623/portfolio/issues",
   "marketingUrl": "https://github.com/hyeon623/portfolio",

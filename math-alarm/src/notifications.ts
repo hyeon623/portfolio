@@ -32,7 +32,7 @@ export function isMathAlarmData(data: unknown) {
 export async function ensureNotificationPermissions() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("alarms", {
-      name: "Math Alarm",
+      name: "Wake up dongdong",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       sound: ALARM_SOUND_FILE,
@@ -92,7 +92,7 @@ export async function scheduleDailyAlarm(time: string) {
   await Notifications.scheduleNotificationAsync({
     identifier: NOTIFICATION_ID,
     content: {
-      title: "Math Alarm",
+      title: "Wake up dongdong",
       body: "문제를 풀어야 알람이 꺼집니다",
       sound: ALARM_SOUND_FILE,
       data: { type: "math-alarm" },

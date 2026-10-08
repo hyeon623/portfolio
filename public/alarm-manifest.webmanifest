@@ -1,6 +1,6 @@
 {
-  "name": "Math Alarm",
-  "short_name": "Math Alarm",
+  "name": "Wake up dongdong",
+  "short_name": "Wake up dongdong",
   "description": "수학 문제를 풀어야 꺼지는 간단한 알람",
   "start_url": "/alarm",
   "scope": "/alarm",

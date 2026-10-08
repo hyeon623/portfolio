@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Math Alarm Privacy Policy",
-  description: "Privacy policy for the Math Alarm iOS app",
+  title: "Wake up dongdong Privacy Policy",
+  description: "Privacy policy for the Wake up dongdong iOS app",
   robots: { index: true, follow: true },
 };
 
@@ -21,7 +21,7 @@ export default function AlarmPrivacyPage() {
     >
       <article style={{ maxWidth: 680, margin: "0 auto", lineHeight: 1.65 }}>
         <p style={{ color: "#3dd6c6", fontWeight: 650, marginBottom: 12 }}>
-          MATH ALARM
+          WAKE UP DONGDONG
         </p>
         <h1 style={{ fontSize: "2rem", margin: "0 0 8px" }}>개인정보 처리방침</h1>
         <p style={{ color: "#8b9aab", marginTop: 0 }}>최종 업데이트: 2026-10-07</p>
@@ -29,8 +29,9 @@ export default function AlarmPrivacyPage() {
         <section style={{ marginTop: 28 }}>
           <h2 style={{ fontSize: "1.15rem" }}>개요</h2>
           <p>
-            Math Alarm(이하 &quot;앱&quot;)은 기상 알람과 수학 문제 해제 기능만
-            제공합니다. 회원가입, 광고, 추적, 분석 SDK를 사용하지 않습니다.
+            Wake up dongdong(이하 &quot;앱&quot;)은 기상 알람과 수학 문제 해제
+            기능만 제공합니다. 회원가입, 광고, 추적, 분석 SDK를 사용하지
+            않습니다.
           </p>
         </section>
 
@@ -85,7 +86,7 @@ export default function AlarmPrivacyPage() {
 
         <p style={{ marginTop: 36 }}>
           <Link href="/alarm" style={{ color: "#3dd6c6" }}>
-            ← Math Alarm으로 돌아가기
+            ← Wake up dongdong으로 돌아가기
           </Link>
         </p>
       </article>

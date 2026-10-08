@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Math Alarm",
-    "slug": "math-alarm",
+    "name": "Wake up dongdong",
+    "slug": "wake-up-dongdong",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,7 @@
       "bundleIdentifier": "com.donghyeon.mathalarm",
       "buildNumber": "1",
       "infoPlist": {
-        "CFBundleDisplayName": "Math Alarm",
+        "CFBundleDisplayName": "Wake up dongdong",
         "CFBundleLocalizations": [
           "ko",
           "en"

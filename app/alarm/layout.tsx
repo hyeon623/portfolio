@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Math Alarm",
+  title: "Wake up dongdong",
   description: "수학 문제를 풀어야 꺼지는 간단한 아이폰 알람",
-  applicationName: "Math Alarm",
+  applicationName: "Wake up dongdong",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Math Alarm",
+    title: "Wake up dongdong",
   },
   icons: {
     icon: "/alarm-icon.svg",

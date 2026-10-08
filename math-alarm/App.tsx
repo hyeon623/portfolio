@@ -259,7 +259,7 @@ export default function App() {
     <SafeAreaView style={styles.root}>
       <StatusBar style="light" />
       <View style={styles.header}>
-        <Text style={styles.brand}>MATH ALARM</Text>
+        <Text style={styles.brand}>WAKE UP DONGDONG</Text>
         <View style={styles.statusRow}>
           <View style={[styles.dot, settings.enabled && styles.dotOn]} />
           <Text style={styles.statusText}>{statusLabel}</Text>

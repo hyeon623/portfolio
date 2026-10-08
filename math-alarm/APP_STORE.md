@@ -1,4 +1,4 @@
-# Math Alarm — App Store 제출 준비
+# Wake up dongdong — App Store 제출 준비
 
 이 폴더는 Expo(React Native) 네이티브 앱입니다. Linux/클라우드에서도 EAS로 iOS 바이너리를 만들고 App Store Connect에 올릴 수 있습니다.
 
@@ -6,8 +6,8 @@
 
 1. [Apple Developer Program](https://developer.apple.com/programs/) 등록
 2. [App Store Connect](https://appstoreconnect.apple.com)에서 새 앱 생성
-   - 이름: Math Alarm
-   - Bundle ID: `com.donghyeon.mathalarm`
+   - 이름: Wake up dongdong
+   - Bundle ID: `com.donghyeon.mathalarm` (표시 이름과 별개; 원하면 `com.donghyeon.wakeupdongdong`으로 변경 가능)
    - 카테고리: Utilities
 3. 개인정보 처리방침 URL을 배포 사이트 `/alarm/privacy`로 연결
 

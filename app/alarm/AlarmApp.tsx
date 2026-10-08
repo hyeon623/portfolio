@@ -303,7 +303,7 @@ export default function AlarmApp() {
     if (typeof Notification !== "undefined" && Notification.permission === "granted") {
       try {
         notifyRef.current?.close();
-        notifyRef.current = new Notification("Math Alarm", {
+        notifyRef.current = new Notification("Wake up dongdong", {
           body: "문제를 풀어야 알람이 꺼집니다",
           tag: "math-alarm-ring",
           requireInteraction: true,
@@ -438,7 +438,7 @@ export default function AlarmApp() {
   return (
     <div className="alarm-root">
       <header className="alarm-header">
-        <div className="alarm-brand">MATH ALARM</div>
+        <div className="alarm-brand">WAKE UP DONGDONG</div>
         <div className="alarm-status" aria-live="polite">
           <span className={`alarm-status-dot${settings.enabled ? " on" : ""}`} />
           {hydrated ? nextLabel : "불러오는 중"}
